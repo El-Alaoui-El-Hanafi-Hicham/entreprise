@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Hi {{data.userForm.email}}</h2>
+<mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <mat-label>First Name</mat-label>
+  <input matInput [(ngModel)]="user.first_name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Last Name</mat-label>
+  <input matInput [(ngModel)]="user.last_name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+  <input matInput [(ngModel)]="user.email">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Job Title</mat-label>
+  <input matInput [(ngModel)]="user.job_title">
+  </mat-form-field>
+  <mat-form-field>
+    
+    <mat-label>Hire Date </mat-label>
+    <input matInput [matDatepicker]="picker"  [formControl]="date" [(ngModel)]="user.hire_date">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-hint>MM/DD/YYYY</mat-hint>
+</mat-form-field>
+  <mat-form-field>
+    <mat-label>Phone Number</mat-label>
+  <input matInput [(ngModel)]="data.userForm.phone_number">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="user" (click)="addEmployee()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

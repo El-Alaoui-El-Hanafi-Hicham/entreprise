@@ -1,0 +1,55 @@
+<div class="d-flex gap-3 flex-column">
+    <div class="d-flex align-items-center justify-content-between">
+    <h3>Departements</h3>
+    <p-button label="Add Departements" (click)="openDepartmentDialog()"/>
+</div>
+<div >
+    <p-table [value]="departments" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Department Name</th>
+                <th>Manager</th>
+                <th>Members</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-department>
+            <tr>
+                <td>{{ department.department_name }} </td>
+                <td>  <p *ngIf="department.manager; else noManager">
+                    <p-tag [value]="department.manager.first_name + ' ' + department.manager.last_name" [rounded]="true"  severity="secondary"></p-tag>
+                  </p>
+                  <ng-template #noManager>No Manager</ng-template></td>
+                <td><p-button [label]="getArrayLength(department.employees)"  /></td>
+                <td> 
+                  
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                                    <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openEditModal(department)">
+                      <mat-icon>dialpad</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="openEditModal(department)">
+                        <mat-icon>dialpad</mat-icon>
+                        <span>Add Employee</span>
+                      </button>
+                    <button mat-menu-item (click)="setManager(department)">
+                        <mat-icon>notifications_off</mat-icon>
+                        <span>Set Manager</span>
+                    </button>
+                    <button mat-menu-item (click)="delete(department)" >
+                      <mat-icon>voicemail</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                </td>
+
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+</div>
+<app-department-modal  [visible]="openDepartmentModal" (closeM)="closeDepartmentDialog($event)"></app-department-modal>
+<app-departements-users [selectedDepartement]="selectedDepartement" [isSetManager]="isSetManager"  [isEdit]="isEdit" [visible]="isModalOpen" (closeAddEdit)="closeAddEditDep($event)" ></app-departements-users>

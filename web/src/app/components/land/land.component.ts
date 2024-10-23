@@ -1,0 +1,26 @@
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EmployeeService } from 'src/app/services/employee.service';
+
+@Component({
+  selector: 'app-land',
+  templateUrl: './land.component.html',
+  styleUrls: ['./land.component.css']
+})
+export class LandComponent implements OnInit {
+  employees:Array<Object>=[];
+  constructor(private employeeService:EmployeeService,private  snackBar: MatSnackBar){
+
+}
+  ngOnInit(): void {
+    this.getEmployees()
+  }
+  getEmployees(){
+    this.employeeService.getEmployees(1,34).subscribe((value) => {
+      this.employees = value; 
+    },
+    (error) => {
+      this.snackBar.open("Failed to fetch employees. Please try again later.")
+    });
+  }
+}

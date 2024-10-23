@@ -1,0 +1,24 @@
+<mat-sidenav-container class="mainSide">
+    <mat-sidenav  mode="side" [opened]="openedSideBar" class="sideBar">
+        <mat-list>
+            <mat-list-item><a routerLink=""><span class="material-icons md-48">home</span>Home</a></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><a routerLink="employees"><span class="material-icons md-48">person</span>Users</a></mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item><a routerLink="departements"><span class="material-icons md-48">domain</span>Departements</a></mat-list-item>
+           </mat-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar>
+            <button mat-icon-button class="example-icon" (click)="toggleSideBar()" aria-label="Example icon-button with menu icon">
+                <mat-icon>menu</mat-icon>
+              </button>
+            <span>My Application</span>
+          </mat-toolbar>
+        <div class="main">
+        <router-outlet>
+
+        </router-outlet>
+    </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
