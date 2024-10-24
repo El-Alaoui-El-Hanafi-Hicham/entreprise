@@ -242,7 +242,11 @@ public class DepartementService {
 
         // Define the target directory where files will be saved
         String uploadDir = "uploads/";
-
+        if (file.isEmpty()) {
+            response.put("Status", "false");
+            response.put("message", "File is empty");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
         // Ensure directory exists
         File dir = new File(uploadDir);
         if (!dir.exists()) {
@@ -257,6 +261,7 @@ public class DepartementService {
             // Launch the batch job with the file path as a job parameter
             JobParameters jobParameters = new JobParametersBuilder()
                     .addString("fullPathFileName", filePath)
+                    .addString("run.id", String.valueOf(System.currentTimeMillis())) // Makes each run unique
                     .toJobParameters();
             jobLauncher.run(jobDe, jobParameters);
 

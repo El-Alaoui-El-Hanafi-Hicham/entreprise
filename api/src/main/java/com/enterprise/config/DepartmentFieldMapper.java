@@ -4,7 +4,7 @@ import com.enterprise.entity.Department;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
-public class DepartmentFieldMapper implements org.springframework.batch.item.file.mapping.FieldSetMapper<Department> {
+public class  DepartmentFieldMapper implements org.springframework.batch.item.file.mapping.FieldSetMapper<Department> {
     @Override
     public Department mapFieldSet(FieldSet fieldSet) throws BindException {
         Department department= new Department();
