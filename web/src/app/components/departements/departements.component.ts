@@ -15,6 +15,8 @@ export class DepartementsComponent implements OnInit {
   
   ngOnInit(): void {
     this.getDepartments()
+    // this.wsService.connectSocket("JELLS");
+    // this.wsService.subscribeToNotification();
   }
   openDepartmentModal:boolean=false
   departments:any=[]
@@ -22,7 +24,7 @@ export class DepartementsComponent implements OnInit {
   isEdit:boolean=false;
   selectedDepartement!:Department
   isSetManager:boolean=false
-constructor(private departmentService:departmentService,private snackBar:MatSnackBar ){
+constructor(private departmentService:departmentService,private snackBar:MatSnackBar,){
  
 } 
 update(department: Department) {

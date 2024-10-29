@@ -54,6 +54,8 @@ import { DepartmentModalComponent } from './components/modals/department-modal/d
 import { DepartementsUsersComponent } from './components/modals/departements-users/departements-users.component';
 import { DepartementsComponent } from './components/departements/departements.component';
 import { jWTKeyInterceptor } from './jwtkey.interceptor';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -104,7 +106,6 @@ import { jWTKeyInterceptor } from './jwtkey.interceptor';
     MatMenuModule,
     InputSwitchModule,
     MatNativeDateModule, DialogModule, ButtonModule, InputTextModule // Import the date module
-  
 
   ],
   providers: [    HttpClient,

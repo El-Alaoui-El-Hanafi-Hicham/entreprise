@@ -60,6 +60,7 @@ deleteDepartment(id: BigInteger) {
   return this.httpClient.delete(this.baseUrl+"department?id=" +id, { headers: this.httpHeaders});
 
 }
+
     }
     interface Department {
       id:BigInteger;
