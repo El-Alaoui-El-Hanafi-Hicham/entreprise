@@ -49,6 +49,8 @@ public class Security {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
+                .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/ws/**").permitAll()  // Allow access to WebSocket endpoint
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -1,30 +1,27 @@
 package com.enterprise.service;
 
-import com.enterprise.batch.DepartmentJob;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.entity.Department;
 import com.enterprise.entity.Employee;
 import jakarta.transaction.Transactional;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +33,16 @@ public class DepartementService {
     JobLauncher jobLauncher;
     DepartmentRepository departmentRepository;
     Job jobDe;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     @Autowired
-    public DepartementService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, Job departmentJob) {
+    public DepartementService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, Job departmentJob, SimpMessagingTemplate messagingTemplate) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.jobLauncher = jobLauncher;
         this.jobDe = departmentJob;
+        this.messagingTemplate = messagingTemplate;
     }
     @ResponseBody
 
@@ -58,6 +58,8 @@ public class DepartementService {
         if (s.equals(department)) {
             response.put("message", "Department Added Succesfully");
             response.put("Status", true);
+            // Optionally send the department information to the WebSocket topic
+            messagingTemplate.convertAndSend("/user", response);
             return new ResponseEntity<>(
                     response,
                     HttpStatus.OK);
