@@ -5,6 +5,7 @@ import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.entity.Department;
 import com.enterprise.entity.Employee;
 import jakarta.transaction.Transactional;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -240,6 +241,7 @@ public class DepartementService {
     }
 
     public ResponseEntity<Map<String, String>> bulk(MultipartFile file) {
+        String extention = FilenameUtils.getExtension(file.getOriginalFilename());
         Map<String, String> response = new HashMap<>();
 
         // Define the target directory where files will be saved
@@ -248,6 +250,11 @@ public class DepartementService {
             response.put("Status", "false");
             response.put("message", "File is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else if(!extention.isEmpty() &&!extention.equalsIgnoreCase("csv")){
+            response.put("Status", "false");
+            response.put("message", "File's extention is not correct, please upload a csv file");
+            return ResponseEntity.badRequest().body(response);
         }
         // Ensure directory exists
         File dir = new File(uploadDir);
