@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuItem } from 'primeng/api';
+import { FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
 import { departmentService } from 'src/app/services/department/department.service';
 
@@ -12,7 +13,16 @@ import { departmentService } from 'src/app/services/department/department.servic
 })
 export class DepartementsComponent implements OnInit {
 
-  
+
+
+uploadedFiles: any;
+
+items: MenuItem[]=[
+  {id:'1',label:"Upload File",title:"Upload File",command:()=>this.openUploadFile(),icon:'pi pi-upload'},
+  {id:'2',label:"Download Template",title:"Upload File",command:()=>this.downloadDepartmentTemplate(),iconClass:"pi-address-book",icon:"pi pi-download"}
+];
+IsUploadModalopen:boolean=false
+  file!:File|null;
   ngOnInit(): void {
     this.getDepartments()
     // this.wsService.connectSocket("JELLS");
@@ -29,7 +39,40 @@ constructor(private departmentService:departmentService,private snackBar:MatSnac
 } 
 update(department: Department) {
 }
+openUploadFile(){
+  this.IsUploadModalopen=true;
+  console.log("It should be open by now!!")
+}
+closeUploadFile(refresh:boolean){
+  this.removeFile();
+  this.IsUploadModalopen=false;
+}
 
+downloadDepartmentTemplate(): void {
+  const link = document.createElement('a');
+  link.href = 'assets/Empty.csv'; // Path to the file in assets
+  link.download = 'departmentTemplate.csv'; // Set the desired file name for download
+  document.body.appendChild(link); // Append to the body
+  link.click(); // Programmatically trigger a click to download
+  document.body.removeChild(link); // Remove the link after download
+
+}
+UploadFile() {
+this.departmentService.uploadFileToBE(this.file).subscribe((value: any)=>{
+  if(Boolean(value['Status'])){
+    this.snackBar.open(value['message'])
+    this.closeUploadFile(true);
+    this.getDepartments();
+    this.file=null
+  }else{
+    this.snackBar.open(value['message'])
+    
+  }
+})
+}
+  removeFile() {
+    this.file=null;
+    }
 delete(department: Department) {
   this.departmentService.deleteDepartment(department.id).subscribe((value: any)=>{
     if(Boolean(value['Status'])){
@@ -40,6 +83,12 @@ delete(department: Department) {
       
     }
   })
+}
+onUpload($event: FileSelectEvent) {
+console.log($event.currentFiles[0])
+this.file=$event.currentFiles[0];
+console.log(this.file)
+console.log($event.currentFiles)
 }
 openEditModal(selectedDepartement: Department) {
   this.isEdit=true;

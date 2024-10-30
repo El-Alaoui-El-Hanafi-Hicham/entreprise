@@ -8,6 +8,7 @@ import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee
   providedIn: 'root'
 })
 export class departmentService {
+
  
     jwtKey:String|null;
 
@@ -60,6 +61,19 @@ deleteDepartment(id: BigInteger) {
   return this.httpClient.delete(this.baseUrl+"department?id=" +id, { headers: this.httpHeaders});
 
 }
+uploadFileToBE(file:File|null){
+  let n =this.httpHeaders.set("Content-Type","multipart/form-data");
+  const HttpUploadOptions = {
+    headers: new HttpHeaders({ "Content-Type": "multipart/form-data","Accept":"application/json",
+        "Authorization":"Bearer "+this.jwtKey })
+  }
+  console.log(n)
+  const formData = new FormData();
+  if(file) formData.append('file', file, file.name);
+  console.log(formData)
+  return this.httpClient.post(this.baseUrl+"department/bulk",formData)
+}
+
 
     }
     interface Department {

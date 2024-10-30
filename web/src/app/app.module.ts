@@ -39,6 +39,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TagModule } from 'primeng/tag';
+import { SpeedDialModule } from 'primeng/speeddial';
+import { FileUploadModule } from 'primeng/fileupload';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -105,6 +107,8 @@ import { jWTKeyInterceptor } from './jwtkey.interceptor';
     SplitButtonModule,
     MatMenuModule,
     InputSwitchModule,
+    SpeedDialModule,
+    FileUploadModule,
     MatNativeDateModule, DialogModule, ButtonModule, InputTextModule // Import the date module
 
   ],

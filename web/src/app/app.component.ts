@@ -25,6 +25,10 @@ this.socket.connect({'Authorization:':"Bearer "+this.apiKey},()=>{
     console.log("SUBSCRIIIIIIIIIIIBED")
     console.log(e.body)
   });
+  this.UserSubscription=this.socket.subscribe("/user/39/queue/messages",(e:any)=>{
+    console.log("SUBSCRIIIIIIIIIIIBED Ny ID")
+    console.log(e.body)
+  });
 });
   }
 

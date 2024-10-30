@@ -1,7 +1,18 @@
 <div class="d-flex gap-3 flex-column">
     <div class="d-flex align-items-center justify-content-between">
     <h3>Departements</h3>
-    <p-button label="Add Departements" (click)="openDepartmentDialog()"/>
+    <div class="d-flex gap-2">
+      
+      <p-speedDial [model]="items" 
+      type="semi-circle"
+      direction="up" 
+      transitionDelay="80" 
+      [radius]="80" 
+      class="speedDial"
+      buttonClassName="p-button-primary"
+      />
+    </div>
+      <p-button label="Add Departements" (click)="openDepartmentDialog()"/>
 </div>
 <div >
     <p-table [value]="departments" [tableStyle]="{ 'min-width': '50rem' }">
@@ -53,3 +64,37 @@
 </div>
 <app-department-modal  [visible]="openDepartmentModal" (closeM)="closeDepartmentDialog($event)"></app-department-modal>
 <app-departements-users [selectedDepartement]="selectedDepartement" [isSetManager]="isSetManager"  [isEdit]="isEdit" [visible]="isModalOpen" (closeAddEdit)="closeAddEditDep($event)" ></app-departements-users>
+<p-dialog [header]="isEdit ?isSetManager?'Edit Manager': 'Edit Departement' : 'Add Departement'" class="d-flex gap-2 flex-column" [modal]="true"
+    [(visible)]="IsUploadModalopen" [style]="{ width: '25rem',display:'flex',flexDirection:'column' }" (onHide)="closeUploadFile(false)">
+    <p-fileUpload 
+    mode="basic" 
+    chooseLabel="Choose" 
+    chooseIcon="pi pi-upload"
+    name="demo" 
+    accept=".csv, application/csv, text/csv"
+    maxFileSize="1000000" 
+    (onSelect)="onUpload($event)"
+    *ngIf="!file;else NoFile"
+    />
+    <ng-template #NoFile>
+      <div class="d-flex align-content-center justify-between">
+<span>{{file?.name}}</span> 
+<p-button (onClick)="removeFile()">
+  remove
+</p-button>
+</div>    
+</ng-template>
+    <ng-template pTemplate="footer">
+      <p-button 
+          label="Cancel" 
+          [text]="true" 
+          severity="secondary" 
+          (onClick)="closeUploadFile(false)" 
+          />
+          <p-button 
+          label="Save" 
+          [outlined]="true" 
+          severity="secondary" 
+          (onClick)="UploadFile()" />
+  </ng-template>
+</p-dialog>
