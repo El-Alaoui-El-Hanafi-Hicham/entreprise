@@ -20,6 +20,7 @@
         "@angular/platform-browser-dynamic": "^18.2.7",
         "@angular/router": "^18.2.7",
         "@ng-bootstrap/ng-bootstrap": "^17.0.0",
+        "@ngrx/store": "^18.1.1",
         "@popperjs/core": "^2.11.8",
         "bootstrap": "5.3.3",
         "chart.js": "4.4.3",
@@ -4240,6 +4241,19 @@
         "@angular/localize": "^18.0.0",
         "@popperjs/core": "^2.11.8",
         "rxjs": "^6.5.3 || ^7.4.0"
+      }
+    },
+    "node_modules/@ngrx/store": {
+      "version": "18.1.1",
+      "resolved": "https://registry.npmjs.org/@ngrx/store/-/store-18.1.1.tgz",
+      "integrity": "sha512-K0v1akJ2sEnIeb1AUA064+ksgRgbMgVG9HbSsLBxENbFjK2ZvKRxo1bpOw6WHW9+hyDTlhZGl7+gUtjmo3497g==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "^2.0.0"
+      },
+      "peerDependencies": {
+        "@angular/core": "^18.0.0",
+        "rxjs": "^6.5.3 || ^7.5.0"
       }
     },
     "node_modules/@ngtools/webpack": {

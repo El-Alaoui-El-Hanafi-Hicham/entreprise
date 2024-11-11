@@ -1,0 +1,11 @@
+[NX Daemon Server] - 2024-10-31T21:59:52.102Z - Started listening on: \\.\pipe\nx\C:\Users\elala\AppData\Local\Temp\0da5db5df1eb2177606f\d.sock
+[NX Daemon Server] - 2024-10-31T21:59:52.106Z - [WATCHER]: Subscribed to changes within: c:\Users\elala\Downloads\enterprise\web (native)
+[NX Daemon Server] - 2024-10-31T21:59:52.117Z - Established a connection. BigInteger of open connections: 1
+[NX Daemon Server] - 2024-10-31T21:59:52.124Z - Closed a connection. BigInteger of open connections: 0
+[NX Daemon Server] - 2024-10-31T21:59:52.124Z - Established a connection. BigInteger of open connections: 1
+[NX Daemon Server] - 2024-10-31T21:59:52.126Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-10-31T21:59:52.127Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-10-31T21:59:52.130Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 4.
+[NX Daemon Server] - 2024-10-31T21:59:52.131Z - [WATCHER]: Stopping the watcher for c:\Users\elala\Downloads\enterprise\web (sources)
+[NX Daemon Server] - 2024-10-31T21:59:52.131Z - Closed a connection. BigInteger of open connections: 0
+[NX Daemon Server] - 2024-10-31T21:59:52.131Z - [WATCHER]: Stopping the watcher for c:\Users\elala\Downloads\enterprise\web (outputs)

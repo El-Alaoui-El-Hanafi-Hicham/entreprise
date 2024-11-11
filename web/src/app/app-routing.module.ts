@@ -10,6 +10,7 @@ import { LandComponent } from './components/land/land.component';
 import { UsersComponent } from './components/users/users.component';
 import { DepartementsComponent } from './components/departements/departements.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 
 const routes: Routes = [   {
@@ -26,6 +27,10 @@ const routes: Routes = [   {
     {
       path: 'departements', // child route path
       component: DepartementsComponent, // child route component that the router renders
+    },
+    {
+      path: 'chats', // child route path
+      component: ChatComponent, // child route component that the router renders
     },
   ]
 },

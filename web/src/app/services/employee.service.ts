@@ -18,13 +18,15 @@ this.httpHeaders= new HttpHeaders({
   "Authorization":"Bearer "+this.jwtKey
 });
    }
+   me(){
+    return this.http.get<any>(this.BASE_URL+"/me", { headers: this.httpHeaders });
+    }
   getEmployees(page:number,size:number){
   let params = new HttpParams()
     .set('pageNumber', String(page)) // Reassign the result
     .set('pageSize', String(size));  // Reassign the result
 
-  // Log params to see the output
-  console.log(params.toString());
+
 
   // Make the GET request with headers and params
   return this.http.get<any>(this.BASE_URL+"", { headers: this.httpHeaders, params });

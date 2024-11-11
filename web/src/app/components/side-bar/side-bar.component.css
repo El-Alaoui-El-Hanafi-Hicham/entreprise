@@ -6,4 +6,5 @@
 }
 .main{
     padding: 15px;
+    height: calc(100% - 63px);
 }

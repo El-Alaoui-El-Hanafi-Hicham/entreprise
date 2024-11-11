@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, booleanAttribute } from '@angular/core';
+import { Injectable, OnInit, booleanAttribute } from '@angular/core';
 import { RegisterModule } from '../../modules/register/register.module';
 import { Observable, map } from 'rxjs';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
-export class departmentService {
+export class departmentService implements OnInit {
 
  
     jwtKey:String|null;
@@ -19,7 +20,7 @@ export class departmentService {
   });
     private authSecretKey = 'key';
   baseUrl="http://localhost:8080/api/"
-    constructor(private httpClient:HttpClient) {
+    constructor(private httpClient:HttpClient,private store: Store<{count:number}> ) {
 this.jwtKey=localStorage.getItem('key');
 
       this.httpHeaders= new HttpHeaders({
@@ -28,6 +29,10 @@ this.jwtKey=localStorage.getItem('key');
         "Authorization":"Bearer "+this.jwtKey
       });
      }
+  ngOnInit(): void {
+    // console.log("THIS>>>> is")
+    // console.log(this.store)
+  }
      addDepartment(DepartmentName:String){
       let payload:object={
         "department_name":DepartmentName,

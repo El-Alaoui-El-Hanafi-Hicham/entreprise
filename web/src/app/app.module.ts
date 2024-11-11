@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
@@ -56,6 +57,9 @@ import { DepartmentModalComponent } from './components/modals/department-modal/d
 import { DepartementsUsersComponent } from './components/modals/departements-users/departements-users.component';
 import { DepartementsComponent } from './components/departements/departements.component';
 import { jWTKeyInterceptor } from './jwtkey.interceptor';
+import { StoreModule } from '@ngrx/store';
+import { ChatComponent } from './components/chat/chat.component';
+import { userReducer } from './stores/user/user.reducer';
 
 
 @NgModule({
@@ -73,9 +77,10 @@ import { jWTKeyInterceptor } from './jwtkey.interceptor';
     ResetPasswordComponent,
     DepartmentModalComponent,
     DepartementsUsersComponent,
-    
+    ChatComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     MatToolbarModule,
@@ -109,7 +114,7 @@ import { jWTKeyInterceptor } from './jwtkey.interceptor';
     InputSwitchModule,
     SpeedDialModule,
     FileUploadModule,
-    MatNativeDateModule, DialogModule, ButtonModule, InputTextModule // Import the date module
+    MatNativeDateModule, DialogModule, ButtonModule, InputTextModule, StoreModule.forRoot({user:userReducer}, {}) // Import the date module
 
   ],
   providers: [    HttpClient,
