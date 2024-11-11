@@ -1,5 +1,6 @@
 package com.enterprise.service;
 
+import com.enterprise.config.JwtService;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.entity.Department;
@@ -25,12 +26,14 @@ public class EmployeeeService {
     EmailService emailService;
     DepartmentRepository departmentRepository;
     JavaMailSender mailSender;
+    private final JwtService jwtService;
     @Autowired
-    public EmployeeeService(JavaMailSender mailSender,EmployeeRepository employeeRepository, DepartmentRepository departmentRepository,EmailService emailService) {
+    public EmployeeeService(JavaMailSender mailSender, EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmailService emailService, JwtService jwtService) {
         this.employeeRepository=employeeRepository;
         this.departmentRepository = departmentRepository;
         this.emailService = emailService;
         this.mailSender= mailSender;
+        this.jwtService = jwtService;
     }
 
     public ResponseEntity<String> AddEmployee(Employee employee) throws MessagingException {
@@ -112,8 +115,8 @@ if(employee.get().getDepartment()!=null){
 
 
     public ResponseEntity<Page<Employee>> allEmployees(int pageNumber, int pageSize) {
-        Pageable firstPageWithTwoElements = PageRequest.of(pageNumber, pageSize);
-
+        Pageable firstPageWithTwoElements = PageRequest.of(pageSize==0? 0:pageNumber,pageSize==0? Integer.MAX_VALUE:pageSize);
+        System.out.println("the page size is ====> "+firstPageWithTwoElements.getPageSize());
 
         Page<Employee> allEmployees=   employeeRepository.findAll(firstPageWithTwoElements);// Collect the stream into a list
 
@@ -126,6 +129,11 @@ if(employee.get().getDepartment()!=null){
 
 Employee employee1 = employeeRepository.save(employee);
         return employee1;
+    }
+    public Employee getCurrentUser(String token) {
+        String email = this.jwtService.extractEmail(token.substring(7));
+    Optional<Employee> employee =this.employeeRepository.findByEmail(email);
+    return  employee.get();
     }
 
 

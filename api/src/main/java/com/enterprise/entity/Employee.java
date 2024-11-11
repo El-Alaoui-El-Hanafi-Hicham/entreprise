@@ -46,12 +46,13 @@ private  String job_title;
     private String email;
     @Column(nullable = false)
     private  String password;
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Date created_at;;
-    @UpdateTimestamp
-    @Column
-    private Date updated_at;
+
+        @CreationTimestamp
+        @Column(updatable = false)
+        private Date created_at;;
+        @UpdateTimestamp
+        @Column
+        private Date updated_at;
 @ManyToOne(fetch = FetchType.LAZY)
 @JsonBackReference
 @JoinColumn(name = "department_id")

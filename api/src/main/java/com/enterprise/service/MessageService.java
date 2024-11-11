@@ -1,38 +1,79 @@
 package com.enterprise.service;
 
 import com.enterprise.dao.ChatRoomRepository;
+import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.dao.MessageRepository;
+import com.enterprise.dto.EmployeeDto;
+import com.enterprise.dto.MessageDto;
 import com.enterprise.entity.ChatRoom;
 import com.enterprise.entity.Employee;
 import com.enterprise.entity.Message;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class MessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final MessageRepository messageRepository;
-private  final ChatRoomService chatRoomService;
-    public Message save(Message message){
-        this.messageRepository.save(message );
-        Employee sender= message.getSender();
-        Employee recipent= message.getRecipient();
-String chatID=chatRoomService.getchatRoomById(sender.getId(),recipent.getId(),true)
-        .orElseThrow();
-message.setChatRoom(chatRoomService.findById(chatID).get());
-chatRoomService.setMessages(chatRoomService.findById(chatID).get(),message);
-        return message;
-    }
-public List<Message> findMessages(Long Sender_id,Long Recipient_id){
-        String ChatId = String.format("%s_%s",Sender_id,Recipient_id);
-Optional<ChatRoom>  chatRoom=       chatRoomService.findById(ChatId);
-return chatRoom.map(ChatRoom::getMessages).orElse(new ArrayList<>());
+    private final EmployeeRepository employeeRepository;
+    private final ChatRoomService chatRoomService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-}
+    public ResponseEntity<Map<String, String>> save(Message message) {
+        HashMap<String, String> response = new HashMap<String, String>();
+
+        System.out.println(message.toString());
+//        this.messageRepository.save(message );
+        Employee sender_id = message.getSender();
+        Employee recipient_id = message.getRecipient();
+        String chatID = chatRoomService.getchatRoomById(sender_id.getId(), recipient_id.getId(), true)
+                .orElseThrow();
+        System.out.println(chatID);
+        Optional<Employee> recipient = employeeRepository.findById(recipient_id.getId());
+        Optional<Employee> sender = employeeRepository.findById(sender_id.getId());
+        message.setChatRoom(chatRoomService.findById(chatID).get());
+        message.setSender(sender.get());
+        message.setRecipient(recipient.get());
+        messageRepository.save(message);
+        chatRoomService.setMessages(chatRoomService.findById(chatID).get(), message);
+
+        response.put("message", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
+        response.put("Status", "true");
+        messagingTemplate.convertAndSend("/user/"+recipient_id+ "/queue/messages", response);;
+        return ResponseEntity.ok().body(response);
+    }
+
+    public List<MessageDto> findMessages(Long Sender_id, Long Recipient_id) {
+        String ChatId = String.format("%s_%s", Sender_id, Recipient_id);
+        List<MessageDto> messageDtos= new ArrayList<>();
+        Optional<ChatRoom> chatRoom = chatRoomService.findById(ChatId);
+        List<Message> messages=chatRoom.map(ChatRoom::getMessages).orElse(new ArrayList<>());
+         messages.stream().forEach(el->{
+        EmployeeDto sender = EmployeeDto.builder().id(el.getSender().getId())
+                .email(el.getSender().getEmail())
+                .last_name(el.getSender().getLast_name())
+                .first_name(el.getSender().getFirst_name())
+                .build();
+        EmployeeDto recipient = EmployeeDto.builder().id(el.getRecipient().getId())
+                .email(el.getRecipient().getEmail())
+                .last_name(el.getRecipient().getLast_name())
+                .first_name(el.getRecipient().getFirst_name())
+                .build();
+            MessageDto messageDto=MessageDto.builder().chat_id(el.getChatRoom().getId())
+                    .message(el.getMessage())
+                    .receiver(recipient)
+                    .sender(sender)
+                    .id(el.getId())
+                    .date(el.getCreated_at())
+                    .build();
+             messageDtos.add(messageDto);
+    });
+return  messageDtos;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.enterprise.service;
 
 import com.enterprise.dao.ChatRoomRepository;
 import com.enterprise.dao.EmployeeRepository;
+import com.enterprise.dto.ChatRoomDto;
 import com.enterprise.entity.ChatRoom;
 import com.enterprise.entity.Employee;
 import com.enterprise.entity.Message;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,7 +27,8 @@ public class ChatRoomService {
 private final EmployeeRepository employeeRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
-public Optional<String> getchatRoomById(Long Sender_id, Long Recipient_id, boolean createNewOneIfNotFound){
+public Optional<String>     getchatRoomById(Long Sender_id, Long Recipient_id, boolean createNewOneIfNotFound){
+
     String chatId= String.format("%s_%s",Sender_id,Recipient_id);
     Optional <Employee> sender= employeeRepository.findById(Sender_id);
     Optional<Employee> recipient = employeeRepository.findById(Recipient_id);
@@ -37,7 +40,9 @@ if(createNewOneIfNotFound && sender.isPresent() && recipient.isPresent()){
             .recipient(recipient.get())
             .sender(sender.get())
             .build();
-chatRoomRepository.save(newChatRoom);
+return Optional.ofNullable(chatRoomRepository.save(newChatRoom).getId());
+}else{
+    System.out.println(createNewOneIfNotFound &&sender.isPresent() && recipient.isPresent());
 }
               return Optional.empty();
 
@@ -68,14 +73,65 @@ public ResponseEntity<Map<String, String>> sendMessage(String message, Long send
             .recipient(recipient.get())
             .build();
     chatRoom.get().addMessage(message1);
+
         response.put("message", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
         response.put("Status", "true");
         messagingTemplate.convertAndSend("/user/"+recipient_id+ "/queue/messages", response);;
-    this.chatRoomRepository.save(chatRoom.get());
     return ResponseEntity.ok().body(response);
     }
     response.put("message", "Something is Wrong");
     response.put("Status", "False");
     return ResponseEntity.badRequest().body(response);
 }
+
+    public List<ChatRoomDto> getRooms(Long sender_id, Long recipient_id) {
+        List<ChatRoom> chatRooms = this.chatRoomRepository.findChatRooms(sender_id, recipient_id);
+        List<ChatRoomDto> chatRoomsDto= chatRooms.stream().map(el ->
+                ChatRoomDto.builder()
+                        .id(el.getId())
+                        .recipient(
+                                Employee.builder()
+                                        .email(el.getRecipient().getEmail())
+                                        .last_name(el.getRecipient().getLast_name())
+                                        .id(el.getRecipient().getId())
+                                        .first_name(el.getRecipient().getFirst_name())
+                                        .build()
+                        )
+                        .sender(
+                                Employee.builder()
+                                        .email(el.getSender().getEmail())
+                                        .last_name(el.getSender().getLast_name())
+                                        .id(el.getSender().getId())
+                                        .first_name(el.getSender().getFirst_name())
+                                        .build()
+                        )
+                        .build()
+        ).collect(Collectors.toList()); // Collects mapped ChatRoomDto objects into a List
+return chatRoomsDto;
+    }
+    public List<ChatRoomDto> getUserRooms(Long sender_id) {
+        List<ChatRoom> chatRooms = this.chatRoomRepository.findUserChatRooms(sender_id);
+        List<ChatRoomDto> chatRoomsDto= chatRooms.stream().map(el ->
+                ChatRoomDto.builder()
+                        .id(el.getId())
+                        .recipient(
+                                Employee.builder()
+                                        .email(el.getRecipient().getEmail())
+                                        .last_name(el.getRecipient().getLast_name())
+                                        .id(el.getRecipient().getId())
+                                        .first_name(el.getRecipient().getFirst_name())
+                                        .build()
+                        )
+                        .sender(
+                                Employee.builder()
+                                        .email(el.getSender().getEmail())
+                                        .last_name(el.getSender().getLast_name())
+                                        .id(el.getSender().getId())
+                                        .first_name(el.getSender().getFirst_name())
+                                        .build()
+                        )
+                        .build()
+        ).collect(Collectors.toList()); // Collects mapped ChatRoomDto objects into a List
+        return chatRoomsDto;
+    }
 }

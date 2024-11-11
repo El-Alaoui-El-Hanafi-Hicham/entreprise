@@ -1,5 +1,6 @@
 package com.enterprise.controller;
 
+import com.enterprise.config.JwtService;
 import com.enterprise.entity.Employee;
 import com.enterprise.entity.Status;
 import com.enterprise.service.EmailService;
@@ -12,18 +13,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/employees")
 public class EmployeeController {
-     EmailService emailService;
-    EmployeeeService employeeeService;
+    private final  EmailService emailService;
+    private final EmployeeeService employeeeService;
+    private final JwtService jwtService;
 @Autowired
-    public EmployeeController(EmailService emailService, EmployeeeService employeeeService) {
+    public EmployeeController(EmailService emailService, EmployeeeService employeeeService,JwtService jwtService) {
     this.emailService = emailService;
     this.employeeeService = employeeeService;
+    this.jwtService= jwtService;
     }
     @GetMapping("")
     public ResponseEntity<Page<Employee>> employees(@RequestParam(required=true) int pageNumber, @RequestParam(required=true) int pageSize){
@@ -38,6 +41,12 @@ public class EmployeeController {
     @GetMapping("/setDepartement")
     public ResponseEntity<String> setDepartement(@RequestParam(name = "id") long userid,@RequestParam(name = "dep_id") long id){
     return this.employeeeService.setDepartement(userid,id);
+    };
+    @GetMapping("/me")
+    public Employee me(@RequestHeader (name="Authorization") String token){
+        Employee emp = this.employeeeService.getCurrentUser(token);
+//        this.emp.getUsername
+        return emp;
     };
     @MessageMapping("/user.setOnline")
     @SendTo("/user/topic")

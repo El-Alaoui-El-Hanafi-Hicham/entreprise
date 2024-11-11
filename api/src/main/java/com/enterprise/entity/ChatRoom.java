@@ -1,5 +1,8 @@
 package com.enterprise.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,17 +16,19 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ChatRoom {
     @Id
     private String id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipient_ID", referencedColumnName = "id")
+
     private Employee recipient;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sender_ID", referencedColumnName = "id")
+
     private Employee sender;
     @OneToMany(mappedBy="chatRoom")
+
     private List<Message> messages;
 
 
