@@ -1,21 +1,38 @@
 <mat-sidenav-container class="mainSide">
     <mat-sidenav  mode="side" [opened]="openedSideBar" class="sideBar">
-        <mat-list>
-            <mat-list-item><a routerLink=""><span class="material-icons md-48">home</span>Home</a></mat-list-item>
+      <div class="up__section"> 
+      <mat-list>
+            <mat-list-item><a routerLink="" class="link"><span class="material-icons md-48">home</span>Home</a></mat-list-item>
             <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="employees"><span class="material-icons md-48">person</span>Users</a></mat-list-item>
+            <mat-list-item><a routerLink="employees" class="link"><span class="material-icons md-48">person</span>Users</a></mat-list-item>
             <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="departements"><span class="material-icons md-48">domain</span>Departements</a></mat-list-item>
+            <mat-list-item><a routerLink="departements" class="link"><span class="material-icons md-48">domain</span>Departements</a></mat-list-item>
             <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="chats"><span class="material-icons md-48">chat</span>Chat</a></mat-list-item>
+            <mat-list-item><a routerLink="chats" class="link"><span class="material-icons md-48">chat</span>Chat</a></mat-list-item>
            </mat-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <mat-toolbar>
-            <button mat-icon-button class="example-icon" (click)="toggleSideBar()" aria-label="Example icon-button with menu icon">
-                <mat-icon>menu</mat-icon>
+          </div> 
+           <div class="down__section">
+           <button class="logout" (click)="logout()">Logout</button>
+          </div>
+          </mat-sidenav>
+          <mat-sidenav-content>
+            <mat-toolbar>
+              <div class="leftside">
+                <button mat-icon-button class="example-icon" (click)="toggleSideBar()" aria-label="Example icon-button with menu icon">
+                  <mat-icon>menu</mat-icon>
               </button>
-            <span>My Application</span>
+            <span>Manage IT</span>
+          </div>
+          <div class="rightside">
+                <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                  <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+                  <mat-icon>share</mat-icon>
+                </button>
+                <div *ngIf="this.activeUser$ | async as user">
+                  {{user.first_name + ' ' + user.last_name}}
+            </div></div>
           </mat-toolbar>
         <div class="main">
         <router-outlet>

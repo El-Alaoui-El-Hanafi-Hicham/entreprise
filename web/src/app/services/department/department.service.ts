@@ -43,26 +43,26 @@ this.jwtKey=localStorage.getItem('key');
         return this.httpClient.get(this.baseUrl+"department", { headers: this.httpHeaders});
      }
 
-     addUserToDepartment(DepartmentId:BigInteger,userId:BigInteger){
+     addUserToDepartment(DepartmentId:number,userId:number){
       return this.httpClient.get(this.baseUrl+"department/employees/add?id=" +userId+"&dep_id="+DepartmentId, { headers: this.httpHeaders});
    }
-   removeUserToDepartment(DepartmentId:BigInteger,userId:BigInteger){
+   removeUserToDepartment(DepartmentId:number,userId:number){
     return this.httpClient.get(this.baseUrl+"department/employees/remove?id=" +userId+"&dep_id="+DepartmentId, { headers: this.httpHeaders});
  }
- editDepartment(id: BigInteger, value:Department ) {
+ editDepartment(id: number, value:Department ) {
   const payload= {department_name:value['department_name']}
   return this.httpClient.put(this.baseUrl+"department?dep_id=" +id,payload, { headers: this.httpHeaders});
 
 }
-setManager(id: BigInteger, value:BigInteger ) {
+setManager(id: number, value:number ) {
   return this.httpClient.get(this.baseUrl+"department/setManager?id=" +id+"&dep_id="+value, { headers: this.httpHeaders});
 
 }
-removeManager(id: BigInteger) {
+removeManager(id: number) {
   return this.httpClient.get(this.baseUrl+"department/removeManager?id=" +id, { headers: this.httpHeaders});
 
 }
-deleteDepartment(id: BigInteger) {
+deleteDepartment(id: number) {
   return this.httpClient.delete(this.baseUrl+"department?id=" +id, { headers: this.httpHeaders});
 
 }
@@ -82,7 +82,7 @@ uploadFileToBE(file:File|null){
 
     }
     interface Department {
-      id:BigInteger;
+      id:number;
       department_name: String;
       manager: Object|null
       employees: Array<EmployeeModule>

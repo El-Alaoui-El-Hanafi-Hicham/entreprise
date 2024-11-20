@@ -1,11 +1,39 @@
 <div class="main">
     <div class="conversations_container">
+        <div *ngIf="isLoading ;else noLoadingTemp">
+<span>
+    "loading ..."
+</span>
+
+        </div>
+        <ng-template #noLoadingTemp>
+            
         <div *ngFor="let item of contactedEmployees">
-           <p> {{item?.first_name }} {{item?.last_name}}</p>
+           <button (click)="chooseConversation(item?.id)" class="conversation"> {{item?.first_name }} {{item?.last_name}}</button>
         </div>
+    </ng-template>
         </div>
-    <div class="conversation_container">
-        
+    <div class="conversation_container" >
+        <div class="h-100" *ngIf="selectedChatUser;else noConversationTemplate">
+        <div class="messages_part">
+            <div class="messages">
+
+                <div *ngFor="let item of actualConversationMessages" ngClass="{{item.sender.id == id ? 'right' : 'left'}}">
+                    <div class="message" *ngIf="item.message" id="{{item.message_append_date}}">
+                      {{item.message}}
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <div class="input_part">
+            <input type="text" class="chat_input" [(ngModel)]="message">
+            <button (click)="sendMessage(message)">Send</button>
+        </div>
     </div>
-        
+    <ng-template #noConversationTemplate>
+        <div class="h-100 d-flex justify-content-center align-items-center">
+            <span>NO CONVERSATION SELECTED</span>
+        </div>
+        </ng-template>
     </div>
+</div>

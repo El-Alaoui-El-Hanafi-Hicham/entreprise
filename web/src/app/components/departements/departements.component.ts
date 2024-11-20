@@ -35,13 +35,13 @@ IsUploadModalopen:boolean=false
   selectedDepartement!:Department
   isSetManager:boolean=false
 constructor(private departmentService:departmentService,private snackBar:MatSnackBar,){
- 
-} 
+
+}
 update(department: Department) {
 }
 openUploadFile(){
   this.IsUploadModalopen=true;
-  console.log("It should be open by now!!")
+  // console.log("It should be open by now!!")
 }
 closeUploadFile(refresh:boolean){
   this.removeFile();
@@ -66,7 +66,7 @@ this.departmentService.uploadFileToBE(this.file).subscribe((value: any)=>{
     this.file=null
   }else{
     this.snackBar.open(value['message'])
-    
+
   }
 })
 }
@@ -80,7 +80,7 @@ delete(department: Department) {
       this.departments= this.departments.filter((el:Department)=>el.id!=department.id);
     }else{
       this.snackBar.open(value['message'])
-      
+
     }
   })
 }
@@ -107,7 +107,7 @@ openEditModal(selectedDepartement: Department) {
     }
 // Dropdown menu for each department
   departmentDropDown(department: Department): MenuItem[] {
-    
+
     return [
       {
         label: 'Add Employees',
@@ -163,7 +163,7 @@ this.getDepartments();
 }
 }
 interface Department {
-  id:BigInteger;
+  id:number;
   department_name: string;
   manager: EmployeeModule|null
   employees: Array<EmployeeModule>

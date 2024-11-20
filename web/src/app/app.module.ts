@@ -42,6 +42,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TagModule } from 'primeng/tag';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { FileUploadModule } from 'primeng/fileupload';
+
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -58,8 +59,12 @@ import { DepartementsUsersComponent } from './components/modals/departements-use
 import { DepartementsComponent } from './components/departements/departements.component';
 import { jWTKeyInterceptor } from './jwtkey.interceptor';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ChatComponent } from './components/chat/chat.component';
 import { userReducer } from './stores/user/user.reducer';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { EffectsModule, provideEffects } from '@ngrx/effects';
+import {  reducers,metaReducers, appEffects } from './stores/app.state';
 
 
 @NgModule({
@@ -114,11 +119,15 @@ import { userReducer } from './stores/user/user.reducer';
     InputSwitchModule,
     SpeedDialModule,
     FileUploadModule,
-    MatNativeDateModule, DialogModule, ButtonModule, InputTextModule, StoreModule.forRoot({user:userReducer}, {}) // Import the date module
+    MatNativeDateModule, DialogModule, ButtonModule, InputTextModule, 
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot(appEffects), // Register effects
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }), // DevTools
 
   ],
   providers: [    HttpClient,
-    provideHttpClient(withInterceptors([jWTKeyInterceptor]))
+    provideHttpClient(withInterceptors([jWTKeyInterceptor])),
+    provideAnimationsAsync(),
 
   ],
   bootstrap: [AppComponent]

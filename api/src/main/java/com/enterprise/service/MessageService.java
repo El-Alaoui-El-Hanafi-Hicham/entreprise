@@ -26,14 +26,13 @@ public class MessageService {
 
     public ResponseEntity<Map<String, String>> save(Message message) {
         HashMap<String, String> response = new HashMap<String, String>();
-
-        System.out.println(message.toString());
+        System.out.println("sender =================> "+message.getSender().getId());
+        System.out.println("recipient========>"+ message.getRecipient().getId());
 //        this.messageRepository.save(message );
         Employee sender_id = message.getSender();
         Employee recipient_id = message.getRecipient();
         String chatID = chatRoomService.getchatRoomById(sender_id.getId(), recipient_id.getId(), true)
                 .orElseThrow();
-        System.out.println(chatID);
         Optional<Employee> recipient = employeeRepository.findById(recipient_id.getId());
         Optional<Employee> sender = employeeRepository.findById(sender_id.getId());
         message.setChatRoom(chatRoomService.findById(chatID).get());
@@ -42,12 +41,42 @@ public class MessageService {
         messageRepository.save(message);
         chatRoomService.setMessages(chatRoomService.findById(chatID).get(), message);
 
-        response.put("message", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
+        response.put("notification", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
         response.put("Status", "true");
-        messagingTemplate.convertAndSend("/user/"+recipient_id+ "/queue/messages", response);;
+        response.put("sender",(String.valueOf( sender.get().getId())));
+        response.put("message", message.getMessage());
+        response.put("date", message.getCreated_at().toString());
+        messagingTemplate.convertAndSend("/user/"+recipient_id.getId()+ "/queue/messages", response);
+        response.put("message", "the message was sent succesfully to "+ recipient.get().getFirst_name()+" "+recipient.get().getLast_name()+" with the id "+recipient_id.getId());
+        response.put("Status", "true");
         return ResponseEntity.ok().body(response);
     }
-
+public List<MessageDto>getConvMessages(Long user1,Long user2){
+        List<MessageDto> messageDtos= new ArrayList<>();
+    List<Message> messages=messageRepository.getConvMessages(user1,user2);
+    messages.stream().forEach(el->{
+        EmployeeDto sender = EmployeeDto.builder().id(el.getSender().getId())
+                .email(el.getSender().getEmail())
+                .last_name(el.getSender().getLast_name())
+                .first_name(el.getSender().getFirst_name())
+                .build();
+        EmployeeDto recipient = EmployeeDto.builder().id(el.getRecipient().getId())
+                .email(el.getRecipient().getEmail())
+                .last_name(el.getRecipient().getLast_name())
+                .first_name(el.getRecipient().getFirst_name())
+                .build();
+        MessageDto messageDto=MessageDto.builder().chat_id(el.getChatRoom().getId())
+                .message(el.getMessage())
+                .receiver(recipient)
+                .sender(sender)
+                .id(el.getId())
+                .isRead(el.getIsRead())
+                .date(el.getCreated_at())
+                .build();
+        messageDtos.add(messageDto);
+    });
+    return  messageDtos;
+}
     public List<MessageDto> findMessages(Long Sender_id, Long Recipient_id) {
         String ChatId = String.format("%s_%s", Sender_id, Recipient_id);
         List<MessageDto> messageDtos= new ArrayList<>();
@@ -68,12 +97,18 @@ public class MessageService {
                     .message(el.getMessage())
                     .receiver(recipient)
                     .sender(sender)
+                    .isRead(el.getIsRead())
                     .id(el.getId())
                     .date(el.getCreated_at())
                     .build();
              messageDtos.add(messageDto);
     });
 return  messageDtos;
+    }
+    public ResponseEntity<String> readAllMsgs(Long user1_id,Long user2_id){
+       Optional<String> chatRoom1 =this.chatRoomService.getchatRoomById(user1_id,user2_id,false);
+        Optional<String> chatRoom2=this.chatRoomService.getchatRoomById(user2_id,user1_id,false);
+
     }
 
 }

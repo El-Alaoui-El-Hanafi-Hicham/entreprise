@@ -20,7 +20,9 @@
         "@angular/platform-browser-dynamic": "^18.2.7",
         "@angular/router": "^18.2.7",
         "@ng-bootstrap/ng-bootstrap": "^17.0.0",
+        "@ngrx/effects": "^18.1.1",
         "@ngrx/store": "^18.1.1",
+        "@ngrx/store-devtools": "^18.1.1",
         "@popperjs/core": "^2.11.8",
         "bootstrap": "5.3.3",
         "chart.js": "4.4.3",
@@ -4243,6 +4245,20 @@
         "rxjs": "^6.5.3 || ^7.4.0"
       }
     },
+    "node_modules/@ngrx/effects": {
+      "version": "18.1.1",
+      "resolved": "https://registry.npmjs.org/@ngrx/effects/-/effects-18.1.1.tgz",
+      "integrity": "sha512-XXob8kYEvYMaZwgHtrrTW0XZargbu5PloEpNHLnzB8jPk0yWEw6keryxaF09Ylws1779MWvMmF/YP2rPl04nHQ==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "^2.0.0"
+      },
+      "peerDependencies": {
+        "@angular/core": "^18.0.0",
+        "@ngrx/store": "18.1.1",
+        "rxjs": "^6.5.3 || ^7.5.0"
+      }
+    },
     "node_modules/@ngrx/store": {
       "version": "18.1.1",
       "resolved": "https://registry.npmjs.org/@ngrx/store/-/store-18.1.1.tgz",
@@ -4253,6 +4269,20 @@
       },
       "peerDependencies": {
         "@angular/core": "^18.0.0",
+        "rxjs": "^6.5.3 || ^7.5.0"
+      }
+    },
+    "node_modules/@ngrx/store-devtools": {
+      "version": "18.1.1",
+      "resolved": "https://registry.npmjs.org/@ngrx/store-devtools/-/store-devtools-18.1.1.tgz",
+      "integrity": "sha512-tfn9Ms1q2bl7VDWwHyj7dUbwmGiiVzIpOKZs39rsms8tG8hbvsxoczyQAp2w5erVtoJb8ltIh1/birKkS7HmuQ==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "^2.0.0"
+      },
+      "peerDependencies": {
+        "@angular/core": "^18.0.0",
+        "@ngrx/store": "18.1.1",
         "rxjs": "^6.5.3 || ^7.5.0"
       }
     },

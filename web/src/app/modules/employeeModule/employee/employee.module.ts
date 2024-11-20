@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class EmployeeModule  {
-  id:BigInteger | undefined;
+  id:number | undefined;
 email:String | undefined;
 hire_date:Date| undefined;
 first_name:String| undefined;

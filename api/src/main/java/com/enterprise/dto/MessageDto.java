@@ -16,5 +16,6 @@ public class MessageDto {
     private EmployeeDto receiver;
     private String message;
     private Long id;
+    private Boolean isRead;
     private Date date;
 }

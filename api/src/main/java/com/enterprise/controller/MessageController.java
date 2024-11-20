@@ -53,14 +53,20 @@ public class MessageController {
     public List<ChatRoomDto> findUserConversations(@PathVariable Long sender_id){
         return chatRoomService.getUserRooms(sender_id);
     }
-    @PostMapping("/messages")
-    public ResponseEntity<Map<String, String>> setMessages( @RequestBody(required = true) Message message){
+    @GetMapping("/messages/both/{user1}/{user2}")
+    public List<MessageDto> getConvMessages(@PathVariable Long user1,@PathVariable Long user2){
+        return this.messageService.getConvMessages(user1,user2);
+    }
+    @PostMapping("/messages/{sender_id}/{recipient_id}")
+    public ResponseEntity<Map<String, String>> setMessages(@PathVariable(name = "sender_id") Long sender_id, @PathVariable(name = "recipient_id") Long recipient_id, @RequestParam(required = true) String message){
         HashMap<String,String> response = new HashMap<String, String>();
 
-        Optional<Employee> sender= this.employeeRepository.findById(message.getSender().getId());
-        Optional<Employee> recipient= this.employeeRepository.findById(message.getRecipient().getId());
-        if(sender.isPresent() && recipient.isPresent())
-        return this.messageService.save(message);
+        Optional<Employee> sender= this.employeeRepository.findById(sender_id);
+        Optional<Employee> recipient= this.employeeRepository.findById(recipient_id);
+        if(sender.isPresent() && recipient.isPresent()) {
+         Message message1 = Message.builder().sender(sender.get()).message(message).recipient(recipient.get()).build();
+            return this.messageService.save(message1);
+        }
       else{
           response.put("message", "Something is Wrong");
             response.put("Status", "False");

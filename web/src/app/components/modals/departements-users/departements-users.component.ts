@@ -91,7 +91,7 @@ getEmployees() {
 );
 return this.employees;
 }
-setManager(id: BigInteger| undefined) {
+setManager(id: number| undefined) {
   if(id){
 
     this.departementService.setManager(id,this.selectedDepartement.id).subscribe((value:any)=>{
@@ -112,7 +112,7 @@ get membersLength(): number {
   return (this.newDep.get('employees')?.value).length;
 }
 
-addMember(UserId: BigInteger|undefined) {
+addMember(UserId: number|undefined) {
   if(UserId){
 
     this.departementService.addUserToDepartment(this.selectedDepartement.id,UserId).subscribe((value:any)=>{
@@ -125,7 +125,7 @@ addMember(UserId: BigInteger|undefined) {
     })
   }
 }
-removeMember(UserId: BigInteger|undefined) {
+removeMember(UserId: number|undefined) {
   if(UserId){
 
     this.departementService.removeUserToDepartment(this.selectedDepartement.id,UserId).subscribe((value: any)=>{
@@ -162,7 +162,7 @@ removeManager() {
 }
 
 interface Department {
-  id:BigInteger;
+  id:number;
   department_name: string;
   manager: EmployeeModule|null
   employees: Array<EmployeeModule>

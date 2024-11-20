@@ -1,5 +1,6 @@
 package com.enterprise.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,11 +24,15 @@ public Long id;
 @Column(name = "message")
     private String message;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "recipient_id", referencedColumnName = "id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "id" )
+    @JsonManagedReference
     public Employee recipient;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sender_ID", referencedColumnName = "id")
+    @JoinColumn(name = "sender_ID", referencedColumnName = "id" )
+    @JsonManagedReference
     public Employee sender;
+    private Boolean isRead;
+
     @ManyToOne
     @JoinColumn(name="chat_room_id")
     private ChatRoom chatRoom;

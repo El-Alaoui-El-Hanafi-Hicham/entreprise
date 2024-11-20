@@ -9,7 +9,10 @@ import { Observable } from 'rxjs';
 
 import { EmployeeModule } from './modules/employeeModule/employee/employee.module';
 import { EmployeeService } from './services/employee.service';
-import { setUser } from './stores/user/user.actions';
+import { loadData, setUser } from './stores/user/user.actions';
+import { ActiveUserState } from './stores/user/user.reducer';
+import {selectActiveUserId, selectLoading} from "./stores/user/user.selectors";
+import { AppState } from './stores/app.state';
 
 @Component({
   selector: 'app-root',
@@ -18,36 +21,32 @@ import { setUser } from './stores/user/user.actions';
 })
 
 export class AppComponent implements OnInit{
-  user$!:Observable<EmployeeModule>;
+  user$!:Observable<ActiveUserState>;
   title = 'web';
   private socket: any=null;
   private apiKey:string="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxZWxhbGFvdWllbGhhbmFmaWhpY2hhbUBnbWFpbC5jb20iLCJpYXQiOjE3MjkxMDkwODMsImV4cCI6MzYwMDAwMDAwMDAwMDB9.TgzFNLQVXgxhqpcqAsbMYq9UV3EPLApogQrdgZ0mkFk";
   private UserSubscription:any=null;
-  
-  constructor(private employeeService : EmployeeService,private store:Store<{
-    user: any;
-  }>) { 
-    
+
+  constructor(private employeeService : EmployeeService,private store:Store<AppState>) {
+
 let ws= new SockJs('http://localhost:8080/ws')
 this.socket=StompJs.over(ws)
 this.socket.connect({'Authorization:':"Bearer "+this.apiKey},()=>{
   this.UserSubscription=this.socket.subscribe("/user",(e:any)=>{
-    console.log(e.body)
   });
-  this.UserSubscription=this.socket.subscribe("/user/39/queue/messages",(e:any)=>{
-    console.log(e.body)
+  this.UserSubscription=this.socket.subscribe("/user/2/queue/messages",(e:any)=>{
+    
   });
 });
   }
 
   ngOnInit(): void {
-    
-          this.employeeService.me().subscribe(val=>{
-            this.store.dispatch(setUser(val))
-          })
-          this.user$=this.store.select(state=>state?.user);
-   }
-  
 
- 
+          // this.employeeService.me().subscribe(val=>{
+          // })
+          this.store.dispatch(loadData())
+   }
+
+
+
 }

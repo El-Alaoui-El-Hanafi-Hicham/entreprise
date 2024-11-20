@@ -19,14 +19,13 @@ export class ResetPasswordComponent {
   constructor(private formBuilder: FormBuilder, private authService:RegisterService,private  snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute){
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
-      console.log(this.id); // Use the id as needed
     });
 
 }
 ngOnInit(): void {
   this.userForm = this.formBuilder.group({
     password: ['', Validators.required],
-    
+
   });
 }
 
@@ -41,7 +40,7 @@ ngOnInit(): void {
 
     if(this.id){
 
-    
+
     this.authService.resetPassword(this.id?this.id:'',this.password).subscribe((value)=>{
       if(value.status){
         snack.open(value.Message, 'Close', { duration: 3000 })
@@ -49,7 +48,7 @@ ngOnInit(): void {
       }else{
         snack.open(value.Message, 'Close', { duration: 3000 })
       }
-        
+
     })
   } else{
     this.router.navigate(['login']);

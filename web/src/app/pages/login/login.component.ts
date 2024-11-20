@@ -20,16 +20,15 @@ export class LoginComponent implements OnInit {
     this.userForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      
+
     });
   }
 login(){
   let snack = this.snackBar;
-let router=this.router;  
+let router=this.router;
   // let payload = {email:this.userForm.get('email'),password:this.userForm.get('password')}
   this.authService.login(this.userForm?.value).subscribe({
     next(value) {
-      console.log(value)
       if(value.JwtKey!=null && value.Status){
         localStorage.setItem("key",value.JwtKey);
         snack.open(value.Message)
@@ -39,11 +38,11 @@ let router=this.router;
         snack.open(value.Message)
         return false;
       }
-        
+
     },
     error(err) {
       throw new Error(err);
-       
+
    },
   })
 
