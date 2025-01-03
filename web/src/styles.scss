@@ -1,37 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
-@import "primeicons/primeicons.css";
 @use '@angular/material' as mat;
 
+@import "primeicons/primeicons.css";
 @include mat.core();
-$theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$violet-palette,
-  ),
-  typography: (
-    brand-family: 'Comic Sans',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
-.theme-light{
-    @include mat.all-component-colors($theme)
-}
-.theme-dark{
-    @include mat.all-component-colors($theme)
-}
-html, body { height: 100%; }
+/* Add application styles & imports to this file! */
+@import 'primeng/resources/themes/lara-dark-blue/theme.css';
 
-.mat-h3, .mat-subtitle-1, .mat-typography .mat-h3, .mat-typography .mat-subtitle-1, .mat-typography h3 {
-    margin: 0!important;
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+html, body { height: 100%; background-color: unset;}
+
 .page--title--container{
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 5px 0;
+}
+button{
+  display: flex;
+      // border: 0;
+      // background: none;
 }

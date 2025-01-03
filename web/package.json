@@ -26,7 +26,7 @@
     "@ngrx/store": "^18.1.1",
     "@ngrx/store-devtools": "^18.1.1",
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "5.3.3",
+    "bootstrap": "^5.3.3",
     "chart.js": "4.4.3",
     "clipboard": "2.0.11",
     "cors": "^2.8.5",

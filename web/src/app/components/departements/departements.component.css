@@ -1,7 +1,17 @@
 .speedDial {
     position: relative!important;;;
-
+border-radius: 15px!important;
     top: 0!important;
     margin: 0!important;
     padding: 0!important;
+    background:blue ;
+
+}
+.actionBTN{
+    background:blue ;
+}
+.p-speeddial button.p-speeddial-button {
+height: 50px!important;
+padding: 0!important;
+margin: 0!important;
 }

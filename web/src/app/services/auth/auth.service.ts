@@ -13,7 +13,8 @@ export class RegisterService {
   private httpHeaders: HttpHeaders = new HttpHeaders({
     "Content-Type":"application/json",
     "Accept":"application/json",
-});
+    "Authorization":"Bearer "+this.JwtKey
+  });
   private authSecretKey = 'key';
 baseUrl="http://localhost:8080/api/auth/"
   constructor(private httpClient:HttpClient) {
@@ -41,14 +42,16 @@ baseUrl="http://localhost:8080/api/auth/"
   isAuthenticatedFn() {
    console.log("Working")
   // Step
-   this.httpClient.get<any>(this.baseUrl + "isAuthenticated", { headers: this.httpHeaders })
-   .subscribe((status: boolean) =>this.isAuthenticated=status)
+  let s:boolean=false;
+   return this.httpClient.get<any>(this.baseUrl + "isAuthenticated", { headers: this.httpHeaders })
+  //  .subscribe((status: boolean) =>this.isAuthenticated=status)
 }
   login(payload:Object | undefined){
     console.log(payload)
     return this.httpClient.post<any>(this.baseUrl+"login",payload,{headers:this.httpHeaders})
   }
   isAuthenticatedUser(): boolean {
+    console.log("isAuthenticated is ===> "+this.isAuthenticated)
     console.log(this.JwtKey , this.isAuthenticated)
       return this.JwtKey && this.isAuthenticated;
   }

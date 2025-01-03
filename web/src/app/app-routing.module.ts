@@ -19,18 +19,22 @@ const routes: Routes = [   {
     {
       path: '', // child route path
       component: LandComponent, // child route component that the router renders
+      canActivateChild: [AuthGuard]
     },
     {
       path: 'employees', // child route path
       component: UsersComponent, // child route component that the router renders
+      loadChildren: () => import('./components/users/users.module').then(m => m.EmployeesModule)
     },
     {
       path: 'departements', // child route path
       component: DepartementsComponent, // child route component that the router renders
+      loadChildren: () => import('./components/departements/departements.module').then(m => m.DepartementsModule)
     },
     {
       path: 'chats', // child route path
       component: ChatComponent, // child route component that the router renders
+      loadChildren: () => import('./components/chat/chat.module').then(m => m.ChatModule)
     },
   ]
 },
@@ -38,12 +42,13 @@ const routes: Routes = [   {
   path:'reset-password/:id',component:ResetPasswordComponent,title:"Reset Password"
 },
 {
-  path:'login',component:LoginComponent,title:"Login"
+  path:'login',component:LoginComponent,title:"Login",
 }
 ,
 {
   path:'register',component:RegisterComponent,title:"register"
 },
+  { path: 'authentication', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
 { path: '**', component: PageNotFoundComponentComponent  }];
 
 @NgModule({

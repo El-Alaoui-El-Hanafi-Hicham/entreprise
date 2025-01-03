@@ -12,7 +12,7 @@ import { PageNotFoundComponentComponent } from './pages/page-not-found-component
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -70,23 +70,17 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
+   
     PageNotFoundComponentComponent,
     HomeComponent,
     SideBarComponent,
     LandComponent,
-    UsersComponent,
-    DepartementsComponent,
     AddUserComponent,
-    ResetPasswordComponent,
-    DepartmentModalComponent,
-    DepartementsUsersComponent,
-    ChatComponent,
+  
   ],
   imports: [
-    CommonModule,
-    BrowserModule,
+  BrowserModule,
+  CommonModule,
     AppRoutingModule,
     MatToolbarModule,
     ReactiveFormsModule,
@@ -97,28 +91,21 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
     MatListModule,
     MatSelectModule,
     MessagesModule,
-    DialogModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
     MatButtonModule,
     ButtonModule,
     MatDividerModule,
     MatDatepickerModule,
-     MatTableModule,
-     MatPaginatorModule,
     HttpClientModule,
     MatInputModule,
-    TableModule,
-    TagModule,
     MatSnackBarModule,
     MatButtonModule,
     MatDialogModule,
     SplitButtonModule,
-    MatMenuModule,
     InputSwitchModule,
-    SpeedDialModule,
-    FileUploadModule,
+    MatIconModule,
+    MatIcon,
+  
     MatNativeDateModule, DialogModule, ButtonModule, InputTextModule, 
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(appEffects), // Register effects

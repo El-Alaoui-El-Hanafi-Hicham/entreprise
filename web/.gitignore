@@ -40,3 +40,13 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+node_modules
+dist
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+*.log
+.env

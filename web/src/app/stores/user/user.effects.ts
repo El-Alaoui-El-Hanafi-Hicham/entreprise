@@ -14,7 +14,6 @@ export class DataEffects {
       mergeMap(() =>
         this.dataService.me().pipe(
           map((data) => {
-            console.log(data)
             return fromActions.setUser( {user:data} )
           }),
           catchError((error) => of(fromActions.loadDataFailure()))

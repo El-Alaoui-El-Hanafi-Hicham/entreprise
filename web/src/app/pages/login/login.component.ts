@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'
 import { RegisterService } from '../../services/auth/auth.service';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { loadData } from 'src/app/stores/user/user.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/stores/app.state';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +15,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   hide = true;
   userForm :any ;
-    constructor(private formBuilder: FormBuilder, private authService:RegisterService,private  snackBar: MatSnackBar, private router: Router){
+    constructor(private formBuilder: FormBuilder, private authService:RegisterService,private  snackBar: MatSnackBar, private router: Router,
+      private store:Store<AppState>){
 
 
   }
@@ -26,13 +30,15 @@ export class LoginComponent implements OnInit {
 login(){
   let snack = this.snackBar;
 let router=this.router;
+let store = this.store;
   // let payload = {email:this.userForm.get('email'),password:this.userForm.get('password')}
   this.authService.login(this.userForm?.value).subscribe({
     next(value) {
       if(value.JwtKey!=null && value.Status){
         localStorage.setItem("key",value.JwtKey);
         snack.open(value.Message)
-        router.navigate(['home']);
+    store.dispatch(loadData()); // Load necessary data
+        router.navigate(['']);
         return true;
       }else{
         snack.open(value.Message)
