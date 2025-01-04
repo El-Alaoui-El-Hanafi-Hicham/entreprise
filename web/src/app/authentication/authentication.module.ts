@@ -11,7 +11,9 @@ import { RegisterComponent } from '../pages/register/register.component';
 import { ResetPasswordComponent } from '../pages/reset-password/reset-password.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatCard, MatCardContent, MatCardFooter, MatCardHeader } from '@angular/material/card';
-
+import { DividerModule } from 'primeng/divider';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,9 @@ import { MatCard, MatCardContent, MatCardFooter, MatCardHeader } from '@angular/
     AuthenticationRoutingModule,
     //  BrowserModule,
     ReactiveFormsModule,
+    DividerModule,
+    ButtonModule,
+    InputTextModule,
     FormsModule,
     CommonModule,
     MatIconModule,

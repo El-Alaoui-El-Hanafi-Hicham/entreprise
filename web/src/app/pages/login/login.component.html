@@ -1,26 +1,34 @@
 <div class="main">
     <mat-card>
         <mat-card-header>
-            Login
+          <div class="d-flex flex-column align-items-center w-100">
+          <h1>Login</h1>
+          <!-- <span>Enter your credentials</span> -->
+        </div>
         </mat-card-header>
         <mat-card-content>
           <form [formGroup]="userForm">
-            <mat-form-field class="input--container">
-                <mat-label>Email</mat-label>
+            <div>
+
+              <mat-label>Email</mat-label>
+              <mat-form-field class="input--container">
                 <input matInput formControlName="email">
               </mat-form-field>
+            </div>
+              <div>
+              <mat-label>Password</mat-label>
               <mat-form-field class="input--container">
-                <mat-label>Password</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                   <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
               </mat-form-field>
+            </div>
             </form>
         </mat-card-content>
         <mat-card-footer>
             <button mat-flat-button color="primary" [disabled]="formValid()"  (click)="login()">Login</button>
         </mat-card-footer>
       </mat-card>
-      
+
 </div>

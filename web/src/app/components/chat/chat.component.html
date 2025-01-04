@@ -7,7 +7,7 @@
 
         </div>
         <ng-template #noLoadingTemp>
-            
+
         <div *ngFor="let item of contactedEmployees">
            <button (click)="chooseConversation(item?.id)" class="conversation"> {{item?.first_name }} {{item?.last_name}}</button>
         </div>
@@ -15,19 +15,38 @@
         </div>
     <div class="conversation_container" >
         <div class="h-100" *ngIf="selectedChatUser;else noConversationTemplate">
-        <div class="messages_part">
-            <div class="messages">
+          <div class="messages_part">
+            <div class="messages px-2">
+              <div class="d-flex flex-column justify-content-center align-items-center w-100 p-5 ">
+              <h1 style="padding: 0;margin: 0;">{{selectedChatUser.first_name}} {{selectedChatUser.last_name}}</h1>
+              <span>{{selectedChatUser.email}}</span>
+              </div>
 
                 <div *ngFor="let item of actualConversationMessages" ngClass="{{item.sender.id == id ? 'right' : 'left'}}">
                     <div class="message" *ngIf="item.message" id="{{item.message_append_date}}">
                       {{item.message}}
                     </div>
-                </div>     
+                </div>
+
+
+            <div class="UnreadMessages" *ngIf="unReadMessages.length">
+              <div class="d-flex align-items-center justify-content-center">
+                <div class="seperator"></div>
+                <span>Unread Messages</span>
+                <div class="seperator"></div>
+              </div>
+                <div *ngFor="let item of unReadMessages" ngClass="{{item.sender.id == id ? 'right' : 'left'}}">
+                  <div class="message" *ngIf="item.message" id="{{item.message_append_date}}">
+                    {{item.message}}
+                  </div>
+
+              </div>
             </div>
+          </div>
         </div>
         <div class="input_part">
             <input type="text" class="chat_input" [(ngModel)]="message">
-            <button (click)="sendMessage(message)">Send</button>
+            <button (click)="sendMessage(message)" class="sendBtn">Send</button>
         </div>
     </div>
     <ng-template #noConversationTemplate>

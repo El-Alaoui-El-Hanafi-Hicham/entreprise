@@ -41,13 +41,7 @@ const routes: Routes = [   {
 {
   path:'reset-password/:id',component:ResetPasswordComponent,title:"Reset Password"
 },
-{
-  path:'login',component:LoginComponent,title:"Login",
-}
-,
-{
-  path:'register',component:RegisterComponent,title:"register"
-},
+
   { path: 'authentication', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
 { path: '**', component: PageNotFoundComponentComponent  }];
 

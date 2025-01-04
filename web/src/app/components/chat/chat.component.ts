@@ -22,6 +22,7 @@ export class ChatComponent implements OnInit {
 
   count$!: Observable<number>;
   userId$: Observable<any>;
+  unReadMessages: Array<any> = [];
   id:number|undefined;
   message:string|undefined;
   activeUser$!: Observable<any>
@@ -66,9 +67,10 @@ this.socket.subscribe(`/user/${this.id}/queue/messages`,(e:any)=>{
       created_at: data.date,
       chat_id:this.selectedChatUser?.id+'_'+this.id
     }
-    this.actualConversationMessages.push(obj);
-    let number=document.querySelector(".message_append_date")?.scrollHeight
-    document.querySelector(".messages")?.scrollTo(0,number!+100);
+    this.unReadMessages.push(obj);
+
+    let number=document.querySelector(".UnreadMessages")?.scrollHeight
+    document.querySelector(".UnreadMessages")?.scrollTo(0,number!+100);
   }else{
     console.log("DONG SOMETHING ELSE");
   }
@@ -89,7 +91,7 @@ this.userId$.subscribe((id) => {
   this.id=id;
   // console.log('User ID:', this.id);
 });
-} 
+}
 sendMessage(arg0: string|undefined) {
   console.log("sender id is "+this.id+" recipient id is "+this.selectedChatUser?.id);
   this.chatservice.sendMessage(arg0,this.id,this.selectedChatUser?.id).subscribe(val=>{
@@ -161,7 +163,7 @@ filter() {
       console.log(val)
     this.actualConversationMessages=val
     }
-    ) 
+    )
   }
 }
 

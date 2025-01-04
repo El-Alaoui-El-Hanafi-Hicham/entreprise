@@ -12,10 +12,10 @@ const routerConfig:Routes = [
     {
         path:'',component: AppComponent,title:"Home",canActivate: [AuthGuard]
     }
-    ,
-    {
-        path:'login',component:LoginComponent,title:"Login"
-    }
+    // ,
+    // {
+    //     path:'login',component:LoginComponent,title:"Login"
+    // }
     ,
     {
         path:'register',component:RegisterComponent,title:"register"
@@ -26,5 +26,5 @@ const routerConfig:Routes = [
 //     imports: [BrowserModule, RouterModule.forRoot(routerConfig)],
 //     exports: [RouterModule],
 //   })
-  
+
     export default routerConfig;
