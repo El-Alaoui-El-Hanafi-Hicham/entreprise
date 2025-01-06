@@ -83,7 +83,7 @@ public class DepartmentJob {
 @Bean
     public Step step(JobRepository jobRepository,PlatformTransactionManager transactionManager,FlatFileItemReader<Department> read) {
     return new StepBuilder("departmentStep",jobRepository)
-            .<Department,Department>chunk(10)
+            .<Department,Department>chunk(10,transactionManager)
             .reader(read)
             .listener(new ChunkListener() {
                 @Override
@@ -119,14 +119,13 @@ public class DepartmentJob {
 //    }
         @Bean
     public ItemWriter<Department> writer() {
-    return new JdbcBatchItemWriterBuilder<Department>()
-            .dataSource(dataSource)
-            .sql("Insert into department(Department_name) values(?)")
-            .itemPreparedStatementSetter((item, ps) -> {
-                ps.setString(1,item.getDepartment_name());
-            })
-            .build()
-    ;
-    }
+            return new JdbcBatchItemWriterBuilder<Department>()
+                    .dataSource(dataSource)
+                    .sql("Insert into department(department_name) values(?)") // Updated to camel_case
+                    .itemPreparedStatementSetter((item, ps) -> {
+                        ps.setString(1, item.getDepartment_name());
+                    })
+                    .build();
+        }
 
-}
+        }

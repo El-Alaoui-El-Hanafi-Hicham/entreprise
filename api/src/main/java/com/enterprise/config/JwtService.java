@@ -60,7 +60,7 @@ public class JwtService {
         return extractEmail(token).equals(userDetails.getUsername()) && !this.extractExpirationDate(token);
     }
 
-    private boolean extractExpirationDate(String token) {
+    public boolean extractExpirationDate(String token) {
     return extractClaim(token,Claims::getExpiration).before(new Date(System.currentTimeMillis()));
     }
 

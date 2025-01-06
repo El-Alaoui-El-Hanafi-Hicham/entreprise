@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final EmployeeRepository employeeRepository;
 
-    public ResponseEntity<ResetPasswordMessageDto> resetPassword(String encodedId, String password) {
+    public ResponseEntity<ResetPasswordMessageDto> resetPassword(String encodedId, HashMap<String,String> password) {
         String decodedString = new String(Base64.getDecoder().decode(encodedId));
         Long id=Long.parseLong(decodedString);
         Optional<Employee> employee = employeeRepository.findById(id);
@@ -38,9 +39,9 @@ public class AuthenticationService {
 
         }else{
 
-            employee.get().setPassword(passwordEncoder.encode(password));
+            employee.get().setPassword(passwordEncoder.encode(password.get("password")));
             employeeRepository.save(employee.get());
-            return ResponseEntity.ok(ResetPasswordMessageDto.builder().Message("Password Changed Successfully").Status(true).build());
+            return ResponseEntity.ok(ResetPasswordMessageDto.builder().Message("Password Changed Successfully!! ").Status(true).build());
         }
     }
 

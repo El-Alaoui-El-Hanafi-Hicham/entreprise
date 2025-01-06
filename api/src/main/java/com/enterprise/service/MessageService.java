@@ -108,7 +108,7 @@ return  messageDtos;
     public ResponseEntity<String> readAllMsgs(Long user1_id,Long user2_id){
        Optional<String> chatRoom1 =this.chatRoomService.getchatRoomById(user1_id,user2_id,false);
         Optional<String> chatRoom2=this.chatRoomService.getchatRoomById(user2_id,user1_id,false);
-
+return ResponseEntity.ok("MP");
     }
 
 }

@@ -16,6 +16,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.HashMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,10 +57,13 @@ public final AuthenticationService authenticationService;
         return null;
     }
     @GetMapping("/isAuthenticated")
-    public ResponseEntity<Boolean> isAuthenticated(@RequestBody String jwt) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String);
-        return ResponseEntity.ok(isAuthenticated);
+    public ResponseEntity<Boolean> isAuthenticated() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        boolean isAuthenticated = authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String);
+//        return ResponseEntity.ok(isAuthenticated);
+String jwt =((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization").substring(7);
+        Boolean isValid = this.jwtService.extractExpirationDate(jwt);
+        return ResponseEntity.ok(!isValid);
     }
 
 
@@ -79,8 +86,7 @@ public ResponseEntity<AuthenticationResponseDto> Login(@RequestBody LoginUserDto
         return ResponseEntity.ok(registerUserDto);
     }
     @PostMapping("/resetPassord/{encodedId}")
-    public ResponseEntity<ResetPasswordMessageDto> resetPassword(@PathVariable String encodedId, @RequestBody String password){
-
+    public ResponseEntity<ResetPasswordMessageDto> resetPassword(@PathVariable String encodedId, @RequestBody HashMap<String,String> password){
         return authenticationService.resetPassword(encodedId,password);
     }
 

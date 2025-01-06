@@ -11,6 +11,9 @@
         <div *ngFor="let item of contactedEmployees">
            <button (click)="chooseConversation(item?.id)" class="conversation"> {{item?.first_name }} {{item?.last_name}}</button>
         </div>
+        <button class="add_new_conversation">
+            <mat-icon (click)="openDialog()">add</mat-icon>
+        </button>
     </ng-template>
         </div>
     <div class="conversation_container" >
@@ -55,4 +58,5 @@
         </div>
         </ng-template>
     </div>
+    <app-chat-modal (closeM)="closeModal($event)" [visible]="isModalOpen"></app-chat-modal>
 </div>

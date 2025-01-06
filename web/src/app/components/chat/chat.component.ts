@@ -20,6 +20,8 @@ import { validateHeaderName } from 'http';
 
 export class ChatComponent implements OnInit {
 
+
+  isModalOpen:boolean=false;
   count$!: Observable<number>;
   userId$: Observable<any>;
   unReadMessages: Array<any> = [];
@@ -92,6 +94,13 @@ this.userId$.subscribe((id) => {
   // console.log('User ID:', this.id);
 });
 }
+openDialog() {
+  this.isModalOpen=true;
+
+}
+closeModal($event: any) {
+  this.isModalOpen=false;
+  }
 sendMessage(arg0: string|undefined) {
   console.log("sender id is "+this.id+" recipient id is "+this.selectedChatUser?.id);
   this.chatservice.sendMessage(arg0,this.id,this.selectedChatUser?.id).subscribe(val=>{

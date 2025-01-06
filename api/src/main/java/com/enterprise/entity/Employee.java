@@ -25,7 +25,7 @@ import java.util.List;
 @Setter
 @Builder
 @ToString
-public class Employee implements UserDetails {
+public  class Employee implements UserDetails {
 @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -73,6 +73,7 @@ private Department getDepartement(){
         this.hire_date = hire_date;
         this.phone_number=phone_number;
     }
+
     public Employee(String first_name,String last_name, String email, String password) {
         this.first_name = first_name;
         this.last_name = last_name;
