@@ -1,40 +1,58 @@
 <div class="main">
-  <mat-card>
-    <mat-card-header>
-      Login
-    </mat-card-header>
-    <mat-card-content>
-          <form>
-            <mat-form-field class="input--container">
-                <mat-label>First Name</mat-label>
-                <input name="email" [(ngModel)]="first_name">
-              </mat-form-field>
-              <mat-form-field class="input--container">
-                <mat-label>Last Name</mat-label>
-                <input name="email" [(ngModel)]="last_name">
-              </mat-form-field>
-            <mat-form-field class="input--container">
-                <mat-label>Email</mat-label>
-                <input name="email" [(ngModel)]="email">
-              </mat-form-field>
-              <mat-form-field class="input--container">
-                <mat-label>Password</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
-                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Choose hire date</mat-label>
-                <input matInput type="date" [(ngModel)]="hire_date" placeholder="start date">
-              </mat-form-field>
-              
-            </form>
-        </mat-card-content>
-        <mat-card-footer>
-            <button mat-flat-button color="primary" (click)="register()">Register</button>
-     
-        </mat-card-footer>
-      </mat-card>
-      
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="text-center p-3">
+        <h2>Register</h2>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <form>
+        <div class="flex flex-column gap-3">
+          <div class="flex flex-column gap-2">
+            <label for="firstName">First Name</label>
+            <input pInputText id="firstName" name="firstName" [(ngModel)]="first_name" class="w-full" />
+          </div>
+          
+          <div class="flex flex-column gap-2">
+            <label for="lastName">Last Name</label>
+            <input pInputText id="lastName" name="lastName" [(ngModel)]="last_name" class="w-full" />
+          </div>
+          
+          <div class="flex flex-column gap-2">
+            <label for="email">Email</label>
+            <input pInputText id="email" name="email" [(ngModel)]="email" class="w-full" />
+          </div>
+          
+          <div class="flex flex-column gap-2">
+            <label for="password">Password</label>
+            <p-password 
+              id="password" 
+              name="password"
+              [(ngModel)]="password" 
+              [toggleMask]="true" 
+              [feedback]="true"
+              styleClass="w-full">
+            </p-password>
+          </div>
+          
+          <div class="flex flex-column gap-2">
+            <label for="hireDate">Choose hire date</label>
+            <p-calendar 
+              id="hireDate" 
+              name="hireDate"
+              [(ngModel)]="hire_date" 
+              dateFormat="mm/dd/yy" 
+              [showIcon]="true"
+              styleClass="w-full">
+            </p-calendar>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-center">
+        <p-button label="Register" severity="primary" (onClick)="register()"></p-button>
+      </div>
+    </ng-template>
+  </p-card>
 </div>

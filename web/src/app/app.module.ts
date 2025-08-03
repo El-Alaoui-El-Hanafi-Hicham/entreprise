@@ -3,38 +3,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PageNotFoundComponentComponent } from './pages/page-not-found-component/page-not-found-component.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
-import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import { HomeComponent } from './pages/home/home.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
-import {MatListModule} from '@angular/material/list';
 import { LandComponent } from './components/land/land.component';
 import { UsersComponent } from './components/users/users.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import { MatPaginatorModule} from '@angular/material/paginator';
-import { MatTableModule} from '@angular/material/table';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { AddUserComponent } from './components/modals/add-user/add-user.component';
-import { MatNativeDateModule } from '@angular/material/core';
+
+// PrimeNG Imports
 import { MessagesModule } from 'primeng/messages';
-import {MatMenuModule} from '@angular/material/menu';
 import { TableModule } from 'primeng/table';
-import { SplitButtonModule } from 'primeng/splitbutton';;
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -42,17 +25,24 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TagModule } from 'primeng/tag';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CardModule } from 'primeng/card';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
+import { SidebarModule } from 'primeng/sidebar';
+import { MenuModule } from 'primeng/menu';
+import { ToolbarModule } from 'primeng/toolbar';
+import { PaginatorModule } from 'primeng/paginator';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DividerModule } from 'primeng/divider';
+import { PasswordModule } from 'primeng/password';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { MenubarModule } from 'primeng/menubar';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogModule
-} from '@angular/material/dialog';
+// PrimeNG Dialog service
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { DepartmentModalComponent } from './components/modals/department-modal/department-modal.component';
 import { DepartementsUsersComponent } from './components/modals/departements-users/departements-users.component';
@@ -75,47 +65,53 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
     HomeComponent,
     SideBarComponent,
     LandComponent,
-    AddUserComponent,
   
   ],
   imports: [
-  BrowserModule,
-  CommonModule,
+    BrowserModule,
+    CommonModule,
     AppRoutingModule,
-    MatToolbarModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FormsModule,
-    MatSidenavModule,
-    MatCardModule,
-    MatListModule,
-    MatSelectModule,
-    MessagesModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    ButtonModule,
-    MatDividerModule,
-    MatDatepickerModule,
     HttpClientModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    MatDialogModule,
+    // PrimeNG Modules
+    MessagesModule,
+    TableModule,
     SplitButtonModule,
+    DialogModule,
+    ButtonModule,
+    InputTextModule,
     InputSwitchModule,
-    MatIconModule,
-    MatIcon,
-  
-    MatNativeDateModule, DialogModule, ButtonModule, InputTextModule, 
+    TagModule,
+    SpeedDialModule,
+    FileUploadModule,
+    CardModule,
+    DropdownModule,
+    InputTextareaModule,
+    CalendarModule,
+    ToastModule,
+    SidebarModule,
+    MenuModule,
+    ToolbarModule,
+    PaginatorModule,
+    ProgressSpinnerModule,
+    DividerModule,
+    PasswordModule,
+    PanelMenuModule,
+    MenubarModule,
+    FloatLabelModule,
+    // Store Modules
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot(appEffects), // Register effects
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }), // DevTools
-
+    EffectsModule.forRoot(appEffects),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false })
   ],
-  providers: [    HttpClient,
+  providers: [
+    HttpClient,
+    MessageService,
+    ConfirmationService,
     provideHttpClient(withInterceptors([jWTKeyInterceptor])),
-    provideAnimationsAsync(),
-
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

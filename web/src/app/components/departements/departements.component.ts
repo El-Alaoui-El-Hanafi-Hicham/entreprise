@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
 import { departmentService } from 'src/app/services/department/department.service';
@@ -9,7 +8,8 @@ import { departmentService } from 'src/app/services/department/department.servic
 @Component({
   selector: 'app-departements',
   templateUrl: './departements.component.html',
-  styleUrls: ['./departements.component.css']
+  styleUrls: ['./departements.component.css'],
+  providers: [MessageService]
 })
 export class DepartementsComponent implements OnInit {
 
@@ -34,7 +34,7 @@ IsUploadModalopen:boolean=false
   isEdit:boolean=false;
   selectedDepartement!:Department
   isSetManager:boolean=false
-constructor(private departmentService:departmentService,private snackBar:MatSnackBar,){
+constructor(private departmentService:departmentService,private messageService:MessageService,){
 
 }
 update(department: Department) {
@@ -58,14 +58,14 @@ downloadDepartmentTemplate(): void {
 
 }
 UploadFile() {
-this.departmentService.uploadFileToBE(this.file).subscribe((value: any)=>{
+this.departmentService.uploadFileToBE(this.file).subscribe((value: any)=> {
   if(Boolean(value['Status'])){
-    this.snackBar.open(value['message'])
+    this.messageService.add({severity:'success', summary: 'Success', detail: value['message']});
     this.closeUploadFile(true);
     this.getDepartments();
     this.file=null
   }else{
-    this.snackBar.open(value['message'])
+    this.messageService.add({severity:'error', summary: 'Error', detail: value['message']});
 
   }
 })
@@ -74,12 +74,12 @@ this.departmentService.uploadFileToBE(this.file).subscribe((value: any)=>{
     this.file=null;
     }
 delete(department: Department) {
-  this.departmentService.deleteDepartment(department.id).subscribe((value: any)=>{
+  this.departmentService.deleteDepartment(department.id).subscribe((value: any)=> {
     if(Boolean(value['Status'])){
-      this.snackBar.open(value['message'])
-      this.departments= this.departments.filter((el:Department)=>el.id!=department.id);
+      this.messageService.add({severity:'success', summary: 'Success', detail: value['message']});
+      this.departments= this.departments.filter((el:Department)=> el.id!=department.id);
     }else{
-      this.snackBar.open(value['message'])
+      this.messageService.add({severity:'error', summary: 'Error', detail: value['message']});
 
     }
   })
@@ -125,6 +125,34 @@ openEditModal(selectedDepartement: Department) {
       {
         label: 'Upload',
         routerLink: ['/fileupload'] // Example route for file upload
+      }
+    ];
+  }
+  
+  getMenuItems(department: Department): MenuItem[] {
+    return [
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => this.openEditModal(department)
+      },
+      {
+        label: 'Add Employee',
+        icon: 'pi pi-user-plus',
+        command: () => this.openEditModal(department)
+      },
+      {
+        label: 'Set Manager',
+        icon: 'pi pi-user',
+        command: () => this.setManager(department)
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => this.delete(department)
       }
     ];
   }

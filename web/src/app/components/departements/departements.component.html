@@ -34,28 +34,15 @@
                   <ng-template #noManager>No Manager</ng-template></td>
                 <td><p-button [label]="getArrayLength(department.employees)"  /></td>
                 <td> 
-                  
-                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                                    <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="openEditModal(department)">
-                      <mat-icon>dialpad</mat-icon>
-                      <span>Edit</span>
-                    </button>
-                    <button mat-menu-item (click)="openEditModal(department)">
-                        <mat-icon>dialpad</mat-icon>
-                        <span>Add Employee</span>
-                      </button>
-                    <button mat-menu-item (click)="setManager(department)">
-                        <mat-icon>notifications_off</mat-icon>
-                        <span>Set Manager</span>
-                    </button>
-                    <button mat-menu-item (click)="delete(department)" >
-                      <mat-icon>voicemail</mat-icon>
-                      <span>Delete</span>
-                    </button>
-                  </mat-menu>
+                  <p-button 
+                    icon="pi pi-ellipsis-v" 
+                    [text]="true" 
+                    [rounded]="true" 
+                    severity="secondary" 
+                    (click)="menu.toggle($event)"
+                    #menuButton>
+                  </p-button>
+                  <p-menu #menu [model]="getMenuItems(department)" [popup]="true" appendTo="body"></p-menu>
                 </td>
 
             </tr>

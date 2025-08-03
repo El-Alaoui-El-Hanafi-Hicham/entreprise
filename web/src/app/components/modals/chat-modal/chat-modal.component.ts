@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EventEmitter } from "@angular/core";
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'primeng/api';
 import { filter, map } from 'rxjs';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
 import { EmployeeService } from 'src/app/services/employee.service';
@@ -23,7 +23,7 @@ export class ChatModalComponent implements OnChanges{
   @Output() closeM: EventEmitter<any> = new EventEmitter();
 
 
-  constructor(private employeeService:EmployeeService,private snackBar: MatSnackBar){
+  constructor(private employeeService:EmployeeService,private messageService: MessageService){
 
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -46,7 +46,7 @@ this.isLoading=false
   },
   (error) => {
     console.log(error)
-    this.snackBar.open("Failed to fetch employees. Please try again later.")
+    this.messageService.add({severity:'error', summary:'Error', detail:'Failed to fetch employees. Please try again later.'})
   },()=>{
     this.isLoading=false;
   }

@@ -1,12 +1,28 @@
 <div class="main">
-    <div>
-<mat-card>
-    <mat-card-header>Employees</mat-card-header>
-    <mat-card-content>{{employees.length}}</mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>Employees</mat-card-header>
-    <mat-card-content>{{employees.length}}</mat-card-content>
-  </mat-card>
-</div>
+    <div class="flex gap-3">
+        <p-card>
+            <ng-template pTemplate="header">
+                <div class="p-3">
+                    <h3>Employees</h3>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="text-center text-3xl font-bold">
+                    {{employees.length}}
+                </div>
+            </ng-template>
+        </p-card>
+        <p-card>
+            <ng-template pTemplate="header">
+                <div class="p-3">
+                    <h3>Departments</h3>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="text-center text-3xl font-bold">
+                    {{employees.length}}
+                </div>
+            </ng-template>
+        </p-card>
+    </div>
 </div>

@@ -1,43 +1,55 @@
-<mat-sidenav-container class="mainSide">
-    <mat-sidenav  mode="side" [opened]="openedSideBar" class="sideBar">
-      <div class="up__section"> 
-      <mat-list>
-            <mat-list-item><a routerLink="" class="link"><span class="material-icons md-48">home</span>Home</a></mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="employees" class="link"><span class="material-icons md-48">person</span>Users</a></mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="departements" class="link"><span class="material-icons md-48">domain</span>Departements</a></mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item><a routerLink="chats" class="link"><span class="material-icons md-48">chat</span>Chat</a></mat-list-item>
-           </mat-list>
-          </div> 
-           <div class="down__section">
-           <button class="logout" (click)="logout()">Logout</button>
-          </div>
-          </mat-sidenav>
-          <mat-sidenav-content>
-            <mat-toolbar>
-              <div class="leftside">
-                <button mat-icon-button class="example-icon" (click)="toggleSideBar()" aria-label="Example icon-button with menu icon">
-                  <mat-icon>menu</mat-icon>
-              </button>
-            <span>Manage IT</span>
-          </div>
-          <div class="rightside">
-                <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-                  <mat-icon>favorite</mat-icon>
-                </button>
-                <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-                  <mat-icon>share</mat-icon>
-                </button>
-                <div *ngIf="this.activeUser$ | async as user">
-                  {{user.first_name + ' ' + user.last_name}}
-            </div></div>
-          </mat-toolbar>
-        <div class="main">
-        <router-outlet>
-
-        </router-outlet>
+<div class="layout-wrapper">
+  <p-sidebar [(visible)]="openedSideBar" [modal]="false" [showCloseIcon]="false" styleClass="sideBar">
+    <div class="up__section">
+      <p-panelMenu [model]="menuItems" styleClass="w-full"></p-panelMenu>
     </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    <div class="down__section">
+      <p-button 
+        label="Logout" 
+        icon="pi pi-sign-out" 
+        styleClass="w-full" 
+        severity="danger"
+        (onClick)="logout()">
+      </p-button>
+    </div>
+  </p-sidebar>
+  
+  <div class="layout-main">
+    <p-toolbar>
+      <ng-template pTemplate="start">
+        <p-button 
+          icon="pi pi-bars" 
+          [text]="true" 
+          [rounded]="true" 
+          severity="secondary"
+          (onClick)="toggleSideBar()">
+        </p-button>
+        <span class="ml-3">Manage IT</span>
+      </ng-template>
+      
+      <ng-template pTemplate="end">
+        <p-button 
+          icon="pi pi-heart" 
+          [text]="true" 
+          [rounded]="true" 
+          severity="secondary" 
+          styleClass="mr-2">
+        </p-button>
+        <p-button 
+          icon="pi pi-share-alt" 
+          [text]="true" 
+          [rounded]="true" 
+          severity="secondary" 
+          styleClass="mr-2">
+        </p-button>
+        <div *ngIf="activeUser$ | async as user" class="ml-3">
+          {{user.first_name + ' ' + user.last_name}}
+        </div>
+      </ng-template>
+    </p-toolbar>
+    
+    <div class="main">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

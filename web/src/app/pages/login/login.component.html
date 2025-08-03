@@ -1,34 +1,41 @@
 <div class="main">
-    <mat-card>
-        <mat-card-header>
-          <div class="d-flex flex-column align-items-center w-100">
+    <p-card>
+        <ng-template pTemplate="header">
+          <div class="d-flex flex-column align-items-center w-100 p-3">
           <h1>Login</h1>
           <!-- <span>Enter your credentials</span> -->
         </div>
-        </mat-card-header>
-        <mat-card-content>
+        </ng-template>
+        <ng-template pTemplate="content">
           <form [formGroup]="userForm">
-            <div>
-
-              <mat-label>Email</mat-label>
-              <mat-form-field class="input--container">
-                <input matInput formControlName="email">
-              </mat-form-field>
+            <div class="flex flex-column gap-3">
+              <div class="flex flex-column gap-2">
+                <label for="email">Email</label>
+                <input pInputText id="email" formControlName="email" class="w-full" />
+              </div>
+              
+              <div class="flex flex-column gap-2">
+                <label for="password">Password</label>
+                <p-password 
+                  id="password" 
+                  formControlName="password" 
+                  [toggleMask]="true" 
+                  [feedback]="false"
+                  styleClass="w-full">
+                </p-password>
+              </div>
             </div>
-              <div>
-              <mat-label>Password</mat-label>
-              <mat-form-field class="input--container">
-                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            </form>
-        </mat-card-content>
-        <mat-card-footer>
-            <button mat-flat-button color="primary" [disabled]="formValid()"  (click)="login()">Login</button>
-        </mat-card-footer>
-      </mat-card>
-
+          </form>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="flex justify-content-center">
+            <p-button 
+              label="Login" 
+              severity="primary" 
+              [disabled]="formValid()" 
+              (onClick)="login()">
+            </p-button>
+          </div>
+        </ng-template>
+      </p-card>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'primeng/api';
 import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
@@ -9,9 +9,9 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class LandComponent implements OnInit {
   employees:Array<Object>=[];
-  constructor(private employeeService:EmployeeService,private  snackBar: MatSnackBar){
+  constructor(private employeeService:EmployeeService, private messageService: MessageService){
 
-}
+  }
   ngOnInit(): void {
     this.getEmployees()
   }
@@ -20,7 +20,7 @@ export class LandComponent implements OnInit {
       this.employees = value; 
     },
     (error) => {
-      this.snackBar.open("Failed to fetch employees. Please try again later.")
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to fetch employees. Please try again later.'});
     });
   }
 }

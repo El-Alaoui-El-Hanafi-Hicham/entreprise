@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { RegisterService } from 'src/app/services/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +16,7 @@ export class ResetPasswordComponent {
   id:string | null='';
   userForm :any ;
   password:String='';
-  constructor(private formBuilder: FormBuilder, private authService:RegisterService,private  snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute){
+  constructor(private formBuilder: FormBuilder, private authService:RegisterService,private  messageService: MessageService, private router: Router, private route: ActivatedRoute){
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
     });
@@ -35,24 +35,17 @@ ngOnInit(): void {
     return this.password.length==0
   }
   resetPassword(){
-    let snack = this.snackBar;
-    let router=this.router;
-
     if(this.id){
-
-
-    this.authService.resetPassword(this.id?this.id:'',this.password).subscribe((value)=>{
-      if(value.status){
-        snack.open(value.Message, 'Close', { duration: 3000 })
-        this.router.navigate(['login']);
-      }else{
-        snack.open(value.Message, 'Close', { duration: 3000 })
-      }
-
-    })
-  } else{
-    this.router.navigate(['login']);
-
-  }
+      this.authService.resetPassword(this.id?this.id:'',this.password).subscribe((value)=>{
+        if(value.status){
+          this.messageService.add({severity:'success', summary:'Success', detail:value.Message});
+          this.router.navigate(['login']);
+        }else{
+          this.messageService.add({severity:'error', summary:'Error', detail:value.Message});
+        }
+      })
+    } else{
+      this.router.navigate(['login']);
+    }
   }
 }

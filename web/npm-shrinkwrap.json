@@ -9,22 +9,18 @@
       "version": "0.0.0",
       "dependencies": {
         "@angular/animations": "^18.2.7",
-        "@angular/cdk": "^18.2.6",
         "@angular/common": "^18.2.7",
         "@angular/compiler": "^18.2.7",
         "@angular/core": "^18.2.7",
         "@angular/forms": "^18.2.7",
         "@angular/localize": "^18.2.7",
-        "@angular/material": "^18.2.6",
         "@angular/platform-browser": "^18.2.7",
         "@angular/platform-browser-dynamic": "^18.2.7",
         "@angular/router": "^18.2.7",
-        "@ng-bootstrap/ng-bootstrap": "^17.0.0",
         "@ngrx/effects": "^18.1.1",
         "@ngrx/store": "^18.1.1",
         "@ngrx/store-devtools": "^18.1.1",
         "@popperjs/core": "^2.11.8",
-        "bootstrap": "^5.3.3",
         "chart.js": "4.4.3",
         "clipboard": "2.0.11",
         "cors": "^2.8.5",
@@ -33,6 +29,7 @@
         "ngx-clipboard": "16.0.0",
         "ngx-toastr": "19.0.0",
         "nouislider": "15.8.1",
+        "primeflex": "^4.0.0",
         "primeicons": "^7.0.0",
         "primeng": "^17.18.6",
         "rxjs": "~7.8.1",
@@ -385,23 +382,6 @@
         }
       }
     },
-    "node_modules/@angular/cdk": {
-      "version": "18.2.6",
-      "resolved": "https://registry.npmjs.org/@angular/cdk/-/cdk-18.2.6.tgz",
-      "integrity": "sha512-Gfq/iv4zhlKYpdQkDaBRwxI71NHNUHM1Cs1XhnZ0/oFct5HXvSv1RHRGTKqBJLLACaAPzZKXJ/UglLoyO5CNiQ==",
-      "license": "MIT",
-      "dependencies": {
-        "tslib": "^2.3.0"
-      },
-      "optionalDependencies": {
-        "parse5": "^7.1.2"
-      },
-      "peerDependencies": {
-        "@angular/common": "^18.0.0 || ^19.0.0",
-        "@angular/core": "^18.0.0 || ^19.0.0",
-        "rxjs": "^6.5.3 || ^7.4.0"
-      }
-    },
     "node_modules/@angular/cli": {
       "version": "18.2.7",
       "resolved": "https://registry.npmjs.org/@angular/cli/-/cli-18.2.7.tgz",
@@ -557,24 +537,6 @@
       "peerDependencies": {
         "@angular/compiler": "18.2.7",
         "@angular/compiler-cli": "18.2.7"
-      }
-    },
-    "node_modules/@angular/material": {
-      "version": "18.2.6",
-      "resolved": "https://registry.npmjs.org/@angular/material/-/material-18.2.6.tgz",
-      "integrity": "sha512-ObxC/vomSb9QF3vIztuiInQzws+D6u09Dhfx6uNFjtyICqxEFpF7+Qx7QVDWrsuXOgxZTKgacK8f46iV8hWUfg==",
-      "license": "MIT",
-      "dependencies": {
-        "tslib": "^2.3.0"
-      },
-      "peerDependencies": {
-        "@angular/animations": "^18.0.0 || ^19.0.0",
-        "@angular/cdk": "18.2.6",
-        "@angular/common": "^18.0.0 || ^19.0.0",
-        "@angular/core": "^18.0.0 || ^19.0.0",
-        "@angular/forms": "^18.0.0 || ^19.0.0",
-        "@angular/platform-browser": "^18.0.0 || ^19.0.0",
-        "rxjs": "^6.5.3 || ^7.4.0"
       }
     },
     "node_modules/@angular/platform-browser": {
@@ -4229,22 +4191,6 @@
         "@tybys/wasm-util": "^0.9.0"
       }
     },
-    "node_modules/@ng-bootstrap/ng-bootstrap": {
-      "version": "17.0.0",
-      "resolved": "https://registry.npmjs.org/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-17.0.0.tgz",
-      "integrity": "sha512-hTbBtozJlpevF1RO6J2adCoXiAkMTPV3wmXIyK05dVha4VsKjHibgaL6YldToKoh6ElQnIYkPEIJHX9z5EtyMw==",
-      "dependencies": {
-        "tslib": "^2.3.0"
-      },
-      "peerDependencies": {
-        "@angular/common": "^18.0.0",
-        "@angular/core": "^18.0.0",
-        "@angular/forms": "^18.0.0",
-        "@angular/localize": "^18.0.0",
-        "@popperjs/core": "^2.11.8",
-        "rxjs": "^6.5.3 || ^7.4.0"
-      }
-    },
     "node_modules/@ngrx/effects": {
       "version": "18.1.1",
       "resolved": "https://registry.npmjs.org/@ngrx/effects/-/effects-18.1.1.tgz",
@@ -7725,25 +7671,6 @@
       "dev": true,
       "license": "ISC"
     },
-    "node_modules/bootstrap": {
-      "version": "5.3.3",
-      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.3.tgz",
-      "integrity": "sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==",
-      "funding": [
-        {
-          "type": "github",
-          "url": "https://github.com/sponsors/twbs"
-        },
-        {
-          "type": "opencollective",
-          "url": "https://opencollective.com/bootstrap"
-        }
-      ],
-      "license": "MIT",
-      "peerDependencies": {
-        "@popperjs/core": "^2.11.8"
-      }
-    },
     "node_modules/brace-expansion": {
       "version": "1.1.11",
       "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",
@@ -9797,7 +9724,7 @@
       "version": "4.5.0",
       "resolved": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
       "integrity": "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==",
-      "devOptional": true,
+      "dev": true,
       "engines": {
         "node": ">=0.12"
       },
@@ -15120,7 +15047,7 @@
       "version": "7.1.2",
       "resolved": "https://registry.npmjs.org/parse5/-/parse5-7.1.2.tgz",
       "integrity": "sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==",
-      "devOptional": true,
+      "dev": true,
       "dependencies": {
         "entities": "^4.4.0"
       },
@@ -15981,6 +15908,12 @@
       "funding": {
         "url": "https://github.com/chalk/ansi-styles?sponsor=1"
       }
+    },
+    "node_modules/primeflex": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/primeflex/-/primeflex-4.0.0.tgz",
+      "integrity": "sha512-UOEZCRjR36+sm5bUpDhS1xbA068l9VC6y1aTNVqQPtXuKIdPTqAWHRUxj3mKAoPrQ9W373ooJJMgNVXfiaw04g==",
+      "license": "MIT"
     },
     "node_modules/primeicons": {
       "version": "7.0.0",

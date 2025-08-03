@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
 import { RegisterService } from '../../services/auth/auth.service';
 
 @Component({

@@ -10,10 +10,9 @@ import { SpeedDialModule } from 'primeng/speeddial';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 
 
 @NgModule({
@@ -33,8 +32,8 @@ import { BrowserModule } from '@angular/platform-browser';
     DialogModule,
     TableModule,
     TagModule,
-    MatIconModule,
-    MatMenuModule,
+    ButtonModule,
+    MenuModule
   ]
 })
 export class DepartementsModule { }

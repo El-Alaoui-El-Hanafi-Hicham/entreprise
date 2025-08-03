@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'primeng/api';
 import { Obj } from '@popperjs/core';
 import { filter, map } from 'rxjs';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
@@ -30,7 +30,7 @@ export class DepartementsUsersComponent implements OnInit, OnChanges{
   totalPages:number=0;
   @Input() selectedDepartement !:Department;
   @Output() closeAddEdit: EventEmitter<any> = new EventEmitter();
-  constructor(private fb : FormBuilder, private cdRef: ChangeDetectorRef,private employeeService:EmployeeService,private snackBar: MatSnackBar,private departementService: departmentService){
+  constructor(private fb : FormBuilder, private cdRef: ChangeDetectorRef,private employeeService:EmployeeService,private messageService: MessageService,private departementService: departmentService){
     
   }
 
@@ -84,7 +84,7 @@ getEmployees() {
  
   },
   (error) => {
-    this.snackBar.open("Failed to fetch employees. Please try again later.")
+    this.messageService.add({severity:'error', summary:'Error', detail:'Failed to fetch employees. Please try again later.'})
   },()=>{
     this.isLoading=false;
   }
@@ -96,11 +96,11 @@ setManager(id: number| undefined) {
 
     this.departementService.setManager(id,this.selectedDepartement.id).subscribe((value:any)=>{
       if(Boolean(value['Status'])){
-        this.snackBar.open(value['message'])
+        this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
   
         this.closeModal(true);
       }else{
-        this.snackBar.open(value['message'])
+        this.messageService.add({severity:'error', summary:'Error', detail:value['message']});
         
       }});
     }
@@ -120,7 +120,7 @@ addMember(UserId: number|undefined) {
         let employee:EmployeeModule | undefined =this.employees.find(el=>el.id==UserId);
      this.newDep.get('employees')?.value.push(employee);
         this.employees =employee ?  this.employees.filter(el=>el.id!=employee.id) :this.employees
-    this.snackBar.open(value['message'])
+    this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
       }
     })
   }
@@ -133,7 +133,7 @@ removeMember(UserId: number|undefined) {
         let employee:EmployeeModule | undefined =this.selectedDepartement.employees.find(el=>el.id==UserId);
          employee &&  this.newDep.get('employees')?.setValue(this.newDep.get('employees')?.value.filter((el:EmployeeModule)=>el.id!=employee.id))
         employee && this.employees.push(employee);
-    this.snackBar.open(value['message'])
+    this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
       }
     })
   }
@@ -141,7 +141,7 @@ removeMember(UserId: number|undefined) {
 editDepartment() {
   this.departementService.editDepartment(this.selectedDepartement.id,this.newDep.value).subscribe((value: any)=>{
     if(Boolean(value['status'])){
-    this.snackBar.open(value['message'])
+    this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
      this.closeModal(true);
     }
   })
@@ -149,11 +149,11 @@ editDepartment() {
 removeManager() {
   this.departementService.removeManager(this.selectedDepartement.id).subscribe((value: any)=>{
     if(Boolean(value['Status'])){
-      this.snackBar.open(value['message'])
+      this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
 
       this.closeModal(true);
     }else{
-      this.snackBar.open(value['message'])
+      this.messageService.add({severity:'error', summary:'Error', detail:value['message']});
       
     }
   })

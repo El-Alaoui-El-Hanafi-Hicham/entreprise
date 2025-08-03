@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'primeng/api';
 import { departmentService } from 'src/app/services/department/department.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class DepartmentModalComponent {
   messages:Array<any>=[]
 
   
-  constructor(private departmentService : departmentService, private snackBar: MatSnackBar){
+  constructor(private departmentService : departmentService, private messageService: MessageService){
 
   }
   closeModal(s:boolean){
@@ -26,12 +26,11 @@ export class DepartmentModalComponent {
     this.departmentService.addDepartment(this.DepartmentName).subscribe((value:any)=>
       {
         if(Boolean(value['Status'])){
-          this.snackBar.open(value['message'])
+          this.messageService.add({severity:'success', summary:'Success', detail:value['message']});
           this.DepartmentName=''
           this.closeModal(true);
         }else{
-          this.snackBar.open(value['message'])
-          
+          this.messageService.add({severity:'error', summary:'Error', detail:value['message']});
         }
         
    

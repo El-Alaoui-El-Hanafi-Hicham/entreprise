@@ -3,17 +3,18 @@ import { CommonModule } from '@angular/common';
 
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { AuthenticationComponent } from './authentication.component';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from '../pages/login/login.component';
 import { RegisterComponent } from '../pages/register/register.component';
 import { ResetPasswordComponent } from '../pages/reset-password/reset-password.component';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatCard, MatCardContent, MatCardFooter, MatCardHeader } from '@angular/material/card';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { PasswordModule } from 'primeng/password';
+import { CalendarModule } from 'primeng/calendar';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @NgModule({
   declarations: [
@@ -26,22 +27,15 @@ import { InputTextModule } from 'primeng/inputtext';
   imports: [
     CommonModule,
     AuthenticationRoutingModule,
-    //  BrowserModule,
     ReactiveFormsModule,
+    FormsModule,
     DividerModule,
     ButtonModule,
     InputTextModule,
-    FormsModule,
-    CommonModule,
-    MatIconModule,
-    MatLabel,
-    MatFormField,
-    MatCardFooter,
-    MatCardContent,
-    MatCardHeader,
-    MatCard,
-    MatIcon,
-    MatIconModule
+    CardModule,
+    PasswordModule,
+    CalendarModule,
+    FloatLabelModule
   ]
 })
 export class AuthenticationModule { }

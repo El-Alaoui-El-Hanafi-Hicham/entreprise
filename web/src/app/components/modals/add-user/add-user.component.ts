@@ -1,6 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EmployeeModule } from 'src/app/modules/employeeModule/employee/employee.module';
 import { RegisterModule } from 'src/app/modules/register/register.module';
 import { EmployeeService } from 'src/app/services/employee.service';
@@ -12,6 +11,10 @@ import { EmployeeService } from 'src/app/services/employee.service';
   
 })
 export class AddUserComponent {
+  @Input() visible: boolean = false;
+  @Input() userData: any;
+  @Output() closeModal = new EventEmitter<any>();
+  
   user:EmployeeModule={
     id:undefined,
     email: '',
@@ -24,19 +27,28 @@ export class AddUserComponent {
   };
   date = new FormControl(new Date());
 
-  constructor( public dialogRef: MatDialogRef<AddUserComponent>,@Inject(MAT_DIALOG_DATA) public data:any| undefined,private employeeService:EmployeeService) {
-    this.user.email=data.userForm.email
-    this.user.first_name=data.userForm.first_name
-    this.user.last_name=data.userForm.last_name
-    this.user.hire_date=data.userForm.hire_date
-    this.user.job_title=data.userForm.job_title
+  constructor(private employeeService:EmployeeService) {
+    
   }
 
+  ngOnInit() {
+    if (this.userData) {
+      this.user.email = this.userData.userForm?.email || '';
+      this.user.first_name = this.userData.userForm?.first_name || '';
+      this.user.last_name = this.userData.userForm?.last_name || '';
+      this.user.hire_date = this.userData.userForm?.hire_date;
+      this.user.job_title = this.userData.userForm?.job_title;
+    }
+  }
 
   onNoClick(): void {
-    this.dialogRef.close("Dialog Closed with Data"); // Pass the data you want to return here
+    this.closeModal.emit("Dialog Closed with Data");
   }
+  
   addEmployee(){
-this.employeeService.addEmployee(this.user).subscribe((value)=>{ console.log(value); this.dialogRef.close(value)});
+    this.employeeService.addEmployee(this.user).subscribe((value)=> { 
+      console.log(value); 
+      this.closeModal.emit(value);
+    });
   }
 }

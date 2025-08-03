@@ -10,29 +10,6 @@ justify-content: center;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
 
-    .mat-mdc-card{
-        display: flex;
-        flex-direction: column;
-        gap:35px;
-        height: 50%;
-        width: 50%;
-        background-color: white;
-        border: 1px solid rgba(170, 170, 170, 0.39);
-        justify-content: center;
-        padding: 15px;
-        color: black;
-    }
-    .mat-mdc-card-content{
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        justify-content: center;
-        color: black;
-
-    }
-    .mat-mdc-label{
-      color: black;
-    }
     .input--container{
         height: fit-content;
     }
