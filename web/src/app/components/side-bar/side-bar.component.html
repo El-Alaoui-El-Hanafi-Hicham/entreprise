@@ -1,55 +1,89 @@
-<div class="layout-wrapper">
-  <p-sidebar [(visible)]="openedSideBar" [modal]="false" [showCloseIcon]="false" styleClass="sideBar">
-    <div class="up__section">
-      <p-panelMenu [model]="menuItems" styleClass="w-full"></p-panelMenu>
-    </div>
-    <div class="down__section">
+<div class="layout-wrapper" [class.sidebar-collapsed]="!openedSideBar">
+  <!-- Fixed Sidebar -->
+  <aside class="sidebar" [class.collapsed]="!openedSideBar">
+    <div class="sidebar-header">
+      <div class="logo" *ngIf="openedSideBar">
+        <i class="pi pi-building text-2xl text-primary"></i>
+        <span class="font-bold text-lg ml-2">Manage IT</span>
+      </div>
       <p-button 
-        label="Logout" 
-        icon="pi pi-sign-out" 
-        styleClass="w-full" 
-        severity="danger"
-        (onClick)="logout()">
+        icon="pi pi-bars" 
+        [text]="true" 
+        [rounded]="true" 
+        severity="secondary"
+        (onClick)="toggleSideBar()"
+        class="toggle-btn">
       </p-button>
     </div>
-  </p-sidebar>
-  
-  <div class="layout-main">
-    <p-toolbar>
-      <ng-template pTemplate="start">
-        <p-button 
-          icon="pi pi-bars" 
-          [text]="true" 
-          [rounded]="true" 
-          severity="secondary"
-          (onClick)="toggleSideBar()">
-        </p-button>
-        <span class="ml-3">Manage IT</span>
-      </ng-template>
-      
-      <ng-template pTemplate="end">
-        <p-button 
-          icon="pi pi-heart" 
-          [text]="true" 
-          [rounded]="true" 
-          severity="secondary" 
-          styleClass="mr-2">
-        </p-button>
-        <p-button 
-          icon="pi pi-share-alt" 
-          [text]="true" 
-          [rounded]="true" 
-          severity="secondary" 
-          styleClass="mr-2">
-        </p-button>
-        <div *ngIf="activeUser$ | async as user" class="ml-3">
-          {{user.first_name + ' ' + user.last_name}}
-        </div>
-      </ng-template>
-    </p-toolbar>
     
-    <div class="main">
-      <router-outlet></router-outlet>
+    <div class="sidebar-content">
+      <nav class="navigation">
+        <ul class="nav-list">
+          <li *ngFor="let item of menuItems" class="nav-item">
+            <a [routerLink]="item.routerLink" 
+               class="nav-link" 
+               routerLinkActive="active"
+               [title]="item.label">
+              <i [class]="item.icon" class="nav-icon"></i>
+              <span class="nav-label" *ngIf="openedSideBar">{{item.label}}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
+    
+    <div class="sidebar-footer">
+      <div class="user-info" *ngIf="activeUser$ | async as user">
+        <div class="user-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="user-details" *ngIf="openedSideBar">
+          <span class="user-name">{{user.first_name + ' ' + user.last_name}}</span>
+        </div>
+      </div>
+      
+      <p-button 
+        [label]="openedSideBar ? 'Logout' : ''" 
+        icon="pi pi-sign-out" 
+        severity="danger"
+        [text]="!openedSideBar"
+        [outlined]="openedSideBar"
+        (onClick)="logout()"
+        class="logout-btn"
+        [title]="'Logout'">
+      </p-button>
+    </div>
+  </aside>
+  
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Top Toolbar -->
+    <header class="top-toolbar">
+      <p-toolbar styleClass="border-none">
+        <ng-template pTemplate="end">
+          <div class="flex align-items-center gap-2">
+            <p-button 
+              icon="pi pi-bell" 
+              [text]="true" 
+              [rounded]="true" 
+              severity="secondary" 
+              styleClass="mr-2">
+            </p-button>
+            <p-button 
+              icon="pi pi-cog" 
+              [text]="true" 
+              [rounded]="true" 
+              severity="secondary" 
+              styleClass="mr-2">
+            </p-button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+    </header>
+    
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>

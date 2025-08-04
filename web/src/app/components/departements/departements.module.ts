@@ -13,6 +13,18 @@ import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToolbarModule } from 'primeng/toolbar';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MessagesModule } from 'primeng/messages';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { BadgeModule } from 'primeng/badge';
 
 
 @NgModule({
@@ -22,7 +34,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DepartementsUsersComponent
   ],
   imports: [
-    // BrowserModule,
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
@@ -33,7 +44,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TableModule,
     TagModule,
     ButtonModule,
-    MenuModule
+    MenuModule,
+    InputTextModule,
+    DropdownModule,
+    ToastModule,
+    ConfirmDialogModule,
+    ToolbarModule,
+    InputSwitchModule,
+    MessagesModule,
+    SkeletonModule,
+    ProgressSpinnerModule,
+    CardModule,
+    DividerModule,
+    BadgeModule
   ]
 })
 export class DepartementsModule { }

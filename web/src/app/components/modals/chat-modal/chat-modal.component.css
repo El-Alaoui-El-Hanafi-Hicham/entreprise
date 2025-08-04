@@ -1,0 +1,39 @@
+.contact-card{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.contact-card:hover{
+  background-color: var(--primary-50, #e3f2fd);
+}
+.contact-info{
+  display: flex;
+  align-items: center;
+  gap:20px
+}
+.contact-avatar{
+  margin-right: 1rem;
+}
+.contact-name{
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.contact-email{
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin-bottom: 0.5rem;
+}
+.contact-title{
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+}
+.dialog-footer{
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}

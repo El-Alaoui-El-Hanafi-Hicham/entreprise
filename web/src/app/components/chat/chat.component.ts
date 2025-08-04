@@ -11,7 +11,7 @@ import * as StompJs from 'stompjs';
 import { ActiveUserState } from 'src/app/stores/user/user.reducer';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { validateHeaderName } from 'http';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -158,21 +158,61 @@ filter() {
             }
           }
         )
-// console.log("contacted employees are ======>")
- console.table(this.contactedEmployees);
       } else {
       }
     }
-// ids.forEach(el=>console.log(this.employees.find(emp=>emp.id==el)))
   }
   chooseConversation(selectedId:number|undefined) {
     this.selectedChatUser=this.employees.find(el=>el.id==selectedId);
     this.chatservice.getMessages(this.id,selectedId).subscribe((val:any)=>
     {
       console.log(val)
-    this.actualConversationMessages=val
+    this.actualConversationMessages=val.map((item: any) => {
+     return {...item, created_at: this.formatTime(item.date)}
+    })
     }
     )
+  }
+
+  // Helper method to get initials for avatars
+  getInitials(firstName: String="", lastName: String=""): string {
+    if (!firstName || !lastName) return '??';
+    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+  }
+
+  // Helper method to generate avatar colors based on user ID
+  getAvatarColor(userId: number): string {
+    const colors = [
+      '#667eea', '#764ba2', '#f093fb', '#f5576c',
+      '#4facfe', '#00f2fe', '#43e97b', '#38f9d7',
+      '#ffecd2', '#fcb69f', '#a8edea', '#fed6e3',
+      '#ff9a9e', '#fecfef', '#ffecd2', '#fcb69f'
+    ];
+    return colors[userId % colors.length];
+  }
+
+  // Helper method to format message time
+  formatTime(timestamp: any): string {
+    if (!timestamp) return '';
+
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) {
+      return 'Just now';
+    } else if (minutes < 60) {
+      return `${minutes}m ago`;
+    } else if (hours < 24) {
+      return `${hours}h ago`;
+    } else if (days < 7) {
+      return `${days}d ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
   }
 }
 

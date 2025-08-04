@@ -18,7 +18,7 @@ import { map, Observable, take } from 'rxjs';
       console.log(this.router.url);
       return this.checkAuth();
     }
-  
+
     canActivateChild(): boolean | Observable<boolean> {
       return this.accessChilds();
     }
@@ -32,14 +32,14 @@ import { map, Observable, take } from 'rxjs';
     //   }
     //   return true;
     // }
-  
+
     canLoad(): boolean | Observable<boolean> {
       return this.checkAuth();
     }
 
     private checkAuth(): boolean | Observable<boolean> {
-      if(!localStorage.getItem('key')&&this.router.url != '/login')               this.router.navigate(['/login']); // Redirect to the home page      ;  
-      if (this.router.url === '/login' && !localStorage.getItem('key')) {
+      if(!localStorage.getItem('key')&&this.router.url != '/login')               this.router.navigate(['/authantication/login']); // Redirect to the home page      ;
+      if (this.router.url === '/authantication/login' && !localStorage.getItem('key')) {
         // Handle '/login' route
         return this.store.select(selectActiveUser).pipe(
           take(1), // Automatically unsubscribe after one emission
@@ -62,12 +62,12 @@ import { map, Observable, take } from 'rxjs';
               return true; // Allow access
             } else {
               localStorage.removeItem('key'); // Remove the token from local storage
-              this.router.navigate(['/login']); // Redirect to the login page
+              this.router.navigate(['/authantication/login']); // Redirect to the login page
               return false; // Block access
             }
           })
         );
       }
     }
-    
+
 };

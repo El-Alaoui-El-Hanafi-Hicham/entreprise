@@ -128,7 +128,7 @@ openEditModal(selectedDepartement: Department) {
       }
     ];
   }
-  
+
   getMenuItems(department: Department): MenuItem[] {
     return [
       {
@@ -172,6 +172,10 @@ getArrayLength(arr:Array<any>){
   return String(arr.length).toString();
 }
 openDepartmentDialog(){
+  this.openDepartmentModal=true;
+}
+
+openAddDepartmentModal(){
   this.openDepartmentModal=true;
 }
 closeDepartmentDialog(s:boolean){
