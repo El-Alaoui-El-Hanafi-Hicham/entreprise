@@ -26,6 +26,7 @@ export class AddUserComponent {
     department_id: undefined
   };
   date = new FormControl(new Date());
+  isLoading: boolean = false;
 
   constructor(private employeeService:EmployeeService) {
     
@@ -46,9 +47,17 @@ export class AddUserComponent {
   }
   
   addEmployee(){
-    this.employeeService.addEmployee(this.user).subscribe((value)=> { 
-      console.log(value); 
-      this.closeModal.emit(value);
+    this.isLoading = true;
+    this.employeeService.addEmployee(this.user).subscribe({
+      next: (response:any) => {
+        console.log("Employee added successfully:", response.message);
+        this.closeModal.emit("Employee Added Succesfully");
+        this.isLoading = false;
+      },
+      error: (error:any) => {
+        console.error("Error adding employee:", error.message );
+        this.closeModal.emit("Error Adding Employee");
+      }
     });
   }
 }

@@ -25,13 +25,21 @@ this.httpHeaders= new HttpHeaders({
   let params = new HttpParams()
     .set('pageNumber', String(page)) // Reassign the result
     .set('pageSize', String(size));  // Reassign the result
-
-
-
   // Make the GET request with headers and params
   return this.http.get<any>(this.BASE_URL+"", { headers: this.httpHeaders, params });
   }
   addEmployee(employee :EmployeeModule){
     return this.http.post<any>(this.BASE_URL+"/employee",employee,{headers:this.httpHeaders})
+  }
+  removeUsers(employees:Array<Object>){
+    return this.http.post<any>(this.BASE_URL+"/bDEL",employees.map((el:any)=>{
+      return el.id;
+    }),{headers:this.httpHeaders})
+  }
+  updateEmployee(employee:EmployeeModule){
+    return this.http.put<any>(this.BASE_URL+"/employee",employee,{headers:this.httpHeaders})
+  }
+  getEmployeeById(id:number){
+    return this.http.get<any>(this.BASE_URL+"/employee/"+id,{headers:this.httpHeaders})
   }
 }

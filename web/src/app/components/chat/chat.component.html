@@ -4,12 +4,15 @@
             <i class="pi pi-spin pi-spinner"></i> Loading...
         </div>
         <ng-template #noLoadingTemplate>
-            <ul class="conversation-list" *ngIf="contactedEmployees.length; ">
+            <ul class="conversation-list" >
                 <li *ngFor="let item of contactedEmployees">
-                    <button (click)="chooseConversation(item?.id)" class="conversation-card">
+                    <button (click)="chooseConversation(item?.id)" [class]="selectedChatUser?.id==item?.id?'conversation-card selected':'conversation-card'">
                         <p-avatar label="{{getInitials(item?.first_name, item?.last_name)}}" shape="circle" styleClass="mr-2"></p-avatar>
                         <span style="font-weight: bold; color: #495057;">{{item?.first_name}} {{item?.last_name}}</span>
                     </button>
+                </li>
+                <li>
+
                 </li>
                 <li>
                     <p-button
@@ -34,11 +37,16 @@
         </div>
         <ng-template #chatBoxTemplate>
             <div class="chat-header">
-                <p-avatar shape="circle"></p-avatar>
+                        <p-avatar label="{{getInitials(selectedChatUser?.first_name, selectedChatUser?.last_name)}}" shape="circle" styleClass="mr-2"></p-avatar>
                 <div class="chat-header-info">
-                    <h3>{{selectedChatUser?.first_name}} {{selectedChatUser?.last_name}}</h3>
-                    <p-badge [value]="5" severity="success" styleClass="ml-2"></p-badge>
+                  <div class="flex align-items-start gap-2">
+                    <h3 class="m-0">{{selectedChatUser?.first_name}} {{selectedChatUser?.last_name}}</h3>
+                    <p-badge [value]="unReadMessages.length" *ngIf="unReadMessages.length" severity="success" styleClass="ml-2"></p-badge>
                 </div>
+                <span>
+                    <p-tag [value]="selectedChatUser?.job_title?.toString() || 'Missing'" severity="secondary" rounded="true"></p-tag>
+                  </span>
+                  </div>
             </div>
 
             <div class="chat-messages-container">
@@ -125,7 +133,7 @@
 
             <div class="chat-input-group">
                 <input type="text" pInputText [(ngModel)]="message" autoResize="true" class="chat-input" placeholder="Type a message..."/>
-                <p-button icon="pi pi-send" (onClick)="sendMessage(message)" styleClass="send-message-btn"></p-button>
+                <p-button icon="pi pi-send" [loading]="isSendingMessageLoading" (onClick)="sendMessage(message)" styleClass="send-message-btn"></p-button>
             </div>
         </ng-template>
     </div>

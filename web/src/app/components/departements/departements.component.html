@@ -3,37 +3,47 @@
 
 <div class="department-container">
     <!-- Header Section -->
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
+    <p-toolbar styleClass="mb-4 flex justify-between">
             <h2 class="text-xl font-bold text-primary m-0">
                 <i class="pi pi-building mr-2"></i>
                 Departments Management
             </h2>
-        </ng-template>
 
             <div class="flex gap-2">
-              <p-speedDial
+  <p-button label="" icon="pi pi-trash" *ngIf="selectedDepartements.length" severity="danger"></p-button>
+              <!-- <p-speedDial
                     [model]="items"
                     direction="down"
                     showIcon="pi pi-ellipsis-v"
                     hideIcon="pi pi-times"
-                    buttonClassName="p-button-outlined p-button-secondary">
-                </p-speedDial>
+                    [style]="{ position: 'relative', height: '100%' }"
+                    [radius]="50"
+                    buttonClassName="p-button-outlined p-button-secondary w-13 h-13">
+                </p-speedDial> -->
+                
                 <p-button
-                    label="Add Department"
                     icon="pi pi-plus"
                     severity="success"
                     (onClick)="openAddDepartmentModal()"
                     styleClass="p-button-raised">
                 </p-button>
-
+ <p-button
+                    icon="pi pi-ellipsis-v"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="secondary"
+                    (click)="menu.toggle($event)"
+                    #menuButton>
+                  </p-button>
+                  <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
 
             </div>
     </p-toolbar>
 <div >
-    <p-table [value]="departments" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [value]="departments" [(selection)]="selectedDepartements" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header">
             <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
                 <th>Department Name</th>
                 <th>Manager</th>
                 <th>Members</th>
@@ -42,6 +52,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-department>
             <tr>
+                <td style="width: 4rem"><p-tableCheckbox [value]="department" /></td>
                 <td>{{ department.department_name }} </td>
                 <td>  <p *ngIf="department.manager; else noManager">
                     <p-tag [value]="department.manager.first_name + ' ' + department.manager.last_name" [rounded]="true"  severity="secondary"></p-tag>
@@ -58,6 +69,7 @@
                     #menuButton>
                   </p-button>
                   <p-menu #menu [model]="getMenuItems(department)" [popup]="true" appendTo="body"></p-menu>
+                  
                 </td>
 
             </tr>
@@ -67,7 +79,7 @@
 </div>
 <app-department-modal  [visible]="openDepartmentModal" (closeM)="closeDepartmentDialog($event)"></app-department-modal>
 <app-departements-users [selectedDepartement]="selectedDepartement" [isSetManager]="isSetManager"  [isEdit]="isEdit" [visible]="isModalOpen" (closeAddEdit)="closeAddEditDep($event)" ></app-departements-users>
-<p-dialog [header]="isEdit ?isSetManager?'Edit Manager': 'Edit Departement' : 'Add Departement'" class="d-flex gap-2 flex-column" [modal]="true"
+<p-dialog [header]="isEdit ?isSetManager?'Edit Manager': 'Edit Departement' : 'Add Departement'" class="flex gap-2 flex-column" [modal]="true"
     [(visible)]="IsUploadModalopen" [style]="{ width: '25rem',display:'flex',flexDirection:'column' }" (onHide)="closeUploadFile(false)">
     <p-fileUpload
     mode="basic"
@@ -80,7 +92,7 @@
     *ngIf="!file;else NoFile"
     />
     <ng-template #NoFile>
-      <div class="d-flex align-content-center justify-between">
+      <div class="flex align-content-center justify-between">
 <span>{{file?.name}}</span>
 <p-button (onClick)="removeFile()">
   remove
@@ -88,6 +100,8 @@
 </div>
 </ng-template>
     <ng-template pTemplate="footer">
+      <div class="flex justify-content-end gap-2 w-full">
+      
       <p-button
           label="Cancel"
           [text]="true"
@@ -99,5 +113,6 @@
           [outlined]="true"
           severity="secondary"
           (onClick)="UploadFile()" />
+          </div>
   </ng-template>
 </p-dialog>

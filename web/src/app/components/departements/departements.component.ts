@@ -13,10 +13,8 @@ import { departmentService } from 'src/app/services/department/department.servic
 })
 export class DepartementsComponent implements OnInit {
 
-
-
 uploadedFiles: any;
-
+selectedDepartements: Department[] = [];
 items: MenuItem[]=[
   {id:'1',label:"Upload File",title:"Upload File",command:()=>this.openUploadFile(),icon:'pi pi-upload'},
   {id:'2',label:"Download Template",title:"Upload File",command:()=>this.downloadDepartmentTemplate(),iconClass:"pi-address-book",icon:"pi pi-download"}

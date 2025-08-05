@@ -18,4 +18,8 @@ public interface EmployeeRepository extends PagingAndSortingRepository<Employee,
     Optional<Employee> findById(long userId);
 
     Employee save(Employee employee);
+
+    void removeEmployeeById(long id);
+
+    void deleteById(long id);
 }

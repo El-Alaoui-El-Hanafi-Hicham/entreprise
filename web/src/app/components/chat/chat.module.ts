@@ -25,6 +25,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { SplitterModule } from 'primeng/splitter';
 import { DataViewModule } from 'primeng/dataview';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ConfirmDialogModule,
     TabViewModule,
     SplitterModule,
-    DataViewModule
+    DataViewModule,
+    TagModule
   ]
 })
 export class ChatModule { }

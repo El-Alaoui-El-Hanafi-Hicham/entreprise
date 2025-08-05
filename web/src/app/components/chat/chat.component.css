@@ -40,6 +40,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-bottom: 0.5rem;
+    border-color: var(--primary-color);
 }
 
 .conversation-card:hover, .conversation-card.active {
@@ -287,7 +288,13 @@
     align-items: center;
     gap: 0.5rem;
 }
-
+.selected{
+    border: none;
+    background-color:  var(--primary-color);
+}
+.selected span {
+    color: white!important;
+}
 .unread-indicator {
     font-size: 0.5rem;
     animation: blink 1.5s infinite;

@@ -14,7 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { MenuModule } from 'primeng/menu';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BrowserModule } from '@angular/platform-browser';
     ProgressSpinnerModule,
     TableModule,
     PaginatorModule,
+    MenuModule,
     ButtonModule,
     DialogModule,
     ToastModule,

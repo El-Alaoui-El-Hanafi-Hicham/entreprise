@@ -44,7 +44,6 @@ public class Security {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf()
                 .disable()
-
                 .anonymous().disable() // Disable anonymous authentication
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")

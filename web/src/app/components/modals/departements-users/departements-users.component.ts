@@ -125,6 +125,20 @@ addMember(UserId: number|undefined) {
     })
   }
 }
+
+getInitials(firstName: String="", lastName: String=""): string {
+    if (!firstName || !lastName) return '??';
+    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+  }
+  getAvatarColor(userId: number): string {
+    const colors = [
+      '#667eea', '#764ba2', '#f093fb', '#f5576c',
+      '#4facfe', '#00f2fe', '#43e97b', '#38f9d7',
+      '#ffecd2', '#fcb69f', '#a8edea', '#fed6e3',
+      '#ff9a9e', '#fecfef', '#ffecd2', '#fcb69f'
+    ];
+    return colors[userId % colors.length];
+  }
 removeMember(UserId: number|undefined) {
   if(UserId){
 

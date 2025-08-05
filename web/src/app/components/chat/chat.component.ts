@@ -33,6 +33,7 @@ export class ChatComponent implements OnInit {
   contactedEmployees: Array<EmployeeModule | undefined> = [];
   loading$!:Observable<any>;
   isLoading:boolean=false;
+  isSendingMessageLoading:boolean=false;
   socket:any;
   selectedChatUser: EmployeeModule | undefined;
   actualConversationMessages!: Array<any>;
@@ -50,7 +51,6 @@ this.socket=StompJs.over(ws)
 this.socket.connect({'Authorization:':"Bearer "+this.apiKey},()=>{
 this.socket.subscribe(`/user/${this.id}/queue/messages`,(e:any)=>{
   let data=JSON.parse(e.body);
-  console.log(data)
   if(data.sender==this.selectedChatUser?.id){
     let obj = {
       message: data.message,
@@ -102,7 +102,7 @@ closeModal($event: any) {
   this.isModalOpen=false;
   }
 sendMessage(arg0: string|undefined) {
-  console.log("sender id is "+this.id+" recipient id is "+this.selectedChatUser?.id);
+this.isSendingMessageLoading=true;
   this.chatservice.sendMessage(arg0,this.id,this.selectedChatUser?.id).subscribe(val=>{
     if(val.Status){
       let obj = {
@@ -131,6 +131,7 @@ sendMessage(arg0: string|undefined) {
       this.message="";
       this.actualConversationMessages.push(obj);
       // this.chatRooms.
+this.isSendingMessageLoading=false;
     }
   });
   }
@@ -166,12 +167,14 @@ filter() {
     this.selectedChatUser=this.employees.find(el=>el.id==selectedId);
     this.chatservice.getMessages(this.id,selectedId).subscribe((val:any)=>
     {
-      console.log(val)
     this.actualConversationMessages=val.map((item: any) => {
      return {...item, created_at: this.formatTime(item.date)}
     })
     }
     )
+    if(!this.contactedEmployees.includes(this.selectedChatUser)){
+      this.contactedEmployees.push(this.selectedChatUser);
+    }
   }
 
   // Helper method to get initials for avatars

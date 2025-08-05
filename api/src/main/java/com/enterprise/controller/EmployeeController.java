@@ -16,6 +16,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/employees")
 public class EmployeeController {
@@ -30,13 +33,18 @@ public class EmployeeController {
     }
     @GetMapping("")
     public ResponseEntity<Page<Employee>> employees(@RequestParam(required=true) int pageNumber, @RequestParam(required=true) int pageSize){
-
+        System.out.println("Page Number: " + pageNumber + ", Page Size: " + pageSize);
         return this.employeeeService.allEmployees(pageNumber, pageSize);
     }
-@PostMapping("/employee")
-    public ResponseEntity<String> addEmployee(@RequestBody Employee employee) throws MessagingException {
+@   PostMapping("/employee")
+    public ResponseEntity<HashMap<String,String>> addEmployee(@RequestBody Employee employee) throws MessagingException {
 
         return this.employeeeService.AddEmployee(employee);
+    }
+    @PostMapping("/bDEL")
+    public ResponseEntity<HashMap<String,String>> deleteEmployees(@RequestBody Long[] employees_id)  {
+        System.out.println("this is the list of employees to delete: "+employees_id);
+        return this.employeeeService.deleteEmployees(employees_id);
     }
     @GetMapping("/setDepartement")
     public ResponseEntity<String> setDepartement(@RequestParam(name = "id") long userid,@RequestParam(name = "dep_id") long id){

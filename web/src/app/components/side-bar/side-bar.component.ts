@@ -18,7 +18,7 @@ menuItems: MenuItem[] = [
   {
     label: 'Home',
     icon: 'pi pi-home',
-    routerLink: '/'
+    routerLink: ''
   },
   {
     label: 'Users',

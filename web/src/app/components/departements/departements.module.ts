@@ -25,6 +25,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
+import { AvatarModule } from 'primeng/avatar';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { BadgeModule } from 'primeng/badge';
     InputTextModule,
     DropdownModule,
     ToastModule,
+    AvatarModule,
     ConfirmDialogModule,
     ToolbarModule,
     InputSwitchModule,

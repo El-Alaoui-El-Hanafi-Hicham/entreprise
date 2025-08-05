@@ -1,0 +1,11 @@
+.page--title--container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+}
+.page--title--actions {
+  display: flex;
+  gap: 0.5rem;
+}

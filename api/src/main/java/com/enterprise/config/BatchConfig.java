@@ -101,7 +101,6 @@ public  Step step2() throws Exception {
             .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
             .name("JSON F")
             .resource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/Written.json"))
-
             .build()
             ;
     }
