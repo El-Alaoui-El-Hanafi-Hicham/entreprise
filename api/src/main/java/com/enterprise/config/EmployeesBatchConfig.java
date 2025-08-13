@@ -1,42 +1,38 @@
 package com.enterprise.config;
 
-import com.enterprise.entity.Department;
+import com.enterprise.entity.Employee;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.json.JacksonJsonObjectMarshaller;
-import org.springframework.batch.item.json.builder.JsonFileItemWriterBuilder;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 
 public class EmployeesBatchConfig {
-
     private final PlatformTransactionManager transactionManager;
 
     private final JobRepository jobRepository;
     private final DataSource dataSource;
+
 
     public EmployeesBatchConfig(PlatformTransactionManager transactionManager, JobRepository jobRepository, DataSource dataSource) {
         this.transactionManager = transactionManager;
@@ -44,133 +40,65 @@ public class EmployeesBatchConfig {
         this.dataSource = dataSource;
     }
 
-
-@Bean
-public  Step step2() throws Exception {
-    return new StepBuilder("step 2",this.jobRepository)
-            .<Department,Department>chunk(5)
-            .reader(itemReader())
-//            .processor(itemProcessor())
-            .writer(DBItemWriter())
-
-            .transactionManager(transactionManager)  // Inject the transaction manager
-
-            .build();
-    }
-
-
-
     @Bean
-    public ItemWriter<? super Department> DBItemWriter() {
-//    return new JdbcBatchItemWriterBuilder<Department>()
-//            .dataSource(dataSource)
-//            .sql("INSERT into department(department_name) values(?)")
-//            .itemPreparedStatementSetter(new ItemPreparedStatementSetter<Department>() {
-//                @Override
-//                public void setValues(Department item, PreparedStatement ps) throws SQLException {
-//                    ps.setString(1,item.getDepartment_name());
-//
-//                }
-//            })
-//            .build();
-    return new JsonFileItemWriterBuilder<Department>()
-            .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
-            .name("JSON F")
-            .resource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/Written.json"))
-
-            .build()
-            ;
+    public JdbcBatchItemWriter<Employee> employeeDbWriter(DataSource dataSource) {
+        JdbcBatchItemWriter<Employee> writer = new JdbcBatchItemWriter<>();
+        writer.setDataSource(dataSource);
+        writer.setSql("INSERT INTO employee (first_name, last_name, email, job_title, phone_number, hire_date) VALUES (?, ?, ?, ?, ?, ?)");
+        writer.setItemPreparedStatementSetter((employee, ps) -> {
+            System.out.println("Writing employee: " + employee);
+            ps.setString(1, employee.getFirst_name());
+            ps.setString(2, employee.getLast_name());
+            ps.setString(3, employee.getEmail());
+            ps.setString(4, employee.getJob_title());
+            ps.setString(5, String.valueOf(employee.getPhone_number()));
+            ps.setDate(6, java.sql.Date.valueOf(String.valueOf(employee.getHire_date())));
+        });
+        return writer;
     }
 
     @Bean
-    public  Step step1() throws Exception {
-        return new StepBuilder("step",this.jobRepository)
-                .<Department,Department>chunk(5)
-                .reader(itemReader())
-                .writer(itemWriter())
-                .transactionManager(transactionManager)  // Inject the transaction manager
-
+    public Step saveToDbStep() {
+        return new StepBuilder("saveToDbStep", jobRepository)
+                .<Employee, Employee>chunk(5, transactionManager)
+                .reader(empitemReader(null)) // Spring will inject the correct value at runtime
+                .writer(employeeDbWriter(dataSource))
                 .build();
-
-//         .writer(new ItemWriter<Department>() {
-//            @Override
-//            public void write(Chunk<? extends Department> chunk) throws Exception {
-//                System.out.println(chunk.size());
-//                chunk.forEach(System.out::println);
-//            }
-//        })
     }
 
     @Bean
-    public ItemWriter<Department> itemWriter() throws MalformedURLException {
-        FlatFileItemWriter<Department> flatFileItemWriter = new FlatFileItemWriter<>();
+    public Job EmployeeJob(Step saveToDbStep) {
+        return new JobBuilder("EmpJob", jobRepository)
+                .start(saveToDbStep)
+                .build();
+    }
 
-        // Set the output resource to a specific file location
-        flatFileItemWriter.setResource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/written.csv")); // Specify an absolute path if needed
-        flatFileItemWriter.setAppendAllowed(false); // Set to true if you want to append instead of overwrite
-
-        // Ensure the line aggregator and field extractor are set correctly
-        DelimitedLineAggregator<Department> lineAggregator = new DelimitedLineAggregator<>();
+    @Bean
+    public ItemWriter<Employee> empItemWriter() {
+        FlatFileItemWriter<Employee> flatFileItemWriter = new FlatFileItemWriter<>();
+        flatFileItemWriter.setResource(new FileSystemResource("C:/Users/elala/Downloads/enterprise/api/data/written.csv"));
+        flatFileItemWriter.setAppendAllowed(false);
+        DelimitedLineAggregator<Employee> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
-        BeanWrapperFieldExtractor<Department> departmentBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-        departmentBeanWrapperFieldExtractor.setNames(new String[]{"department_name"});
-        lineAggregator.setFieldExtractor(departmentBeanWrapperFieldExtractor);
-
+        BeanWrapperFieldExtractor<Employee> employeeBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+        employeeBeanWrapperFieldExtractor.setNames(new String[]{"first_name","last_name","email","job_title","phone_number","hire_date"});
+        lineAggregator.setFieldExtractor(employeeBeanWrapperFieldExtractor);
         flatFileItemWriter.setLineAggregator(lineAggregator);
-
-        System.out.println("Writer initialized and ready to write data.");
         return flatFileItemWriter;
     }
 
-
-    private ItemReader<Department> itemReader() throws Exception {
-        FlatFileItemReader<Department> flatFileItemReader = new FlatFileItemReader<>();
+    @Bean
+    @StepScope
+    public ItemReader<Employee> empitemReader(@Value("#{jobParameters['fullPathFileName']}") String filePath) {
+        FlatFileItemReader<Employee> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setLinesToSkip(1);
-        flatFileItemReader.setResource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/test.csv"));
-        DefaultLineMapper<Department> lineMapper = new DefaultLineMapper<>();
-        lineMapper.setFieldSetMapper(new DepartmentFieldMapper());
+        flatFileItemReader.setResource(new FileSystemResource(filePath));
+        DefaultLineMapper<Employee> lineMapper = new DefaultLineMapper<>();
+        lineMapper.setFieldSetMapper(new EmployeeFieldMapper());
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-        lineTokenizer.setNames(new String[]{"department_name"});
+        lineTokenizer.setNames("first_name","last_name","email","job_title","phone_number","hire_date");
         lineMapper.setLineTokenizer(lineTokenizer);
         flatFileItemReader.setLineMapper(lineMapper);
         return flatFileItemReader;
-
-
-//        return new JdbcCursorItemReaderBuilder<Department>()
-//                .dataSource(dataSource)
-//                .name("JDBC Cursor")
-//                .sql("SELECT * from department ORDER BY id")
-//                .rowMapper(new JdbcTestMapper())
-//                .build();
-
-//        return new JdbcPagingItemReaderBuilder<Department>()
-//                .dataSource(dataSource)
-//                .name("JDBC Cursor")
-//                .queryProvider(queryProvider())
-//                .rowMapper(new JdbcTestMapper())
-//                .pageSize(5)
-//                .build();
     }
-    @Bean
-    public PagingQueryProvider queryProvider() throws Exception {
-        Map<String, Order> sortKeys = new HashMap<>();
-        sortKeys.put("id", Order.ASCENDING);
-            SqlPagingQueryProviderFactoryBean factoryBean = new SqlPagingQueryProviderFactoryBean();
-            factoryBean.setSortKeys(sortKeys);
-        factoryBean.setSelectClause("SELECT *");
-        factoryBean.setFromClause("FROM department");
-        factoryBean.setDataSource(dataSource);
-        return factoryBean.getObject();
-    }
-
-
-    @Bean
-    public Tasklet tasklet() {
-        return (contribution, chunkContext) -> {
-            // Handle any additional logic or error handling here
-            return RepeatStatus.FINISHED;
-        };
-    }
-
-//s
 }

@@ -6,6 +6,7 @@ import com.enterprise.entity.Status;
 import com.enterprise.service.EmailService;
 import com.enterprise.service.EmployeeeService;
 import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,9 +16,11 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/employees")
@@ -25,7 +28,7 @@ public class EmployeeController {
     private final  EmailService emailService;
     private final EmployeeeService employeeeService;
     private final JwtService jwtService;
-@Autowired
+    @Autowired
     public EmployeeController(EmailService emailService, EmployeeeService employeeeService,JwtService jwtService) {
     this.emailService = emailService;
     this.employeeeService = employeeeService;
@@ -36,7 +39,7 @@ public class EmployeeController {
         System.out.println("Page Number: " + pageNumber + ", Page Size: " + pageSize);
         return this.employeeeService.allEmployees(pageNumber, pageSize);
     }
-@   PostMapping("/employee")
+   @PostMapping("/employee")
     public ResponseEntity<HashMap<String,String>> addEmployee(@RequestBody Employee employee) throws MessagingException {
 
         return this.employeeeService.AddEmployee(employee);
@@ -53,13 +56,12 @@ public class EmployeeController {
     @GetMapping("/me")
     public Employee me(@RequestHeader (name="Authorization") String token){
         Employee emp = this.employeeeService.getCurrentUser(token);
-//        this.emp.getUsername
         return emp;
     };
     @MessageMapping("/user.setOnline")
     @SendTo("/user/topic")
     public Employee setOnlineUser(@Payload Employee employee){
-employeeeService.setStatus(employee,Status.ONLINE);
+        employeeeService.setStatus(employee,Status.ONLINE);
         return employee;
     };
     @MessageMapping("/user.setOffline")
@@ -68,4 +70,9 @@ employeeeService.setStatus(employee,Status.ONLINE);
         employeeeService.setStatus(employee,Status.OFFLINE);
         return employee;
     };
+       @PostMapping("/bulk")
+       public ResponseEntity<Map<String,String>> addEmployeesBulk(@RequestParam("file") MultipartFile file) throws MessagingException {
+           System.out.println("this is the file: "+file);
+           return this.employeeeService.bulk(file);
+       }
 }

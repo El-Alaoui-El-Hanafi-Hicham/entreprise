@@ -9,7 +9,7 @@ export class EmployeeService {
 jwtKey:String|null;
 employees:Array<Object>=[];
 private httpHeaders: HttpHeaders| any;
-private  BASE_URL:String ="http://localhost:8080/api/employees" 
+private  BASE_URL:String ="http://localhost:8080/api/employees"
   constructor(private http:HttpClient) {
 this.jwtKey=localStorage.getItem('key');
 this.httpHeaders= new HttpHeaders({
@@ -42,4 +42,12 @@ this.httpHeaders= new HttpHeaders({
   getEmployeeById(id:number){
     return this.http.get<any>(this.BASE_URL+"/employee/"+id,{headers:this.httpHeaders})
   }
+  uploadFileToBE(file: File | null) {
+  const formData = new FormData();
+  if (file) {
+    formData.append('file', file, file.name);
+  }
+  return this.http.post(this.BASE_URL+"/bulk",formData)
+  }
+
 }

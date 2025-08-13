@@ -8,9 +8,9 @@ import { Store } from '@ngrx/store';
 @Injectable({
   providedIn: 'root'
 })
-export class departmentService implements OnInit {
+export class departmentService  {
 
- 
+
     jwtKey:String|null;
 
     private JwtKey:String| boolean ="";
@@ -29,10 +29,7 @@ this.jwtKey=localStorage.getItem('key');
         "Authorization":"Bearer "+this.jwtKey
       });
      }
-  ngOnInit(): void {
-    // console.log("THIS>>>> is")
-    // console.log(this.store)
-  }
+
      addDepartment(DepartmentName:String){
       let payload:object={
         "department_name":DepartmentName,
@@ -67,19 +64,14 @@ deleteDepartment(id: number) {
 
 }
 uploadFileToBE(file:File|null){
-  let n =this.httpHeaders.set("Content-Type","multipart/form-data");
   const HttpUploadOptions = {
     headers: new HttpHeaders({ "Content-Type": "multipart/form-data","Accept":"application/json",
         "Authorization":"Bearer "+this.jwtKey })
   }
-  console.log(n)
   const formData = new FormData();
   if(file) formData.append('file', file, file.name);
-  console.log(formData)
-  return this.httpClient.post(this.baseUrl+"department/bulk",formData)
+return this.httpClient.post(this.baseUrl+"department/bulk",formData)
 }
-
-
     }
     interface Department {
       id:number;

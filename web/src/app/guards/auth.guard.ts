@@ -38,8 +38,8 @@ import { map, Observable, take } from 'rxjs';
     }
 
     private checkAuth(): boolean | Observable<boolean> {
-      if(!localStorage.getItem('key')&&this.router.url != '/login')               this.router.navigate(['/authantication/login']); // Redirect to the home page      ;
-      if (this.router.url === '/authantication/login' && !localStorage.getItem('key')) {
+      if(!localStorage.getItem('key')&&this.router.url != '/login')               this.router.navigate(['/authentication/login']); // Redirect to the home page      ;
+      if (this.router.url === '/authentication/login' && !localStorage.getItem('key')) {
         // Handle '/login' route
         return this.store.select(selectActiveUser).pipe(
           take(1), // Automatically unsubscribe after one emission
@@ -62,7 +62,7 @@ import { map, Observable, take } from 'rxjs';
               return true; // Allow access
             } else {
               localStorage.removeItem('key'); // Remove the token from local storage
-              this.router.navigate(['/authantication/login']); // Redirect to the login page
+              this.router.navigate(['/authentication/login']); // Redirect to the login page
               return false; // Block access
             }
           })

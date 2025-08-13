@@ -1,6 +1,7 @@
 package com.enterprise.config;
 
 import com.enterprise.entity.Department;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 
@@ -55,11 +56,13 @@ public class BatchConfig {
 
     private final JobRepository jobRepository;
     private final DataSource dataSource;
+    private EntityManagerFactory entityManagerFactory;
 
-    public BatchConfig(PlatformTransactionManager transactionManager, JobRepository jobRepository, DataSource dataSource) {
+    public BatchConfig(PlatformTransactionManager transactionManager, JobRepository jobRepository, DataSource dataSource,EntityManagerFactory entityManagerFactory) {
         this.transactionManager = transactionManager;
         this.jobRepository = jobRepository;
         this.dataSource = dataSource;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
 //    @Bean
@@ -126,23 +129,27 @@ public  Step step2() throws Exception {
 
     @Bean
     public ItemWriter<Department> itemWriter() throws MalformedURLException {
-        FlatFileItemWriter<Department> flatFileItemWriter = new FlatFileItemWriter<>();
+//        FlatFileItemWriter<Department> flatFileItemWriter = new FlatFileItemWriter<>();
+//
+//        // Set the output resource to a specific file location
+//        flatFileItemWriter.setResource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/written.csv")); // Specify an absolute path if needed
+//        flatFileItemWriter.setAppendAllowed(false); // Set to true if you want to append instead of overwrite
+//
+//        // Ensure the line aggregator and field extractor are set correctly
+//        DelimitedLineAggregator<Department> lineAggregator = new DelimitedLineAggregator<>();
+//        lineAggregator.setDelimiter(",");
+//        BeanWrapperFieldExtractor<Department> departmentBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+//        departmentBeanWrapperFieldExtractor.setNames(new String[]{"department_name"});
+//        lineAggregator.setFieldExtractor(departmentBeanWrapperFieldExtractor);
+//
+//        flatFileItemWriter.setLineAggregator(lineAggregator);
+//
+//        System.out.println("Writer initialized and ready to write data.");
+//        return flatFileItemWriter;
+        JpaItemWriter<Department> writer = new JpaItemWriter<>();
+        writer.setEntityManagerFactory(entityManagerFactory);
+        return writer;
 
-        // Set the output resource to a specific file location
-        flatFileItemWriter.setResource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/written.csv")); // Specify an absolute path if needed
-        flatFileItemWriter.setAppendAllowed(false); // Set to true if you want to append instead of overwrite
-
-        // Ensure the line aggregator and field extractor are set correctly
-        DelimitedLineAggregator<Department> lineAggregator = new DelimitedLineAggregator<>();
-        lineAggregator.setDelimiter(",");
-        BeanWrapperFieldExtractor<Department> departmentBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-        departmentBeanWrapperFieldExtractor.setNames(new String[]{"department_name"});
-        lineAggregator.setFieldExtractor(departmentBeanWrapperFieldExtractor);
-
-        flatFileItemWriter.setLineAggregator(lineAggregator);
-
-        System.out.println("Writer initialized and ready to write data.");
-        return flatFileItemWriter;
     }
 
 
@@ -195,6 +202,12 @@ public  Step step2() throws Exception {
             return RepeatStatus.FINISHED;
         };
     }
-
+    @Bean
+    public Job DepartmentJob(JobRepository jobRepository) throws Exception {
+        return new JobBuilder("departmentJob", jobRepository)
+                .start(step1())
+                .next(step2())
+                .build();
+    }
 //s
 }

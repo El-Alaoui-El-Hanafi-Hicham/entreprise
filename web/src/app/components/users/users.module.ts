@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MenuModule } from 'primeng/menu';
 import { MessageService } from 'primeng/api';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MessageService } from 'primeng/api';
     PaginatorModule,
     MenuModule,
     ButtonModule,
+    FileUploadModule,
     DialogModule,
     ToastModule,
     InputTextModule,

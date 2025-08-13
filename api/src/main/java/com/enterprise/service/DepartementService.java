@@ -1,5 +1,7 @@
 package com.enterprise.service;
 
+import com.enterprise.batch.DepartmentJob;
+import com.enterprise.config.BatchConfig;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.entity.Department;
@@ -10,6 +12,7 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,20 +36,22 @@ public class DepartementService {
     EmployeeRepository employeeRepository;
     JobLauncher jobLauncher;
     DepartmentRepository departmentRepository;
-    Job jobDe;
+    BatchConfig jobDe;
+    JobRepository jobRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
-    public DepartementService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, Job departmentJob, SimpMessagingTemplate messagingTemplate) {
+    public DepartementService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, BatchConfig departmentJob, SimpMessagingTemplate messagingTemplate, JobRepository jobRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.jobLauncher = jobLauncher;
         this.jobDe = departmentJob;
         this.messagingTemplate = messagingTemplate;
+        this.jobRepository=jobRepository;
     }
-    @ResponseBody
 
+    @ResponseBody
     public ResponseEntity<List<Department>> getDepartements() {
         return new ResponseEntity<>(
                 this.departmentRepository.findAll(),
@@ -243,8 +248,6 @@ public class DepartementService {
     public ResponseEntity<Map<String, String>> bulk(MultipartFile file) {
         String extention = FilenameUtils.getExtension(file.getOriginalFilename());
         Map<String, String> response = new HashMap<>();
-
-        // Define the target directory where files will be saved
         String uploadDir = "uploads/";
         if (file.isEmpty()) {
             response.put("Status", "false");
@@ -272,8 +275,7 @@ public class DepartementService {
                     .addString("fullPathFileName", filePath)
                     .addString("run.id", String.valueOf(System.currentTimeMillis())) // Makes each run unique
                     .toJobParameters();
-            jobLauncher.run(jobDe, jobParameters);
-
+            jobLauncher.run(jobDe.DepartmentJob(jobRepository), jobParameters);
 
             response.put("Status", "true");
             response.put("message", "Department Deleted Successfully");
@@ -290,6 +292,8 @@ public class DepartementService {
         } catch (JobParametersInvalidException e) {
             throw new RuntimeException(e);
         } catch (JobRestartException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

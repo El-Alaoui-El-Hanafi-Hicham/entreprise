@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { MessageService, MenuItem } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FileSelectEvent } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-users',
@@ -20,6 +21,7 @@ export class UsersComponent implements OnInit {
   addUserVisible:boolean=false;
   size:number=10;
   page:number=0;
+  file!:File|null;
   total:number=0;
   totalPages:number=0;
   selectedEmployees:Array<Object> = [];
@@ -156,14 +158,37 @@ openUploadFile(){
     }
   );
   }
-  downloadDepartmentTemplate(): void {
+downloadDepartmentTemplate(): void {
   const link = document.createElement('a');
-  link.href = 'assets/Empty.csv'; // Path to the file in assets
-  link.download = 'EmployeesTemplate.csv'; // Set the desired file name for download
+  link.href = 'assets/UsersTemplate.csv'; // Path to the file in assets
+  link.download = 'EmployeeTemplate.csv'; // Set the desired file name for download
   document.body.appendChild(link); // Append to the body
   link.click(); // Programmatically trigger a click to download
   document.body.removeChild(link); // Remove the link after download
 
+}
+onUpload($event: FileSelectEvent) {
+this.file=$event.currentFiles[0];
+}
+ removeFile() {
+    this.file=null;
+    }
+closeUploadFile(refresh:boolean){
+  this.removeFile();
+  this.IsUploadModalopen=false;
+}
+UploadFile() {
+this.employeeService.uploadFileToBE(this.file).subscribe((value: any)=> {
+  if(Boolean(value['Status'])){
+    this.messageService.add({severity:'success', summary: 'Success', detail: value['message']});
+    this.closeUploadFile(true);
+    this.getEmployees();
+    this.file=null
+  }else{
+    this.messageService.add({severity:'error', summary: 'Error', detail: value['message']});
+
+  }
+})
 }
   deleteUsers() {
     if (this.selectedEmployees.length != 0) {
@@ -179,7 +204,7 @@ this.employeeService.removeUsers(this.selectedEmployees).subscribe(
           }
         }
       );
-    } 
+    }
           }
 
   onPageChange(event: any): void {

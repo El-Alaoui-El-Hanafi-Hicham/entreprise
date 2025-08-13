@@ -1,5 +1,6 @@
 package com.enterprise.service;
 
+import com.enterprise.config.EmployeesBatchConfig;
 import com.enterprise.config.JwtService;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
@@ -9,8 +10,19 @@ import com.enterprise.entity.Status;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,23 +30,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Service
 public class EmployeeeService {
+    private final JobRepository jobRepository;
     EmployeeRepository employeeRepository;
     EmailService emailService;
     DepartmentRepository departmentRepository;
+    JobLauncher jobLauncher;
+    EmployeesBatchConfig employeesBatchConfig;
     JavaMailSender mailSender;
     private final JwtService jwtService;
     @Autowired
-    public EmployeeeService(JavaMailSender mailSender, EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmailService emailService, JwtService jwtService) {
+    @Qualifier("EmployeeJob")
+    private Job employeeJob;
+    @Autowired
+    public EmployeeeService(JavaMailSender mailSender, EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmailService emailService, JwtService jwtService, EmployeesBatchConfig employeesBatchConfig, JobRepository jobRepository,JobLauncher jobLauncher
+    ) {
         this.employeeRepository=employeeRepository;
         this.departmentRepository = departmentRepository;
         this.emailService = emailService;
         this.mailSender= mailSender;
         this.jwtService = jwtService;
+        this.employeesBatchConfig=employeesBatchConfig;
+        this.jobRepository = jobRepository;
+        this.jobLauncher=jobLauncher;
     }
 
     public ResponseEntity<HashMap<String,String>> AddEmployee(Employee employee) throws MessagingException {
@@ -170,4 +195,50 @@ Employee employee1 = employeeRepository.save(employee);
         return ResponseEntity.ok().body(response);
 
     }
+
+    public ResponseEntity<Map<String, String>> bulk(MultipartFile file) {
+            String extention = FilenameUtils.getExtension(file.getOriginalFilename());
+            Map<String, String> response = new HashMap<>();
+
+            // Define the target directory where files will be saved
+            String uploadDir = "uploads/";
+            if (file.isEmpty()) {
+                response.put("Status", "false");
+                response.put("message", "File is empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+            else if(!extention.isEmpty() &&!extention.equalsIgnoreCase("csv")){
+                response.put("Status", "false");
+                response.put("message", "File's extention is not correct, please upload a csv file");
+                return ResponseEntity.badRequest().body(response);
+            }
+            // Ensure directory exists
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            try {
+                String filePath = System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename();
+                File tempFile = new File(filePath);
+                file.transferTo(tempFile);
+
+                // Launch the batch job with the file path as a job parameter
+                JobParameters jobParameters = new JobParametersBuilder()
+                        .addString("fullPathFileName", filePath)
+                        .addString("run.id", String.valueOf(System.currentTimeMillis())) // Makes each run unique
+                        .toJobParameters();
+                this.jobLauncher.run(employeeJob, jobParameters);
+
+
+                response.put("Status", "true");
+                response.put("message", "Employees added Successfully");
+                return ResponseEntity.ok().body(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.put("Status", "false");
+                response.put("message", "An error occurred while processing the file: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        }
 }
