@@ -1,0 +1,6 @@
+firstName,lastName,email,job_title,phone_number,hire_date
+John,Doe,john.doe@company.com,Software Engineer,1234567890,2023-01-15
+Jane,Smith,jane.smith@company.com,Project Manager,1234567891,2023-02-20
+Michael,Johnson,michael.johnson@company.com,Senior Developer,1234567892,2023-03-10
+Sarah,Williams,sarah.williams@company.com,UX Designer,1234567893,2023-04-05
+David,Brown,david.brown@company.com,DevOps Engineer,1234567894,2023-05-12

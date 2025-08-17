@@ -74,7 +74,7 @@ public ResponseEntity<Map<String, String>> sendMessage(String message, Long send
             .build();
     chatRoom.get().addMessage(message1);
 
-        response.put("message", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
+        response.put("message", "YOU Have A New Message From " + sender.get().getFirstName()+" "+sender.get().getLastName());
         response.put("Status", "true");
         messagingTemplate.convertAndSend("/user/"+recipient_id+ "/queue/messages", response);;
     return ResponseEntity.ok().body(response);
@@ -92,17 +92,17 @@ public ResponseEntity<Map<String, String>> sendMessage(String message, Long send
                         .recipient(
                                 Employee.builder()
                                         .email(el.getRecipient().getEmail())
-                                        .last_name(el.getRecipient().getLast_name())
+                                        .lastName(el.getRecipient().getLastName())
                                         .id(el.getRecipient().getId())
-                                        .first_name(el.getRecipient().getFirst_name())
+                                        .firstName(el.getRecipient().getFirstName())
                                         .build()
                         )
                         .sender(
                                 Employee.builder()
                                         .email(el.getSender().getEmail())
-                                        .last_name(el.getSender().getLast_name())
+                                        .lastName(el.getSender().getLastName())
                                         .id(el.getSender().getId())
-                                        .first_name(el.getSender().getFirst_name())
+                                        .firstName(el.getSender().getFirstName())
                                         .build()
                         )
                         .build()
@@ -117,17 +117,17 @@ return chatRoomsDto;
                         .recipient(
                                 Employee.builder()
                                         .email(el.getRecipient().getEmail())
-                                        .last_name(el.getRecipient().getLast_name())
+                                        .lastName(el.getRecipient().getLastName())
                                         .id(el.getRecipient().getId())
-                                        .first_name(el.getRecipient().getFirst_name())
+                                        .firstName(el.getRecipient().getFirstName())
                                         .build()
                         )
                         .sender(
                                 Employee.builder()
                                         .email(el.getSender().getEmail())
-                                        .last_name(el.getSender().getLast_name())
+                                        .lastName(el.getSender().getLastName())
                                         .id(el.getSender().getId())
-                                        .first_name(el.getSender().getFirst_name())
+                                        .firstName(el.getSender().getFirstName())
                                         .build()
                         )
                         .build()

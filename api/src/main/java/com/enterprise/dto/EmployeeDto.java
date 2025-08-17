@@ -11,10 +11,10 @@ public class EmployeeDto {
 
     @JsonProperty("id")
     public  Long id;
-    @JsonProperty("first_name")
-    public String first_name;
-    @JsonProperty("last_name")
-    public String last_name;
+    @JsonProperty("firstName")
+    public String firstName;
+    @JsonProperty("lastName")
+    public String lastName;
     @JsonProperty("email")
     public String email;
     @JsonProperty("department_id")

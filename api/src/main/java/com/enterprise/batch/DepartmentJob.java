@@ -121,8 +121,9 @@ public class DepartmentJob {
     public ItemWriter<Department> writer() {
             return new JdbcBatchItemWriterBuilder<Department>()
                     .dataSource(dataSource)
-                    .sql("Insert into department(department_name) values(?)") // Updated to camel_case
+                    .sql("INSERT INTO department(department_name) VALUES (?)")
                     .itemPreparedStatementSetter((item, ps) -> {
+                        System.out.println("Writing department: " + item.getDepartment_name());
                         ps.setString(1, item.getDepartment_name());
                     })
                     .build();

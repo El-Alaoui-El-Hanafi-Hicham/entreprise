@@ -26,10 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
    final String jwt;
    final String email;
         System.out.println(request.getServletPath().contains("/api/auth")?"true":"false");
-   if (request.getServletPath().contains("/api/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-   }
+//   if (request.getServletPath().contains("/api/auth")) {
+//       System.out.println("In auth filter");
+//            return;
+//   }
    if(authHeader == null  || !authHeader.startsWith("Bearer ")){
        filterChain.doFilter(request,response);
        return;

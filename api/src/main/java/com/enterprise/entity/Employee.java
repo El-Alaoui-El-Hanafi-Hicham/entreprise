@@ -1,17 +1,15 @@
 package com.enterprise.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -25,58 +23,82 @@ import java.util.List;
 @Setter
 @Builder
 @ToString
-public  class Employee implements UserDetails {
-@Id
+public class Employee implements UserDetails, Serializable {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-@Column
-private String first_name;
-@Column()
-@Nullable
-    private Status status;
-@Column
-private String last_name;
-@Column
-private int phone_number;
-@Column
-private Date hire_date;
-@Column
-private  String job_title;
-    @Column(unique = true,length = 100,nullable = false)
+    private Long id;
+
+    @Column(name="firstName")
+    private String firstName;
+
+    @Column(name="lastName")
+    private String lastName;
+
+    @Column(name="phone_number")
+    private String phoneNumber; // Use String, not int
+
+    @Column
+    private Date hireDate;
+
+    @Column(name="job_title")
+    private String jobTitle;
+
+    @Column(unique = true, length = 100, nullable = false)
     private String email;
+
     @Column(nullable = false)
-    private  String password;
+    private String password;
 
-        @CreationTimestamp
-        @Column(updatable = false)
-        private Date created_at;;
-        @UpdateTimestamp
-        @Column
-        private Date updated_at;
-@ManyToOne(fetch = FetchType.LAZY)
-@JsonBackReference
-@JoinColumn(name = "department_id")
+    @Enumerated(EnumType.STRING)
+    @Nullable
+    private Status status;
 
-private Department department;
-@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-private List<Task> taskList;
-@OneToMany(mappedBy = "manager",fetch = FetchType.LAZY)
-private List<Project> projectList;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Date createdAt;
 
+    @UpdateTimestamp
+    private Date updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    @JsonBackReference
+    private Department department;
+
+    @ManyToMany(mappedBy = "employeeList")
+    private List<Task> taskList ;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_subtask",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "subtask_id")
+    )
+    private List<SubTask> subTaskList;  // FIXED type!
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_project",  // join table name
+            joinColumns = @JoinColumn(name = "employee_id"), // foreign key in join table pointing to Employee
+            inverseJoinColumns = @JoinColumn(name = "project_id") // foreign key pointing to Project
+    )
+    private List<Project> projectsList ;
 private Department getDepartement(){
     return this.department;
 }
-    public Employee(String first_name,String last_name, String email, Date hire_date,int phone_number) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Employee(String firstName, String lastName, String email, Date hire_date, String phone_number) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.hire_date = hire_date;
-        this.phone_number=phone_number;
+        this.hireDate = hire_date;
+        this.phoneNumber=phone_number;
     }
 
-    public Employee(String first_name,String last_name, String email, String password) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Employee(String firstName,String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
     }

@@ -80,8 +80,8 @@ export class ChatModalComponent implements OnChanges{
 
     const searchLower = this.searchTerm.toLowerCase();
     this.filteredEmployees = this.employees.filter(employee =>
-      employee.first_name?.toLowerCase().includes(searchLower) ||
-      employee.last_name?.toLowerCase().includes(searchLower) ||
+      employee.firstName?.toLowerCase().includes(searchLower) ||
+      employee.lastName?.toLowerCase().includes(searchLower) ||
       employee.email?.toLowerCase().includes(searchLower) ||
       employee.job_title?.toLowerCase().includes(searchLower)
     );

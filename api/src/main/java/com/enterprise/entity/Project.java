@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.engine.spi.Managed;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Table
@@ -31,6 +32,12 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="manager_id")
     private Employee manager;
+    @OneToMany(mappedBy = "project",fetch = FetchType.LAZY)
+    private List<Task> tasksList;
+    @ManyToMany(mappedBy = "projectsList") // mappedBy points to the field in Employee
+    private List<Employee> employeeList;
+//    @OneToMany(mappedBy = "project",fetch = FetchType.LAZY)
+//    private List<SubTask> subTasksList;
 
     public Project(String project_name, String description, Date start_date, Date end_date) {
         this.project_name = project_name;

@@ -7,8 +7,8 @@
             <ul class="conversation-list" >
                 <li *ngFor="let item of contactedEmployees">
                     <button (click)="chooseConversation(item?.id)" [class]="selectedChatUser?.id==item?.id?'conversation-card selected':'conversation-card'">
-                        <p-avatar label="{{getInitials(item?.first_name, item?.last_name)}}" shape="circle" styleClass="mr-2"></p-avatar>
-                        <span style="font-weight: bold; color: #495057;">{{item?.first_name}} {{item?.last_name}}</span>
+                        <p-avatar label="{{getInitials(item?.firstName, item?.lastName)}}" shape="circle" styleClass="mr-2"></p-avatar>
+                        <span style="font-weight: bold; color: #495057;">{{item?.firstName}} {{item?.lastName}}</span>
                     </button>
                 </li>
                 <li>
@@ -37,10 +37,10 @@
         </div>
         <ng-template #chatBoxTemplate>
             <div class="chat-header">
-                        <p-avatar label="{{getInitials(selectedChatUser?.first_name, selectedChatUser?.last_name)}}" shape="circle" styleClass="mr-2"></p-avatar>
+                        <p-avatar label="{{getInitials(selectedChatUser?.firstName, selectedChatUser?.lastName)}}" shape="circle" styleClass="mr-2"></p-avatar>
                 <div class="chat-header-info">
                   <div class="flex align-items-start gap-2">
-                    <h3 class="m-0">{{selectedChatUser?.first_name}} {{selectedChatUser?.last_name}}</h3>
+                    <h3 class="m-0">{{selectedChatUser?.firstName}} {{selectedChatUser?.lastName}}</h3>
                     <p-badge [value]="unReadMessages.length" *ngIf="unReadMessages.length" severity="success" styleClass="ml-2"></p-badge>
                 </div>
                 <span>
@@ -61,7 +61,7 @@
 
                                 <div class="message-avatar" *ngIf="item.sender.id != id">
                                     <p-avatar
-                                        [label]="getInitials(item.sender.first_name, item.sender.last_name)"
+                                        [label]="getInitials(item.sender.firstName, item.sender.lastName)"
                                         shape="circle"
                                         [style]="{'background-color': getAvatarColor(item.sender.id), 'color': 'white'}">
                                     </p-avatar>
@@ -69,7 +69,7 @@
 
                                 <div class="message-content">
                                     <div class="message-header" *ngIf="item.sender.id != id">
-                                        <span class="sender-name">{{item.sender.first_name}} {{item.sender.last_name}}</span>
+                                        <span class="sender-name">{{item.sender.firstName}} {{item.sender.lastName}}</span>
                                     </div>
 
                                     <div class="message-text">
@@ -105,7 +105,7 @@
 
                                 <div class="message-avatar" *ngIf="item.sender.id != id">
                                     <p-avatar
-                                        [label]="getInitials(item.sender.first_name, item.sender.last_name)"
+                                        [label]="getInitials(item.sender.firstName, item.sender.lastName)"
                                         shape="circle"
                                         [style]="{'background-color': getAvatarColor(item.sender.id), 'color': 'white'}">
                                     </p-avatar>
@@ -113,7 +113,7 @@
 
                                 <div class="message-content">
                                     <div class="message-header" *ngIf="item.sender.id != id">
-                                        <span class="sender-name">{{item.sender.first_name}} {{item.sender.last_name}}</span>
+                                        <span class="sender-name">{{item.sender.firstName}} {{item.sender.lastName}}</span>
                                     </div>
 
                                     <div class="message-text">

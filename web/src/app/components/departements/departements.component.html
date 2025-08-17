@@ -20,7 +20,7 @@
                     [radius]="50"
                     buttonClassName="p-button-outlined p-button-secondary w-13 h-13">
                 </p-speedDial> -->
-                
+
                 <p-button
                     icon="pi pi-plus"
                     severity="success"
@@ -56,7 +56,7 @@
                 <td style="width: 4rem"><p-tableCheckbox [value]="department" /></td>
                 <td>{{ department.department_name }} </td>
                 <td>  <p *ngIf="department.manager; else noManager">
-                    <p-tag [value]="department.manager.first_name + ' ' + department.manager.last_name" [rounded]="true"  severity="secondary"></p-tag>
+                    <p-tag [value]="department.manager.firstName + ' ' + department.manager.lastName" [rounded]="true"  severity="secondary"></p-tag>
                   </p>
                   <ng-template #noManager>No Manager</ng-template></td>
                 <td><p-button [label]="getArrayLength(department.employees)"  /></td>
@@ -70,7 +70,7 @@
                     #menuButton>
                   </p-button>
                   <p-menu #menu [model]="getMenuItems(department)" [popup]="true" appendTo="body"></p-menu>
-                  
+
                 </td>
 
             </tr>
@@ -102,7 +102,7 @@
 </ng-template>
     <ng-template pTemplate="footer">
       <div class="flex justify-content-end gap-2 w-full">
-      
+
       <p-button
           label="Cancel"
           [text]="true"

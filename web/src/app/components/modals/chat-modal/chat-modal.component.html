@@ -40,14 +40,14 @@
 
                     <div class="contact-info">
                     <p-avatar
-                        [label]="getInitials(employee.first_name, employee.last_name)"
+                        [label]="getInitials(employee.firstName, employee.lastName)"
                         shape="circle"
                         size="large"
                         styleClass="contact-avatar">
                     </p-avatar>
 <div>
 
-                        <h4 class="contact-name">{{employee.first_name}} {{employee.last_name}}</h4>
+                        <h4 class="contact-name">{{employee.firstName}} {{employee.lastName}}</h4>
                         <p class="contact-email">{{employee.email}}</p>
                         <p class="contact-title" *ngIf="employee.job_title">{{employee.job_title}}</p>
 </div>

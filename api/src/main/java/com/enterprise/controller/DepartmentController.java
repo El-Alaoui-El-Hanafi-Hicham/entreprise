@@ -1,9 +1,8 @@
 package com.enterprise.controller;
 
-import com.enterprise.config.BatchConfig;
 import com.enterprise.entity.Department;
 import com.enterprise.entity.Employee;
-import com.enterprise.service.DepartementService;
+import com.enterprise.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,11 @@ import java.util.Map;
 @RequestMapping(path = "/api/department")
 public class DepartmentController {
 
-    DepartementService departmentService;
+    DepartmentService departmentService;
 
 
     @Autowired
-    public DepartmentController(DepartementService departmentService) {
+    public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 

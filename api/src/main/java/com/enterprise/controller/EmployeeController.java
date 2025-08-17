@@ -5,21 +5,16 @@ import com.enterprise.entity.Employee;
 import com.enterprise.entity.Status;
 import com.enterprise.service.EmailService;
 import com.enterprise.service.EmployeeeService;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,7 +35,7 @@ public class EmployeeController {
         return this.employeeeService.allEmployees(pageNumber, pageSize);
     }
    @PostMapping("/employee")
-    public ResponseEntity<HashMap<String,String>> addEmployee(@RequestBody Employee employee) throws MessagingException {
+    public ResponseEntity<HashMap<String,String>> addEmployee(@RequestBody Employee employee) {
 
         return this.employeeeService.AddEmployee(employee);
     }
@@ -71,7 +66,7 @@ public class EmployeeController {
         return employee;
     };
        @PostMapping("/bulk")
-       public ResponseEntity<Map<String,String>> addEmployeesBulk(@RequestParam("file") MultipartFile file) throws MessagingException {
+       public ResponseEntity<Map<String,String>> addEmployeesBulk(@RequestParam("file") MultipartFile file) {
            System.out.println("this is the file: "+file);
            return this.employeeeService.bulk(file);
        }

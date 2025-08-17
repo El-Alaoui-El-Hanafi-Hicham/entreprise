@@ -57,8 +57,8 @@ this.socket.subscribe(`/user/${this.id}/queue/messages`,(e:any)=>{
       message_append_date:new Date(),
       sender: {
         id: this.selectedChatUser?.id,
-        "first_name": this.selectedChatUser?.first_name,
-        "last_name": this.selectedChatUser?.last_name,
+        "firstName": this.selectedChatUser?.firstName,
+        "lastName": this.selectedChatUser?.lastName,
         "phone_number": this.selectedChatUser?.phone_number,
         "hire_date": this.selectedChatUser?.hire_date,
         "job_title": this.selectedChatUser?.job_title,
@@ -109,8 +109,8 @@ this.isSendingMessageLoading=true;
         message: this.message,
         sender: {
           id: this.id,
-          "first_name": this.selectedChatUser?.first_name,
-          "last_name": this.selectedChatUser?.last_name,
+          "firstName": this.selectedChatUser?.firstName,
+          "lastName": this.selectedChatUser?.lastName,
           "phone_number": this.selectedChatUser?.phone_number,
           "hire_date": this.selectedChatUser?.hire_date,
           "job_title": this.selectedChatUser?.job_title,
@@ -118,8 +118,8 @@ this.isSendingMessageLoading=true;
           },
         recipient: {
           id: this.selectedChatUser?.id,
-          "first_name": this.selectedChatUser?.first_name,
-          "last_name": this.selectedChatUser?.last_name,
+          "firstName": this.selectedChatUser?.firstName,
+          "lastName": this.selectedChatUser?.lastName,
           "phone_number": this.selectedChatUser?.phone_number,
           "hire_date": this.selectedChatUser?.hire_date,
           "job_title": this.selectedChatUser?.job_title,
@@ -223,9 +223,9 @@ interface ChatRoom {
   id: string | null,
   sender: {
     id: number|undefined;
-    "first_name": string | null,
+    "firstName": string | null,
     "status": string | null,
-    "last_name": string | null,
+    "lastName": string | null,
     "phone_number": number,
     "hire_date": string | null,
     "job_title": string | null,
@@ -244,9 +244,9 @@ interface ChatRoom {
   },
   recipient: {
     id: number|undefined;
-    "first_name": string | null,
+    "firstName": string | null,
     "status": string | null,
-    "last_name": string | null,
+    "lastName": string | null,
     "phone_number": number,
     "hire_date": string | null,
     "job_title": string | null,

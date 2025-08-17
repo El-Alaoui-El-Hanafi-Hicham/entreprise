@@ -2,35 +2,35 @@
   <div class="flex flex-column gap-3">
     <div class="flex flex-column gap-2">
       <label for="firstName">First Name</label>
-      <input pInputText id="firstName" [(ngModel)]="user.first_name" class="w-full" />
+      <input pInputText id="firstName" [(ngModel)]="user.firstName" class="w-full" />
     </div>
-    
+
     <div class="flex flex-column gap-2">
       <label for="lastName">Last Name</label>
-      <input pInputText id="lastName" [(ngModel)]="user.last_name" class="w-full" />
+      <input pInputText id="lastName" [(ngModel)]="user.lastName" class="w-full" />
     </div>
-    
+
     <div class="flex flex-column gap-2">
       <label for="email">Email</label>
       <input pInputText id="email" [(ngModel)]="user.email" class="w-full" />
     </div>
-    
+
     <div class="flex flex-column gap-2">
       <label for="jobTitle">Job Title</label>
       <input pInputText id="jobTitle" [(ngModel)]="user.job_title" class="w-full" />
     </div>
-    
+
     <div class="flex flex-column gap-2">
       <label for="hireDate">Hire Date</label>
       <p-calendar id="hireDate" [(ngModel)]="user.hire_date" dateFormat="mm/dd/yy" [showIcon]="true" class="w-full"></p-calendar>
     </div>
-    
+
     <div class="flex flex-column gap-2">
       <label for="phoneNumber">Phone Number</label>
       <input pInputText id="phoneNumber" [(ngModel)]="user.phone_number" class="w-full" />
     </div>
   </div>
-  
+
   <ng-template pTemplate="footer">
     <div class="flex justify-content-end gap-2 w-full">
       <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="onNoClick()"></p-button>

@@ -14,7 +14,7 @@
       Edit Members <p-inputSwitch [(ngModel)]="isEditChecked" />Add Members
     </div>
 <div class="flex flex-column gap-3">
-   
+
 
     <div *ngIf="!isEditChecked;else addMembers" class="my-5">
       <div *ngIf="membersLength  ;else noMemberTemplate">
@@ -23,10 +23,10 @@
         <div *ngFor="let employee of members; let i = index">
           <div class="flex align-items-center justify-content-between">
             <div class="flex align-items-center gap-2">
-            <p-avatar [label]="getInitials(employee.first_name, employee.last_name)" shape="circle"
+            <p-avatar [label]="getInitials(employee.firstName, employee.lastName)" shape="circle"
               [style]="{'background-color': getAvatarColor(employee.id||0), 'color': 'white'}">
             </p-avatar>
-            <span>{{employee.first_name}} {{employee.last_name}}</span>
+            <span>{{employee.firstName}} {{employee.lastName}}</span>
             </div>
             <p-button severity="secondary" (onClick)="removeMember(employee.id)">
               remove
@@ -42,16 +42,16 @@
 </div>
     </div>
     <div class="my-5">
-      
+
       <ng-template #addMembers>
         <div class="flex flex-column gap-3">
         <div *ngFor="let employee of employees; let i = index">
           <div class="flex align-items-center justify-content-between">
             <div class="flex align-items-center gap-2">
-            <p-avatar [label]="getInitials(employee.first_name, employee.last_name)" shape="circle"
+            <p-avatar [label]="getInitials(employee.firstName, employee.lastName)" shape="circle"
               [style]="{'background-color': getAvatarColor(employee.id||0), 'color': 'white'}">
             </p-avatar>
-            <span>{{employee['first_name']}} {{employee['last_name']}}</span>
+            <span>{{employee['firstName']}} {{employee['lastName']}}</span>
             </div>
             <p-button label="Add User" severity="secondary" (onClick)="addMember(employee.id)" />
           </div>
@@ -72,14 +72,14 @@
     </div> -->
       <div *ngIf="selectedDepartement.manager;else noManager" class="flex align-items-center justify-content-between">
 
-        <span>{{selectedDepartement.manager['first_name']}} {{selectedDepartement.manager['last_name']}}</span>
+        <span>{{selectedDepartement.manager['firstName']}} {{selectedDepartement.manager['lastName']}}</span>
         <p-button (click)="removeManager()">Remove</p-button>
 
       </div>
       <ng-template #noManager>
 
         <div *ngFor="let employee of members" class="flex align-items-center justify-content-between">
-          <span>{{employee.first_name}} {{employee.last_name}}</span>
+          <span>{{employee.firstName}} {{employee.lastName}}</span>
           <p-button (click)="setManager(employee.id)">Set as manager</p-button>
         </div>
       </ng-template>

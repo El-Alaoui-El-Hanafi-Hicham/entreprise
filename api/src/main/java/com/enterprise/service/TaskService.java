@@ -40,9 +40,9 @@ public class TaskService {
             return ResponseEntity.badRequest().body("task not found");
         }else{
 
-        task.get().setEmployee(employee.get());
+        task.get().addEmployeeToEmployee(employee.get());
         this.taskRepository.save(task.get());
-        return ResponseEntity.ok("Task " + task.get().getTask_name()+ " is assigned to "+ employee.get().getFirst_name()+" "+ employee.get().getLast_name());
+        return ResponseEntity.ok("Task " + task.get().getTask_name()+ " is assigned to "+ employee.get().getFirstName()+" "+ employee.get().getLastName());
        }
        }
     }

@@ -1,15 +1,10 @@
 package com.enterprise.controller;
 
-import com.enterprise.entity.Department;
-import com.enterprise.entity.Employee;
 import com.enterprise.entity.Task;
-import com.enterprise.service.DepartementService;
 import com.enterprise.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin()

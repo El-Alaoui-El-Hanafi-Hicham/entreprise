@@ -43,11 +43,16 @@ this.httpHeaders= new HttpHeaders({
     return this.http.get<any>(this.BASE_URL+"/employee/"+id,{headers:this.httpHeaders})
   }
   uploadFileToBE(file: File | null) {
+  // Don't set Content-Type manually for FormData - let the browser set it with boundary
+  const httpUploadHeaders = new HttpHeaders({
+    "Accept":"application/json",
+    "Authorization":"Bearer "+this.jwtKey
+  });
   const formData = new FormData();
   if (file) {
     formData.append('file', file, file.name);
   }
-  return this.http.post(this.BASE_URL+"/bulk",formData)
+  return this.http.post(this.BASE_URL+"/bulk",formData, { headers: httpUploadHeaders })
   }
 
 }

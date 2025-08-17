@@ -64,13 +64,14 @@ deleteDepartment(id: number) {
 
 }
 uploadFileToBE(file:File|null){
+  // Don't set Content-Type manually for FormData - let the browser set it with boundary
   const HttpUploadOptions = {
-    headers: new HttpHeaders({ "Content-Type": "multipart/form-data","Accept":"application/json",
+    headers: new HttpHeaders({ "Accept":"application/json",
         "Authorization":"Bearer "+this.jwtKey })
   }
   const formData = new FormData();
   if(file) formData.append('file', file, file.name);
-return this.httpClient.post(this.baseUrl+"department/bulk",formData)
+  return this.httpClient.post(this.baseUrl+"department/bulk",formData, HttpUploadOptions)
 }
     }
     interface Department {

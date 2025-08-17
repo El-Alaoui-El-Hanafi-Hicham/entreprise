@@ -63,7 +63,7 @@ if(d.equals(new_project)){
 
             project.get().setManager(employee.get());
         this.projectRepository.save(project.get());
-        return ResponseEntity.ok("Project " + project.get().getProject_name()+ " is assigned to "+ employee.get().getFirst_name()+" "+ employee.get().getLast_name()+" now.");
+        return ResponseEntity.ok("Project " + project.get().getProject_name()+ " is assigned to "+ employee.get().getFirstName()+" "+ employee.get().getLastName()+" now.");
        }
        }
     }

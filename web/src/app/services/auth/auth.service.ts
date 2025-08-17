@@ -7,7 +7,7 @@ import { Observable, map } from 'rxjs';
   providedIn: 'root'
 })
 export class RegisterService {
-  
+
   private isAuthenticated = false;
   private JwtKey:String| boolean ="";
   private httpHeaders: HttpHeaders = new HttpHeaders({
@@ -35,12 +35,11 @@ baseUrl="http://localhost:8080/api/auth/"
       },
       error(err) {
          console.log(err)
-          
+
       },
     })
   }
   isAuthenticatedFn() {
-   console.log("Working")
   // Step
   let s:boolean=false;
    return this.httpClient.get<any>(this.baseUrl + "isAuthenticated", { headers: this.httpHeaders })
@@ -51,8 +50,6 @@ baseUrl="http://localhost:8080/api/auth/"
     return this.httpClient.post<any>(this.baseUrl+"login",payload,{headers:this.httpHeaders})
   }
   isAuthenticatedUser(): boolean {
-    console.log("isAuthenticated is ===> "+this.isAuthenticated)
-    console.log(this.JwtKey , this.isAuthenticated)
       return this.JwtKey && this.isAuthenticated;
   }
 

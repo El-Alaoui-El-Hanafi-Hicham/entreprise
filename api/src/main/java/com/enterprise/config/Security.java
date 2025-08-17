@@ -42,25 +42,22 @@ public class Security {
     private final AppConfig appConfig;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**")
-                .permitAll()
-                .requestMatchers("/ws/**").permitAll()
-                .requestMatchers("/ws/**").permitAll()  // Allow access to WebSocket endpoint
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        httpSecurity
+            .csrf(csrf -> csrf.disable()) // disable CSRF
+                .cors(Customizer.withDefaults()) // enable CORS with defaults (you can customize later)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll()   // allow public auth endpoints
+                        .requestMatchers("/ws/**").permitAll()         // allow websocket connections
+                        .anyRequest().authenticated()                  // everything else needs auth
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(appConfig.authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors()
-        ;
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
-    }
+        }
     @Bean
     CorsFilter corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();

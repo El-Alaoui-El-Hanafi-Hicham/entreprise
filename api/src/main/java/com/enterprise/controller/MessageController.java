@@ -33,8 +33,8 @@ public class MessageController {
 //    public void ProcessMessage(@Payload Message message){
 //        Message m= messageService.save(message);
 //        Map<String,String> notification = new HashMap<>();
-//        notification.put("sender",message.sender.getFirst_name()+" "+ message.getSender().getLast_name());
-//        notification.put("recipient",message.recipient.getFirst_name()+" "+ message.getRecipient().getLast_name());
+//        notification.put("sender",message.sender.getFirstName()+" "+ message.getSender().getLastName());
+//        notification.put("recipient",message.recipient.getFirstName()+" "+ message.getRecipient().getLastName());
 //        simpMessagingTemplate.convertAndSendToUser(
 //                String.valueOf(message.getRecipient().getId()),"/queue/message",
 //                notification

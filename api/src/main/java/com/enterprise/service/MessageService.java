@@ -41,13 +41,13 @@ public class MessageService {
         messageRepository.save(message);
         chatRoomService.setMessages(chatRoomService.findById(chatID).get(), message);
 
-        response.put("notification", "YOU Have A New Message From " + sender.get().getFirst_name()+" "+sender.get().getLast_name());
+        response.put("notification", "YOU Have A New Message From " + sender.get().getFirstName()+" "+sender.get().getLastName());
         response.put("Status", "true");
         response.put("sender",(String.valueOf( sender.get().getId())));
         response.put("message", message.getMessage());
         response.put("date", message.getCreated_at().toString());
         messagingTemplate.convertAndSend("/user/"+recipient_id.getId()+ "/queue/messages", response);
-        response.put("message", "the message was sent succesfully to "+ recipient.get().getFirst_name()+" "+recipient.get().getLast_name()+" with the id "+recipient_id.getId());
+        response.put("message", "the message was sent succesfully to "+ recipient.get().getFirstName()+" "+recipient.get().getLastName()+" with the id "+recipient_id.getId());
         response.put("Status", "true");
         return ResponseEntity.ok().body(response);
     }
@@ -57,13 +57,13 @@ public List<MessageDto>getConvMessages(Long user1,Long user2){
     messages.stream().forEach(el->{
         EmployeeDto sender = EmployeeDto.builder().id(el.getSender().getId())
                 .email(el.getSender().getEmail())
-                .last_name(el.getSender().getLast_name())
-                .first_name(el.getSender().getFirst_name())
+                .lastName(el.getSender().getLastName())
+                .firstName(el.getSender().getFirstName())
                 .build();
         EmployeeDto recipient = EmployeeDto.builder().id(el.getRecipient().getId())
                 .email(el.getRecipient().getEmail())
-                .last_name(el.getRecipient().getLast_name())
-                .first_name(el.getRecipient().getFirst_name())
+                .lastName(el.getRecipient().getLastName())
+                .firstName(el.getRecipient().getFirstName())
                 .build();
         MessageDto messageDto=MessageDto.builder().chat_id(el.getChatRoom().getId())
                 .message(el.getMessage())
@@ -85,13 +85,13 @@ public List<MessageDto>getConvMessages(Long user1,Long user2){
          messages.stream().forEach(el->{
         EmployeeDto sender = EmployeeDto.builder().id(el.getSender().getId())
                 .email(el.getSender().getEmail())
-                .last_name(el.getSender().getLast_name())
-                .first_name(el.getSender().getFirst_name())
+                .lastName(el.getSender().getLastName())
+                .firstName(el.getSender().getFirstName())
                 .build();
         EmployeeDto recipient = EmployeeDto.builder().id(el.getRecipient().getId())
                 .email(el.getRecipient().getEmail())
-                .last_name(el.getRecipient().getLast_name())
-                .first_name(el.getRecipient().getFirst_name())
+                .lastName(el.getRecipient().getLastName())
+                .firstName(el.getRecipient().getFirstName())
                 .build();
             MessageDto messageDto=MessageDto.builder().chat_id(el.getChatRoom().getId())
                     .message(el.getMessage())

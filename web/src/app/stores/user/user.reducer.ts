@@ -11,8 +11,8 @@ export const initialState:ActiveUserState ={
         id: undefined,
         email: undefined,
         hire_date: undefined,
-        first_name: undefined,
-        last_name: undefined,
+        firstName: undefined,
+        lastName: undefined,
         phone_number: undefined,
         job_title: undefined,
         department_id: undefined
@@ -26,17 +26,17 @@ export const  userReducer = createReducer (
     return {
         emp:emp,
         loading:false
-    
+
     }
    }),
    on(loadDataFailure, (_state:ActiveUserState) => {
-    
+
     return {
     ..._state,
     loading:false
     }
    }),
-   on(loadData, (state) => 
+   on(loadData, (state) =>
 {
     console.log("THE LOADING SHOULD BE ON TRUE")
     return {

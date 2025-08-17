@@ -8,18 +8,18 @@ import { EmployeeService } from 'src/app/services/employee.service';
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.css']
-  
+
 })
 export class AddUserComponent {
   @Input() visible: boolean = false;
   @Input() userData: any;
   @Output() closeModal = new EventEmitter<any>();
-  
+
   user:EmployeeModule={
     id:undefined,
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     hire_date: undefined,
     job_title: undefined,
     phone_number: undefined,
@@ -29,14 +29,14 @@ export class AddUserComponent {
   isLoading: boolean = false;
 
   constructor(private employeeService:EmployeeService) {
-    
+
   }
 
   ngOnInit() {
     if (this.userData) {
       this.user.email = this.userData.userForm?.email || '';
-      this.user.first_name = this.userData.userForm?.first_name || '';
-      this.user.last_name = this.userData.userForm?.last_name || '';
+      this.user.firstName = this.userData.userForm?.firstName || '';
+      this.user.lastName = this.userData.userForm?.lastName || '';
       this.user.hire_date = this.userData.userForm?.hire_date;
       this.user.job_title = this.userData.userForm?.job_title;
     }
@@ -45,7 +45,7 @@ export class AddUserComponent {
   onNoClick(): void {
     this.closeModal.emit("Dialog Closed with Data");
   }
-  
+
   addEmployee(){
     this.isLoading = true;
     this.employeeService.addEmployee(this.user).subscribe({

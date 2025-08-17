@@ -15,7 +15,7 @@ export class RegisterModule {
 
    password:String | undefined ;
 
-    first_name:String | undefined;
-    last_name:String | undefined;
+    firstName:String | undefined;
+    lastName:String | undefined;
     hire_date:Date | undefined;
  }

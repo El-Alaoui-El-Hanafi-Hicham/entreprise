@@ -62,7 +62,7 @@ public class EmployeeeService {
         this.jobLauncher=jobLauncher;
     }
 
-    public ResponseEntity<HashMap<String,String>> AddEmployee(Employee employee) throws MessagingException {
+    public ResponseEntity<HashMap<String,String>> AddEmployee(Employee employee) {
         String password =employee.getPassword();
         HashMap<String, String> response = new HashMap<>();
 
@@ -79,9 +79,9 @@ public class EmployeeeService {
                 System.out.println(Long.toString(s.getId()).toString());
                 System.out.println(Base64.getEncoder().encodeToString(Long.toString(s.getId()).toString().getBytes()));
                 String id = Base64.getEncoder().encodeToString(Long.toString(s.getId()).toString().getBytes());
-                String subject = "Hello, "+employee.getFirst_name() ;
+                String subject = "Hello, "+employee.getFirstName() ;
                 String template = "Hello, ${firstName}!\n\n"
-                        + "<p>This is a message just for you, "+employee.getFirst_name() +" "+employee.getLast_name()+"</p>\n"
+                        + "<p>This is a message just for you, "+employee.getFirstName() +" "+employee.getLastName()+"</p>\n"
                         + "<p>This is the Link to reset the password </p>\n"
                         +"<a href='http://localhost:4200/reset-password/"+id+"'>Click Here!</a>\n"
                         + "<p>We hope you're having a great day!</p>\n\n"
@@ -90,8 +90,8 @@ public class EmployeeeService {
                         ;
 
                 Map<String, Object> variables = new HashMap<>();
-                variables.put("firstName", employee.getFirst_name());
-                variables.put("lastName", employee.getLast_name());
+                variables.put("firstName", employee.getFirstName());
+                variables.put("lastName", employee.getLastName());
 
                 emailService.sendEmail(recipient, subject, template);
             }
@@ -126,7 +126,7 @@ if(employee.get().getDepartment()!=null){
         employeeRepository.save(employee.get());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body("Employee "+employee.get().getFirst_name() +" " +employee.get().getLast_name() +" is now in the "+departement.get().getDepartment_name() + " departement");
+                .body("Employee "+employee.get().getFirstName() +" " +employee.get().getLastName() +" is now in the "+departement.get().getDepartment_name() + " departement");
 
     }else{
         return ResponseEntity
@@ -234,6 +234,22 @@ Employee employee1 = employeeRepository.save(employee);
                 response.put("Status", "true");
                 response.put("message", "Employees added Successfully");
                 return ResponseEntity.ok().body(response);
+            } catch (JobInstanceAlreadyCompleteException e) {
+                response.put("Status", "false");
+                response.put("message", "Job has already been completed with these parameters");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            } catch (JobExecutionAlreadyRunningException e) {
+                response.put("Status", "false");
+                response.put("message", "A batch job is already running. Please wait for it to complete");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            } catch (JobParametersInvalidException e) {
+                response.put("Status", "false");
+                response.put("message", "Invalid job parameters: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            } catch (JobRestartException e) {
+                response.put("Status", "false");
+                response.put("message", "Error restarting job: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             } catch (Exception e) {
                 e.printStackTrace();
                 response.put("Status", "false");

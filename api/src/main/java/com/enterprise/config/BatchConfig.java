@@ -65,13 +65,7 @@ public class BatchConfig {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-//    @Bean
-//    public Step step(JobRepository jobRepository) {
-//        return new StepBuilder("step",jobRepository)
-//                .tasklet(tasklet()) // Using a separate method for tasklet
-//                .transactionManager(transactionManager)  // Inject the transaction manager
-//                .build();
-//    }
+
 @Bean
 public  Step step2() throws Exception {
     return new StepBuilder("step 2",this.jobRepository)
@@ -89,17 +83,6 @@ public  Step step2() throws Exception {
 
     @Bean
     public ItemWriter<? super Department> DBItemWriter() {
-//    return new JdbcBatchItemWriterBuilder<Department>()
-//            .dataSource(dataSource)
-//            .sql("INSERT into department(department_name) values(?)")
-//            .itemPreparedStatementSetter(new ItemPreparedStatementSetter<Department>() {
-//                @Override
-//                public void setValues(Department item, PreparedStatement ps) throws SQLException {
-//                    ps.setString(1,item.getDepartment_name());
-//
-//                }
-//            })
-//            .build();
     return new JsonFileItemWriterBuilder<Department>()
             .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
             .name("JSON F")
@@ -118,13 +101,7 @@ public  Step step2() throws Exception {
 
                 .build();
 
-//         .writer(new ItemWriter<Department>() {
-//            @Override
-//            public void write(Chunk<? extends Department> chunk) throws Exception {
-//                System.out.println(chunk.size());
-//                chunk.forEach(System.out::println);
-//            }
-//        })
+
     }
 
     @Bean
@@ -153,10 +130,11 @@ public  Step step2() throws Exception {
     }
 
 
+    // This method is for testing only, actual batch reading uses the DepartmentJob configuration
     private ItemReader<Department> itemReader() throws Exception {
         FlatFileItemReader<Department> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setLinesToSkip(1);
-        flatFileItemReader.setResource(new FileSystemResource("C:\\Users\\elala\\Downloads\\enterprise\\api/data/test.csv"));
+        flatFileItemReader.setResource(new FileSystemResource("placeholder.csv"));
         DefaultLineMapper<Department> lineMapper = new DefaultLineMapper<>();
         lineMapper.setFieldSetMapper(new DepartmentFieldMapper());
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();

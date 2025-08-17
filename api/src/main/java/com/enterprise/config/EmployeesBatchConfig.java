@@ -44,15 +44,16 @@ public class EmployeesBatchConfig {
     public JdbcBatchItemWriter<Employee> employeeDbWriter(DataSource dataSource) {
         JdbcBatchItemWriter<Employee> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
-        writer.setSql("INSERT INTO employee (first_name, last_name, email, job_title, phone_number, hire_date) VALUES (?, ?, ?, ?, ?, ?)");
+        System.out.println("this is happening")     ;
+        writer.setSql("INSERT INTO employee (firstName, lastName, email, job_title, phone_number, hire_date) VALUES (?, ?, ?, ?, ?, ?)");
         writer.setItemPreparedStatementSetter((employee, ps) -> {
-            System.out.println("Writing employee: " + employee);
-            ps.setString(1, employee.getFirst_name());
-            ps.setString(2, employee.getLast_name());
+            System.out.println("Writing employee: " + employee.getFirstName() + " " + employee.getLastName());
+            ps.setString(1, employee.getFirstName());
+            ps.setString(2, employee.getLastName());
             ps.setString(3, employee.getEmail());
-            ps.setString(4, employee.getJob_title());
-            ps.setString(5, String.valueOf(employee.getPhone_number()));
-            ps.setDate(6, java.sql.Date.valueOf(String.valueOf(employee.getHire_date())));
+            ps.setString(4, employee.getJobTitle());
+            ps.setString(5, employee.getPhoneNumber());
+            ps.setDate(6, new java.sql.Date(employee.getHireDate().getTime()));
         });
         return writer;
     }
@@ -73,15 +74,17 @@ public class EmployeesBatchConfig {
                 .build();
     }
 
+    // This method is kept for potential future use but removed hardcoded paths
     @Bean
     public ItemWriter<Employee> empItemWriter() {
         FlatFileItemWriter<Employee> flatFileItemWriter = new FlatFileItemWriter<>();
-        flatFileItemWriter.setResource(new FileSystemResource("C:/Users/elala/Downloads/enterprise/api/data/written.csv"));
+        // Use system temp directory instead of hardcoded path
+        flatFileItemWriter.setResource(new FileSystemResource(System.getProperty("java.io.tmpdir") + "/employee_output.csv"));
         flatFileItemWriter.setAppendAllowed(false);
         DelimitedLineAggregator<Employee> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
         BeanWrapperFieldExtractor<Employee> employeeBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-        employeeBeanWrapperFieldExtractor.setNames(new String[]{"first_name","last_name","email","job_title","phone_number","hire_date"});
+        employeeBeanWrapperFieldExtractor.setNames(new String[]{"firstName","lastName","email","job_title","phone_number","hire_date"});
         lineAggregator.setFieldExtractor(employeeBeanWrapperFieldExtractor);
         flatFileItemWriter.setLineAggregator(lineAggregator);
         return flatFileItemWriter;
@@ -96,7 +99,7 @@ public class EmployeesBatchConfig {
         DefaultLineMapper<Employee> lineMapper = new DefaultLineMapper<>();
         lineMapper.setFieldSetMapper(new EmployeeFieldMapper());
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-        lineTokenizer.setNames("first_name","last_name","email","job_title","phone_number","hire_date");
+        lineTokenizer.setNames("firstName","lastName","email","job_title","phone_number","hire_date");
         lineMapper.setLineTokenizer(lineTokenizer);
         flatFileItemReader.setLineMapper(lineMapper);
         return flatFileItemReader;

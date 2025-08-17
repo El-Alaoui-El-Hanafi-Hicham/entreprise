@@ -1,6 +1,5 @@
 package com.enterprise.service;
 
-import com.enterprise.batch.DepartmentJob;
 import com.enterprise.config.BatchConfig;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
@@ -17,7 +16,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class DepartementService {
+public class DepartmentService {
     EmployeeRepository employeeRepository;
     JobLauncher jobLauncher;
     DepartmentRepository departmentRepository;
@@ -42,7 +40,7 @@ public class DepartementService {
 
 
     @Autowired
-    public DepartementService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, BatchConfig departmentJob, SimpMessagingTemplate messagingTemplate, JobRepository jobRepository) {
+    public DepartmentService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, JobLauncher jobLauncher, BatchConfig departmentJob, SimpMessagingTemplate messagingTemplate, JobRepository jobRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.jobLauncher = jobLauncher;
@@ -169,14 +167,14 @@ public class DepartementService {
             } else {
                 if (department.get().getManager() != null && department.get().getManager().equals(employee.get())) {
                     response.put("Status", "false");
-                    response.put("message", employee.get().getFirst_name() + " is already the manager " + department.get().getDepartment_name() + " departement .");
+                    response.put("message", employee.get().getFirstName() + " is already the manager " + department.get().getDepartment_name() + " departement .");
                     return ResponseEntity.ok(response);
                 } else {
 
                     department.get().setManager(employee.get());
                     this.departmentRepository.save(department.get());
                     response.put("Status", "true");
-                    response.put("message", employee.get().getFirst_name() + " is the new manager for " + department.get().getDepartment_name() + " departement");
+                    response.put("message", employee.get().getFirstName() + " is the new manager for " + department.get().getDepartment_name() + " departement");
                     return ResponseEntity.ok().body(response);
                 }
 
@@ -259,7 +257,6 @@ public class DepartementService {
             response.put("message", "File's extention is not correct, please upload a csv file");
             return ResponseEntity.badRequest().body(response);
         }
-        // Ensure directory exists
         File dir = new File(uploadDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -278,23 +275,34 @@ public class DepartementService {
             jobLauncher.run(jobDe.DepartmentJob(jobRepository), jobParameters);
 
             response.put("Status", "true");
-            response.put("message", "Department Deleted Successfully");
+            response.put("message", "Departments uploaded successfully");
             return ResponseEntity.ok().body(response);
         } catch (IOException e) {
             e.printStackTrace();
-            response.put("Status", "true");
-            response.put("message", "Department Deleted Successfully");
+            response.put("Status", "false");
+            response.put("message", "Error saving file: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         } catch (JobInstanceAlreadyCompleteException e) {
-            throw new RuntimeException(e);
+            response.put("Status", "false");
+            response.put("message", "Job has already been completed with these parameters");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (JobExecutionAlreadyRunningException e) {
-            throw new RuntimeException(e);
+            response.put("Status", "false");
+            response.put("message", "A batch job is already running. Please wait for it to complete");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (JobParametersInvalidException e) {
-            throw new RuntimeException(e);
+            response.put("Status", "false");
+            response.put("message", "Invalid job parameters: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (JobRestartException e) {
-            throw new RuntimeException(e);
+            response.put("Status", "false");
+            response.put("message", "Error restarting job: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            response.put("Status", "false");
+            response.put("message", "An unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

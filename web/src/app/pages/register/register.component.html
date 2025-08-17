@@ -10,38 +10,38 @@
         <div class="flex flex-column gap-3">
           <div class="flex flex-column gap-2">
             <label for="firstName">First Name</label>
-            <input pInputText id="firstName" name="firstName" [(ngModel)]="first_name" class="w-full" />
+            <input pInputText id="firstName" name="firstName" [(ngModel)]="firstName" class="w-full" />
           </div>
-          
+
           <div class="flex flex-column gap-2">
             <label for="lastName">Last Name</label>
-            <input pInputText id="lastName" name="lastName" [(ngModel)]="last_name" class="w-full" />
+            <input pInputText id="lastName" name="lastName" [(ngModel)]="lastName" class="w-full" />
           </div>
-          
+
           <div class="flex flex-column gap-2">
             <label for="email">Email</label>
             <input pInputText id="email" name="email" [(ngModel)]="email" class="w-full" />
           </div>
-          
+
           <div class="flex flex-column gap-2">
             <label for="password">Password</label>
-            <p-password 
-              id="password" 
+            <p-password
+              id="password"
               name="password"
-              [(ngModel)]="password" 
-              [toggleMask]="true" 
+              [(ngModel)]="password"
+              [toggleMask]="true"
               [feedback]="true"
               styleClass="w-full">
             </p-password>
           </div>
-          
+
           <div class="flex flex-column gap-2">
             <label for="hireDate">Choose hire date</label>
-            <p-calendar 
-              id="hireDate" 
+            <p-calendar
+              id="hireDate"
               name="hireDate"
-              [(ngModel)]="hire_date" 
-              dateFormat="mm/dd/yy" 
+              [(ngModel)]="hire_date"
+              dateFormat="mm/dd/yy"
               [showIcon]="true"
               styleClass="w-full">
             </p-calendar>

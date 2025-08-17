@@ -14,7 +14,7 @@ public class RegisterUserDto {
 
     private String password;
 
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String hire_date;
 }

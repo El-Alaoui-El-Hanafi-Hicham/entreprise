@@ -11,6 +11,8 @@ import { UsersComponent } from './components/users/users.component';
 import { DepartementsComponent } from './components/departements/departements.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 
 
 const routes: Routes = [   {
@@ -35,6 +37,16 @@ const routes: Routes = [   {
       path: 'chats', // child route path
       component: ChatComponent, // child route component that the router renders
       loadChildren: () => import('./components/chat/chat.module').then(m => m.ChatModule)
+    },
+     {
+      path: 'tasks', // child route path
+      component: TasksComponent, // child route component that the router renders
+      loadChildren: () => import('./components/tasks/tasks.module').then(m => m.TasksModule)
+    },
+       {
+      path: 'projects', // child route path
+      component:ProjectsComponent, // child route component that the router renders
+      loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule)
     },
   ]
 },
