@@ -26,12 +26,14 @@ public class Project {
     private Date start_date;
     @Column
     private Date end_date;
-    @ManyToOne
-    @JoinColumn(name="department_id")
-    private Department department;
+    @ManyToMany(mappedBy = "departmentList") // mappedBy points to the field in Employee
+    private List<Department> departments;
     @ManyToOne
     @JoinColumn(name="manager_id")
     private Employee manager;
+    @ManyToOne
+    @JoinColumn(name="owner_id")
+    private Employee Owner;
     @OneToMany(mappedBy = "project",fetch = FetchType.LAZY)
     private List<Task> tasksList;
     @ManyToMany(mappedBy = "projectsList") // mappedBy points to the field in Employee
@@ -53,10 +55,8 @@ public class Project {
         this.end_date = end_date;
         Department newDep = new Department();
         newDep.setId(department_id);
-
         Employee newMan = new Employee();
         newMan.setId(manager_id);
-        this.department = newDep;
         this.manager = newMan;
     }
 //@Override

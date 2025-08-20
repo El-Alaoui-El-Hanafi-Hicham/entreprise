@@ -33,7 +33,13 @@ public class Department {
     @JsonManagedReference
     private List<Employee> employees;
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "department_project",
+            joinColumns = @JoinColumn(name = "department_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private List<Project> projectsList;  // FIXED type!
     public Boolean addEmployee(Employee employee){
     if(employees==null){
        employees = new ArrayList<>();
