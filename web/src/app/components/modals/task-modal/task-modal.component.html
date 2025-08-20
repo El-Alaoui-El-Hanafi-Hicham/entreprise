@@ -1,0 +1,61 @@
+<p-dialog [header]="isEdit?'Edit Task':'Add Task'" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (onHide)="onNoClick()">
+  <form [formGroup]="taskForm" class="flex flex-column gap-3" >
+    <div class="flex flex-column gap-2">
+      <label for="firstName">Name</label>
+      <input pInputText id="firstName" formControlName="task_name" class="w-full" />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="firstName">Description</label>
+      <input pInputText id="description" formControlName="task_name" class="w-full" />
+    </div>
+    <div class="flex gap-2 w-full">
+    <div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Priority</label>
+      <p-dropdown [options]="priorities" formControlName="priority" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select a priority"  />
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Status</label>
+<p-dropdown [options]="statusOptions" formControlName="status" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select a status"  />
+    </div>
+    </div>
+    <div  class="flex gap-2 w-full">
+<div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Project</label>
+<p-dropdown [options]="statusOptions" formControlName="manager" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select a project" class="w-full md:w-56" />
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Manager</label>
+<p-dropdown [options]="statusOptions" formControlName="manager" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select a manager" class="w-full md:w-56" />
+    </div>
+    </div>
+
+    <div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Departments</label>
+<p-dropdown [options]="statusOptions" formControlName="Departments" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select Departments" class="w-full md:w-56" />
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="firstName">Assignes</label>
+<p-dropdown [options]="statusOptions" formControlName="employees" styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select Assignes" class="w-full md:w-56" />
+    </div>
+    <div class="flex gap-2 w-full">
+    <div class="flex flex-column gap-2 w-full">
+      <label for="start_date">Start Date</label>
+      <p-calendar id="start_date" formControlName="start_date" dateFormat="mm/dd/yy" [showIcon]="true" styleClass="w-full"></p-calendar>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="end_date">End Date</label>
+      <p-calendar id="end_date" formControlName="end_date" dateFormat="mm/dd/yy" [showIcon]="true" styleClass="w-full"></p-calendar>
+    </div>
+    </div>
+
+
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2 w-full">
+      <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="onNoClick()"></p-button>
+      <p-button label="Save" [disabled]="isLoading || !taskForm.valid" [loading]="isLoading" severity="primary" (onClick)="addTask()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

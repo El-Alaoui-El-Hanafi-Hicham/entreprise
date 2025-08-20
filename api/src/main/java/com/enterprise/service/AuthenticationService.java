@@ -46,8 +46,8 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponseDto signup(RegisterUserDto registerUserDto) {
-        Employee user =  Employee.builder().firstName(registerUserDto.getfirstName())
-                .lastName(registerUserDto.getlastName())
+        Employee user =  Employee.builder().firstName(registerUserDto.getFirstName())
+                .lastName(registerUserDto.getLastName())
                 .email(registerUserDto.getEmail())
         .password(passwordEncoder.encode(registerUserDto.getPassword()))
                 .build();

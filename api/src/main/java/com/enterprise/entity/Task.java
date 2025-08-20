@@ -47,6 +47,12 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private Employee createdBy;
 
     public Task(String task_name, String description, Date start_date, Date end_date) {
         this.task_name = task_name;

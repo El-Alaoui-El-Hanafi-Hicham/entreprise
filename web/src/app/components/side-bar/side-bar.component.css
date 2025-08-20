@@ -195,8 +195,8 @@
 /* Page Content */
 .page-content {
     flex: 1;
-    padding: 2rem;
-    background-color: var(--surface-ground, #f8f9fa);
+    /* padding: 2rem; */
+    background-color: white;
     overflow-y: auto;
 }
 
@@ -206,15 +206,15 @@
         transform: translateX(-100%);
         width: 280px;
     }
-    
+
     .sidebar:not(.collapsed) {
         transform: translateX(0);
     }
-    
+
     .main-content {
         margin-left: 0;
     }
-    
+
     .sidebar-collapsed .main-content {
         margin-left: 0;
     }
