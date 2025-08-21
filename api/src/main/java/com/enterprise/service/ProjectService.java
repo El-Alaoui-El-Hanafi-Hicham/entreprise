@@ -1,5 +1,13 @@
 package com.enterprise.service;
 
+//import com.enterprise.dao.DepartmentRepository;
+//import com.enterprise.dao.EmployeeRepository;
+//import com.enterprise.dao.ProjectRepository;
+//import com.enterprise.dao.TaskRepository;
+//import com.enterprise.entity.Department;
+//import com.enterprise.entity.Employee;
+//import com.enterprise.entity.Project;
+//import com.enterprise.entity.Task;
 import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.dao.ProjectRepository;
@@ -7,11 +15,11 @@ import com.enterprise.dao.TaskRepository;
 import com.enterprise.entity.Department;
 import com.enterprise.entity.Employee;
 import com.enterprise.entity.Project;
-import com.enterprise.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -28,24 +36,63 @@ public class ProjectService {
         this.taskRepository = taskRepository;
         this.projectRepository=projectRepository;
     }
-    public ResponseEntity<String> addProject(Project project){
+    public ResponseEntity<HashMap<String,String>> addProject(Project project){
         Optional<Employee> employee = this.employeeRepository.findById(project.getManager().getId());
-        Optional<Department> department = this.departmentRepository.findById(project.getDepartment().getId());
+        Optional<Employee> owner = this.employeeRepository.findById(project.getOwner().getId());
+        HashMap<String,String> response = new HashMap<>();
         if(employee.isEmpty()){
-            return ResponseEntity.badRequest().body("Manager not found");
+            response.put("status","false");
+            response.put("message","Manager not found");
+            return ResponseEntity.badRequest().body(response);
         }else{
-        if(this.departmentRepository.findById(project.getDepartment().getId()).isEmpty()){
-            return ResponseEntity.badRequest().body("Departement not found");
+        if(owner.isEmpty()){
+            response.put("status","false");
+            response.put("message","Owner not found");
+            return ResponseEntity.badRequest().body(response);
 
         }else{
+            Project new_project = new Project(project.getProject_name(),project.getDescription(),project.getStart_date(),project.getEnd_date(),project.getManager(),project.getOwner());
 
-            Project new_project = new Project(project.getProject_name(),project.getDescription(),project.getStart_date(),project.getEnd_date(),project.getDepartment().getId(),project.getManager().getId());
+            if((long) project.getDepartments().size() >0){
+                for (int i = 0; i < project.getDepartments().size(); i++) {
+                    Optional<Department> OptDepartment = this.departmentRepository.findById(project.getDepartments().get(i).getId());
+                    if(OptDepartment.isEmpty()){
+                        response.put("status","false");
+                        response.put("message","Department not found");
+                        return ResponseEntity.badRequest().body(response);
+
+                    }else{
+                      new_project.addDepartment(OptDepartment.get());
+                    }
+                }
+
+            }
+            if(!project.getEmployeeList().isEmpty()){
+                for (int i = 0; i < project.getEmployeeList().size(); i++) {
+                    Optional<Employee> OptEmployee = this.employeeRepository.findById(project.getEmployeeList().get(i).getId());
+                    if(OptEmployee.isEmpty()){
+                        response.put("status","false");
+                        response.put("message","Employee"+project.getEmployeeList().get(i).getFirstName()+" "+project.getEmployeeList().get(i).getLastName()+" not found");
+                        return ResponseEntity.badRequest().body(response);
+
+                    }else{
+                        new_project.addEmployee(OptEmployee.get());
+                    }
+                }
+
+            }
+
+
             Project d = this.projectRepository.save(new_project);
 if(d.equals(new_project)){
 
-    return ResponseEntity.ok("Project Added Succesfuly");
+    response.put("status","true");
+    response.put("message","Project Added Succesfuly");
+    return ResponseEntity.ok().body(response);
 }else{
-    return ResponseEntity.ok("Something Bad happened");
+    response.put("status","false");
+    response.put("message","Something went bad, please try Again");
+    return ResponseEntity.badRequest().body(response);
 }
         }
         }
@@ -67,33 +114,33 @@ if(d.equals(new_project)){
        }
        }
     }
-    public ResponseEntity<String> ToggleStatus(long id){
-        Optional<Task> task = taskRepository.findById(id);
-        if(task.isEmpty()){
-            return ResponseEntity.badRequest().body("task not found");
-
-        }else{
-            if(task.get().getStatus()==null){
-                task.get().setStatus(true);
-                taskRepository.save(task.get());
-                return ResponseEntity.ok().body("task status changed to \"Completed\"");
-            }else{
-
-
-            if(task.get().getStatus()){
-            task.get().setStatus(false);
-                taskRepository.save(task.get());
-                return ResponseEntity.ok().body("task status changed to \"Not Completed\"");
-
-            }else{
-
-                task.get().setStatus(true);
-                taskRepository.save(task.get());
-                return ResponseEntity.ok().body("task status changed to \"Completed\"");
-
-            }
-            }
-        }
+//    public ResponseEntity<String> ToggleStatus(long id){
+//        Optional<Task> task = taskRepository.findById(id);
+//        if(task.isEmpty()){
+//            return ResponseEntity.badRequest().body("task not found");
+//
+//        }else{
+//            if(task.get().getStatus()==null){
+//                task.get().setStatus(true);
+//                taskRepository.save(task.get());
+//                return ResponseEntity.ok().body("task status changed to \"Completed\"");
+//            }else{
+//
+//
+//            if(task.get().getStatus()){
+//            task.get().setStatus(false);
+//                taskRepository.save(task.get());
+//                return ResponseEntity.ok().body("task status changed to \"Not Completed\"");
+//
+//            }else{
+//
+//                task.get().setStatus(true);
+//                taskRepository.save(task.get());
+//                return ResponseEntity.ok().body("task status changed to \"Completed\"");
+//
+//            }
+//            }
+//        }
     }
 
-}
+//}

@@ -36,7 +36,7 @@ this.jwtKey=localStorage.getItem('key');
       }
         return this.httpClient.post(this.baseUrl+"department", payload,{ headers: this.httpHeaders});
      }
-     getDepartments(){
+     getDepartments():Observable<any>{
         return this.httpClient.get(this.baseUrl+"department", { headers: this.httpHeaders});
      }
 

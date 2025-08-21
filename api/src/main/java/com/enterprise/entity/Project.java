@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.engine.spi.Managed;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,14 +27,14 @@ public class Project {
     private Date start_date;
     @Column
     private Date end_date;
-    @ManyToMany(mappedBy = "departmentList") // mappedBy points to the field in Employee
+    @ManyToMany(mappedBy = "projectsList") // mappedBy points to the field in Employee
     private List<Department> departments;
     @ManyToOne
     @JoinColumn(name="manager_id")
     private Employee manager;
     @ManyToOne
     @JoinColumn(name="owner_id")
-    private Employee Owner;
+    private Employee owner;
     @OneToMany(mappedBy = "project",fetch = FetchType.LAZY)
     private List<Task> tasksList;
     @ManyToMany(mappedBy = "projectsList") // mappedBy points to the field in Employee
@@ -48,20 +49,37 @@ public class Project {
         this.end_date = end_date;
     }
 
-    public Project(String project_name, String description, Date start_date, Date end_date, long department_id, long manager_id) {
+    public Project(String project_name, String description, Date start_date, Date end_date,Employee Manager,Employee Owner) {
         this.project_name = project_name;
         this.description = description;
         this.start_date = start_date;
         this.end_date = end_date;
-        Department newDep = new Department();
-        newDep.setId(department_id);
-        Employee newMan = new Employee();
-        newMan.setId(manager_id);
-        this.manager = newMan;
+        this.owner=Owner;
+        this.manager = Manager;
     }
-//@Override
-//    void setManager(Employee manager){
-//        this.manager = manager;
-//    }
+
+    public boolean addDepartment(Department department){
+        if(departments==null){
+            departments = new ArrayList<>();
+        }
+        boolean isPresent = this.departments.stream().anyMatch(employee1 -> employee1.equals(department));
+        if(isPresent){
+            return false;
+        }
+        departments.add(department);
+        return true;
+    }
+    public boolean addEmployee(Employee employee){
+        if(employeeList==null){
+            employeeList = new ArrayList<>();
+        }
+        boolean isPresent = this.employeeList.stream().anyMatch(employee1 -> employee1.equals(employee));
+        if(isPresent){
+            return false;
+        }
+        employeeList.add(employee);
+        return true;
+    }
+
 
 }

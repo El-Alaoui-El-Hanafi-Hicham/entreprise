@@ -58,12 +58,12 @@ public final AuthenticationService authenticationService;
     }
     @GetMapping("/isAuthenticated")
     public ResponseEntity<Boolean> isAuthenticated() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        boolean isAuthenticated = authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String);
-//        return ResponseEntity.ok(isAuthenticated);
-String jwt =((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization").substring(7);
-        Boolean isValid = this.jwtService.extractExpirationDate(jwt);
-        return ResponseEntity.ok(!isValid);
+        String jwt = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest()
+                .getHeader("Authorization")
+                .substring(7);
+        boolean isExpired = jwtService.isTokenExpired(jwt);
+        return ResponseEntity.ok(!isExpired);
     }
 
 

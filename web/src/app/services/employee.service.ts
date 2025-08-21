@@ -21,7 +21,7 @@ this.httpHeaders= new HttpHeaders({
    me(){
     return this.http.get<any>(this.BASE_URL+"/me", { headers: this.httpHeaders });
     }
-  getEmployees(page:number,size:number){
+  getEmployees(page:number=0,size:number=100){
   let params = new HttpParams()
     .set('pageNumber', String(page)) // Reassign the result
     .set('pageSize', String(size));  // Reassign the result

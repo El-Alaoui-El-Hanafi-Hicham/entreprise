@@ -60,12 +60,12 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
 @NgModule({
   declarations: [
     AppComponent,
-   
+
     PageNotFoundComponentComponent,
     HomeComponent,
     SideBarComponent,
     LandComponent,
-  
+
   ],
   imports: [
     BrowserModule,

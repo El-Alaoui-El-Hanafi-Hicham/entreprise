@@ -46,10 +46,10 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256,getSigningKey())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(SignatureAlgorithm.HS256,getSigningKey())
                 .compact();
 
   }
@@ -57,12 +57,15 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
   }
     public boolean isTokenValid(String token,UserDetails userDetails){
-        return extractEmail(token).equals(userDetails.getUsername()) && !this.extractExpirationDate(token);
+        return extractEmail(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    public boolean extractExpirationDate(String token) {
-    return extractClaim(token,Claims::getExpiration).before(new Date(System.currentTimeMillis()));
+    public boolean isTokenExpired(String token) {
+    return extractClaim(token,Claims::getExpiration).before(new Date());
     }
 
 
+    public Date extractExpirationDate(String jwt) {
+        return extractClaim(jwt, Claims::getExpiration);
+    }
 }
