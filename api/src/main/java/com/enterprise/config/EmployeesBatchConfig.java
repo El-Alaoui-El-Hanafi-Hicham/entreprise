@@ -44,7 +44,6 @@ public class EmployeesBatchConfig {
     public JdbcBatchItemWriter<Employee> employeeDbWriter(DataSource dataSource) {
         JdbcBatchItemWriter<Employee> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
-        System.out.println("this is happening")     ;
         writer.setSql("INSERT INTO employee (firstName, lastName, email, job_title, phone_number, hire_date) VALUES (?, ?, ?, ?, ?, ?)");
         writer.setItemPreparedStatementSetter((employee, ps) -> {
             System.out.println("Writing employee: " + employee.getFirstName() + " " + employee.getLastName());

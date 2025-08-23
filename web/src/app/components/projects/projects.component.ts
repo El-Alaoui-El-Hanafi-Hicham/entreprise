@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { departmentService } from 'src/app/services/department/department.service';
+import { EmployeeService } from 'src/app/services/employee.service';
+import { ProjectService } from 'src/app/services/project/project.service';
 
 @Component({
   selector: 'app-projects',
@@ -9,34 +12,37 @@ import { MessageService } from 'primeng/api';
 })
 export class ProjectsComponent implements OnInit {
   getSeverity(status: string) {
-        switch (status) {
-            case 'On Hold':
-                return 'danger';
+    switch (status) {
+      case 'On Hold':
+        return 'danger';
 
-            case 'In Progress':
-                return 'success';
+      case 'In Progress':
+        return 'success';
 
-            case 'Completed':
-                return 'info';
+      case 'Completed':
+        return 'info';
 
-            case 'Not Started':
-                return 'warning';
+      case 'Not Started':
+        return 'warning';
 
-            case 'renewal':
-                return undefined;
-            default:
-                return undefined;
-        }
-      }
+      case 'renewal':
+        return undefined;
+      default:
+        return undefined;
+    }
+  }
 
   departments: any[] = []
   selectedDepartments: any[] = []
-addProjectVisible:boolean=false
-selectedStatus: any[] = [];
-selectedProjects: any[] = [];
-status: any[]=[];
-  projects:any[]= [
-  {
+  addProjectVisible: boolean = false
+  selectedStatus: any[] = [];
+  selectedProjects: any[] = [];
+  status: any[] = [];
+  page: number = 0;
+  isLoading: boolean = false;
+  size: number = 10;
+  projects: any[] = [
+    {
       id: 1,
       name: 'E-Commerce Platform',
       status: 'In Progress',
@@ -81,23 +87,35 @@ status: any[]=[];
       endDate: '2026-03-15',
       budget: 150000
     }
-];
+  ];
 
-  constructor(private messageService: MessageService){
+  constructor(private messageService: MessageService, private departmentService: departmentService, private employeeService: EmployeeService, private projectService: ProjectService) {
 
   }
 
-  ngOnInit(): void {}
-
-  showDialog():void{
-    this.addProjectVisible=true
+  ngOnInit(): void {
+    this.getProjects(this.page, this.size)
   }
 
-  onAddProjectClose(response:any){
+  showDialog(): void {
+    this.addProjectVisible = true
+  }
+
+  onAddProjectClose(response: any) {
     console.log(response)
-    if(response=='Employee Added Succesfully'){
-      this.messageService.add({severity:'success', summary: 'Success', detail: 'Employee Added Successfully'});
+    if (response == 'Employee Added Succesfully') {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Employee Added Successfully' });
+      this.page = 0
+      this.size = 10
+      this.getProjects(this.page, this.size);
     }
-    this.addProjectVisible=false;
+    this.addProjectVisible = false;
+  }
+  getProjects(page: number, size: number) {
+    this.isLoading = true
+    this.projectService.getProjects(page, size).subscribe((response: any) => {
+      this.projects = response.content;
+      this.isLoading = false
+    })
   }
 }

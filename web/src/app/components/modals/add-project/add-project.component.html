@@ -2,7 +2,7 @@
   <form [formGroup]="projectForm" class="flex flex-column gap-3" >
     <div class="flex flex-column gap-2">
       <label for="firstName">Name</label>
-      <input pInputText id="firstName" formControlName="task_name" class="w-full" />
+      <input pInputText id="firstName" formControlName="project_name" class="w-full" />
     </div>
     <div class="flex flex-column gap-2">
       <label for="firstName">Description</label>
@@ -22,11 +22,11 @@
 
     <div class="flex flex-column gap-2 w-full">
       <label for="firstName">Departments</label>
-        <p-multiSelect [options]="departments" formControlName="departments"  styleClass="w-full" optionLabel="department_name" display="chip" placeholder="Select Departments" [maxSelectedLabels]="3"  />
+        <p-multiSelect [options]="departments" formControlName="departmentsList"  styleClass="w-full" optionLabel="department_name" display="chip" placeholder="Select Departments" [maxSelectedLabels]="3"  />
     </div>
     <div class="flex flex-column gap-2 w-full">
       <label for="firstName">Assignes</label>
-        <p-multiSelect [options]="employees" formControlName="employeeList" styleClass="w-full" optionLabel="label" display="chip" placeholder="Select Assignes" [maxSelectedLabels]="3"  />
+        <p-multiSelect [options]="employees" formControlName="employeesList" styleClass="w-full" optionLabel="label" display="chip" placeholder="Select Assignes" [maxSelectedLabels]="3"  />
     </div>
     <div class="flex gap-2 w-full">
     <div class="flex flex-column gap-2 w-full">

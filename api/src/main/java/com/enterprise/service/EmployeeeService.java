@@ -148,7 +148,7 @@ if(employee.get().getDepartment()!=null){
         System.out.println("the page size is ====> "+firstPageWithTwoElements.getPageSize());
         System.out.println("the page size is ====> "+firstPageWithTwoElements.getPageNumber());
 
-        Page<Employee> allEmployees=   employeeRepository.findAll(firstPageWithTwoElements);// Collect the stream into a list
+        Page<Employee> allEmployees=   employeeRepository.findAll(firstPageWithTwoElements);
 
 
 

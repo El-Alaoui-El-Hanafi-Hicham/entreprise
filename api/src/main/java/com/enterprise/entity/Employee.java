@@ -1,6 +1,6 @@
 package com.enterprise.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -61,31 +62,36 @@ public class Employee implements UserDetails, Serializable {
     @UpdateTimestamp
     private Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    @JsonBackReference
-    private Department department;
-
-    @ManyToMany(mappedBy = "employeeList")
-    private List<Task> taskList ;
 
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "employeeList", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Task> taskList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "employee_subtask",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "subtask_id")
     )
-    private List<SubTask> subTaskList;  // FIXED type!
+    @JsonIgnore
+    private List<SubTask> subTaskList = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    @JsonIgnore
+    private Department department;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "employee_project",  // join table name
-            joinColumns = @JoinColumn(name = "employee_id"), // foreign key in join table pointing to Employee
-            inverseJoinColumns = @JoinColumn(name = "project_id") // foreign key pointing to Project
+            name = "project_employees",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
     )
-    private List<Project> projectsList ;
-private Department getDepartement(){
+    @JsonIgnore
+    private List<Project> projectsList = new ArrayList<>();
+
+    private Department getDepartement(){
     return this.department;
 }
     public Employee(String firstName, String lastName, String email, Date hire_date, String phone_number) {
@@ -132,6 +138,62 @@ private Department getDepartement(){
 
     @Override
     public boolean isEnabled() {
+        return true;
+    }
+
+    public Boolean addProject(Project project) {
+        if (projectsList == null) {
+            projectsList = new ArrayList<>();
+        }
+        Boolean isPresent = this.projectsList.stream().anyMatch(proj -> proj.equals(project));
+        if (isPresent) {
+            return false;
+        }
+        projectsList.add(project);
+        if(!project.getEmployeesList().contains(this)) {
+            project.getEmployeesList().add(this);
+        }
+        return true;
+    }
+
+    public Boolean removeProject(Project project) {
+        if (this.projectsList == null) {
+            this.projectsList = new ArrayList<>();
+        }
+        Boolean isPresent = this.projectsList.stream().anyMatch(proj -> proj.equals(project));
+        if (!isPresent) {
+            return false;
+        }
+        this.projectsList.remove(project);
+        project.getEmployeesList().remove(this);
+        return true;
+    }
+
+    public Boolean addTask(Task task) {
+        if (taskList == null) {
+            taskList = new ArrayList<>();
+        }
+        Boolean isPresent = this.taskList.stream().anyMatch(t -> t.equals(task));
+        if (isPresent) {
+            return false;
+        }
+        taskList.add(task);
+        if(!task.getEmployeeList().contains(this)) {
+            task.getEmployeeList().add(this);
+        }
+        return true;
+    }
+
+    public Boolean removeTask(Task task) {
+        if (this.taskList == null) {
+            this.taskList = new ArrayList<>();
+        }
+        Boolean isPresent = this.taskList.stream().anyMatch(t -> t.equals(task));
+        if (!isPresent) {
+            return false;
+        }
+        this.taskList.remove(task);
+        task.getEmployeeList().remove(this);
         return true;
     }
 

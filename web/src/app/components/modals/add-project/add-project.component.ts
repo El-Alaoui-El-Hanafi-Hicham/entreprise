@@ -38,8 +38,8 @@ throw new Error('Method not implemented.');
       description: ['', [Validators.required]],
       manager: [null, []],
       owner: [null, []],
-      employeeList: [null, [Validators.required]],
-      departments: [null, [Validators.required]],
+      employeesList: [null, [Validators.required]],
+      departmentsList: [null, [Validators.required]],
       start_date: ['', [Validators.required]],
       end_date: ['', [Validators.required]]
     });
@@ -61,7 +61,7 @@ throw new Error('Method not implemented.');
   }
   getEmployees() {
     this.employeeService.getEmployees().subscribe((val) => {
-      this.employees = val.content.map((el:any)=>({...el,label:el.firstName+" "+el.lastName}))||[];
+      this.employees = val.content.map((el:any)=>({...el,label:el?.firstName+" "+el?.lastName}))||[];
     })
   }
 

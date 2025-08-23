@@ -1,5 +1,6 @@
 package com.enterprise.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,21 +32,24 @@ public class Task {
     private Boolean status;
     @Column
     private Priority priority;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "employee_task",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id")
     )
-    private List<Employee> employeeList;
+    @JsonIgnore
+    private List<Employee> employeeList = new ArrayList<>();
     @Column
     private Timestamp created_at ;
     @Column
     private Timestamp updated_at;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<SubTask> subTaskList = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnore
     private Project project;
     @ManyToOne
     @JoinColumn(name = "manager_id")
@@ -61,16 +65,35 @@ public class Task {
         this.end_date = end_date;
         this.status = false;
     }
-    public boolean addEmployeeToEmployee(Employee employee){
-        if(this.employeeList == null||this.employeeList.isEmpty()){
+    public boolean addEmployee(Employee employee){
+        if(this.employeeList == null){
             this.employeeList = new ArrayList<>();
-        }else{
-            if(this.employeeList.stream().anyMatch(element->element.equals(employee))){
-                return false;
-            }
+        }
+        if(this.employeeList.stream().anyMatch(element->element.equals(employee))){
+            return false;
         }
         this.employeeList.add(employee);
+        // Update the other side of the relationship
+        if(!employee.getTaskList().contains(this)) {
+            employee.getTaskList().add(this);
+        }
         return true;
+    }
+    
+    public boolean removeEmployee(Employee employee){
+        if(this.employeeList == null || this.employeeList.isEmpty()){
+            return false;
+        }
+        if(!this.employeeList.stream().anyMatch(element->element.equals(employee))){
+            return false;
+        }
+        this.employeeList.remove(employee);
+        // Update the other side of the relationship
+        employee.getTaskList().remove(this);
+        return true;
+    }
+
+    public void addEmployeeToEmployee(Employee employee) {
 
     }
 }
