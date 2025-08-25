@@ -47,7 +47,7 @@ export class ProjectService {
   }
 
 
-  getProjects(page: number, size: number, keyword:String,department_ids:number[]=[],employee_ids:number[]=[],statuses:string[]=[]): Observable<any> {
+  getProjects(page: number=0, size: number=10, keyword:String,department_ids:number[]=[],employee_ids:number[]=[],statuses:string[]=[],rangeDates:Date[]=[]): Observable<any> {
       const httpUploadHeaders = new HttpHeaders({
     "Content-Type":"application/json",
     "Authorization":"Bearer "+this.jwtKey
@@ -55,17 +55,22 @@ export class ProjectService {
     let params = new HttpParams()
       .set('pageNumber', String(page)) // Reassign the result
       .set('pageSize', String(size));  // Reassign the result
+      console.log(rangeDates);
       let payload:{
         keyword:string,
         department_ids:number[],
         employee_ids:number[],
-        statuses?:string[]
+        statuses?:string[],
+        startDate?:String,
+        endDate?:String
       }
       ={
         keyword:"",
         department_ids:[],
         employee_ids:[],
-        statuses:[]
+        statuses:[],
+        startDate:undefined,
+        endDate:undefined
       }
       if(keyword&&keyword.trim().length>0){
         payload.keyword=String(keyword)
@@ -79,6 +84,12 @@ export class ProjectService {
              if(statuses&&statuses.length>0){
               payload.statuses=statuses
             }
+             if(rangeDates&&rangeDates[0]){
+              payload.startDate=rangeDates[0].toISOString().slice(0, 19).replace('T', ' ').split(" ")[0];
+            }
+              if(rangeDates&&rangeDates[1]){
+                payload.endDate=rangeDates[1].toISOString().slice(0, 19).replace('T', ' ').split(" ")[0];
+              }
     return this.httpClient.post(this.baseUrl+"/search" , payload,{ headers: httpUploadHeaders, params });
   }
  getProjectEmployees(id:number,filter:string): Observable<any> {

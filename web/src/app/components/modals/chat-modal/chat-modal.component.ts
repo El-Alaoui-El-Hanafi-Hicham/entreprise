@@ -9,6 +9,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 @Component({
   selector: 'app-chat-modal',
   templateUrl: './chat-modal.component.html',
+  standalone: false,
   styleUrl: './chat-modal.component.css'
 })
 export class ChatModalComponent implements OnChanges{

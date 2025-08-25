@@ -13,30 +13,8 @@ import { ProjectService } from 'src/app/services/project/project.service';
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent implements OnInit, OnChanges {
-customSort($event: any) {
-throw new Error('Method not implemented.');
-}
 
-  getSeverity(status: string) {
-    switch (status) {
-      case 'On Hold':
-        return 'danger';
-
-      case 'In Progress':
-        return 'success';
-
-      case 'Completed':
-        return 'info';
-
-      case 'Not Started':
-        return 'warning';
-
-      case 'renewal':
-        return undefined;
-      default:
-        return undefined;
-    }
-  }
+  selectedProject: any;
 
   departments: any[] = []
   selectedDepartments: any[] = []
@@ -45,8 +23,10 @@ throw new Error('Method not implemented.');
   selectedProjects: any[] = [];
   selectedEmployees: any[] = [];
   employees: any[] = [];
+  rangeDates: Date[] = [];
 
   status: any[] = [
+    {label:'Not Started', value: 'Not Started'},
     {label:'Pending', value: 'Pending'},
     {label:'In Progress', value: 'In Progress'},
     {label:'Completed', value: 'Completed'},
@@ -171,7 +151,7 @@ throw new Error('Method not implemented.');
   }
   getProjects() {
     this.isLoading = true
-    this.projectService.getProjects(this.page, this.size,this.keyword,this.selectedDepartments,this.selectedEmployees, this.selectedStatus.map((el:any)=>el.value)).subscribe((response: any) => {
+    this.projectService.getProjects(this.page, this.size,this.keyword,this.selectedDepartments,this.selectedEmployees, this.selectedStatus.map((el:any)=>el.value),this.rangeDates).subscribe((response: any) => {
       this.projects = response.content;
       this.isLoading = false
     })
@@ -199,11 +179,13 @@ throw new Error('Method not implemented.');
     const allItems = ['Apple', 'Banana', 'Orange', 'Mango', 'Grapes'];
     this.items = allItems.filter(item => item.toLowerCase().includes(query));
   }
-  getMenuItems(department: any): MenuItem[] {
+  getMenuItems(project: any): MenuItem[] {
       return [
         {
           label: 'Edit',
           icon: 'pi pi-pencil',
+          command: () => this.editProject(project)
+
         },
         {
           label: 'Add Employee',
@@ -219,7 +201,36 @@ throw new Error('Method not implemented.');
         {
           label: 'Delete',
           icon: 'pi pi-trash',
+          command: () => this.deleteProject(project.id)
         }
       ];
     }
+  editProject(project: any): void {
+    this.addProjectVisible=true;
+    this.selectedProject=project;
+  }
+  customSort($event: any) {
+throw new Error('Method not implemented.');
+}
+
+  getSeverity(status: string) {
+    switch (status) {
+      case 'On Hold':
+        return 'danger';
+
+      case 'In Progress':
+        return 'success';
+
+      case 'Completed':
+        return 'info';
+
+      case 'Not Started':
+        return 'warning';
+
+      case 'renewal':
+        return undefined;
+      default:
+        return undefined;
+    }
+  }
 }

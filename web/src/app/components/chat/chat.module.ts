@@ -27,12 +27,8 @@ import { DataViewModule } from 'primeng/dataview';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TagModule } from 'primeng/tag';
 
-
 @NgModule({
-  declarations: [
-    ChatComponent,
-    ChatModalComponent
-  ],
+  declarations: [ChatComponent, ChatModalComponent],
   imports: [
     CommonModule,
     ChatRoutingModule,
@@ -57,7 +53,7 @@ import { TagModule } from 'primeng/tag';
     TabViewModule,
     SplitterModule,
     DataViewModule,
-    TagModule
-  ]
+    TagModule,
+  ],
 })
-export class ChatModule { }
+export class ChatModule {}

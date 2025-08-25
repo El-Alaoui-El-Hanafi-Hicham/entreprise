@@ -9,7 +9,8 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class LandComponent implements OnInit {
   employees:Array<Object>=[];
-  constructor(private employeeService:EmployeeService, private messageService: MessageService){
+  constructor(private employeeService:EmployeeService, private messageService: MessageService
+  ){
 
   }
   ngOnInit(): void {

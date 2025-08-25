@@ -12,7 +12,6 @@ import com.enterprise.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -87,14 +86,17 @@ public class ProjectService {
     }
 
     // Get all projects with pagination
-    public Page<ProjectDto> getAllProjects(int page, int size, String filter, List<Long> department_ids, List<Long> employee_ids, List<String> statuses) {
+    public Page<ProjectDto> getAllProjects(int page, int size, String filter, List<Long> department_ids, List<Long> employee_ids, List<String> statuses, String startDate, String endDate) {
        try {
-           System.out.println(statuses.toString());
+
+
            Page<Project> projects = projectRepository.searchProjects(
                    (filter == null || filter.isEmpty()) ? null : filter,
                    (department_ids == null || department_ids.isEmpty()) ? null : department_ids,
                    (employee_ids   == null || employee_ids.isEmpty())   ? null : employee_ids,
-                   (statuses    == null || statuses.isEmpty())     ? null : statuses,
+                   statuses.isEmpty() ? null : statuses,
+                   startDate,
+                   endDate,
                    PageRequest.of(page, size)
            );
 

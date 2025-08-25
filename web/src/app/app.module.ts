@@ -41,6 +41,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenubarModule } from 'primeng/menubar';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
+
 // PrimeNG Dialog service
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
@@ -60,7 +61,6 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
 @NgModule({
   declarations: [
     AppComponent,
-
     PageNotFoundComponentComponent,
     HomeComponent,
     SideBarComponent,
@@ -100,6 +100,7 @@ import {  reducers,metaReducers, appEffects } from './stores/app.state';
     PasswordModule,
     PanelMenuModule,
     MenubarModule,
+    DialogModule,
     FloatLabelModule,
     // Store Modules
     StoreModule.forRoot(reducers, { metaReducers }),

@@ -16,14 +16,18 @@ isInvalid(arg0: string) {
 throw new Error('Method not implemented.');
 }
 onNoClick() {
-throw new Error('Method not implemented.');
+this.closeModal.emit(false)
+this.projectForm.reset();
+this.selectedProject=null;
+this.isLoading=false;
+
 }
 addTask() {
 throw new Error('Method not implemented.');
 }
 
  @Input() visible: boolean = false;
-  @Input() taskData: any;
+  @Input() selectedProject: any;
   @Input() isEdit: boolean=false;
   @Output() closeModal = new EventEmitter<any>();
   projectForm: FormGroup = new FormGroup({});
@@ -49,17 +53,69 @@ throw new Error('Method not implemented.');
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-      if(changes['visible'].currentValue){
-        this.getDepartments();
-        this.getEmployees();
-      }
+  if (changes['visible']?.currentValue) {
+    this.getDepartments();
+    this.getEmployees();
+
+    if (this.selectedProject) {
+      console.log(this.selectedProject);
+
+      // Patch the form
+      this.projectForm.patchValue({
+        project_name: this.selectedProject.project_name,
+        description: this.selectedProject.description,
+        manager: this.selectedProject.manager,
+        owner: this.selectedProject.owner,
+        employeesList: this.selectedProject.employees?.map((emp: any) => ({
+          ...emp,
+          label: emp.full_name
+        })),
+        departmentsList: this.selectedProject.departments?.map((dep: any) => ({
+          ...dep,
+          departmentName: dep.departmentName
+        })),
+        start_date: this.selectedProject.start_date ? new Date(this.selectedProject.start_date) : null,
+        end_date: this.selectedProject.end_date ? new Date(this.selectedProject.end_date) : null
+      });
+
+      console.log(this.projectForm.value);
+
+      // Manage ManagerOptions
+      this.ManagerOptions = [];
+      if (this.selectedProject.manager) this.ManagerOptions.push(this.selectedProject.manager);
+      if (this.selectedProject.owner) this.ManagerOptions.push(this.selectedProject.owner);
+
+      this.selectedProject.employees?.forEach((emp: any) => {
+        if (!this.ManagerOptions.find((el: any) => el.id === emp.id)) {
+          this.ManagerOptions.push(emp);
+        }
+      });
+
+      // Mark selected departments
+      this.departments = this.departments.map((dep: any) => ({
+        ...dep,
+        selected: this.selectedProject.departments?.some((d: any) => d.id === dep.id) || false
+      }));
+
+      // Mark selected employees
+      this.employees = this.employees.map((emp: any) => ({
+        ...emp,
+        selected: this.selectedProject.employees?.some((e: any) => e.id === emp.id) || false
+      }));
+
+    } else {
+      this.projectForm.reset();
+      this.ManagerOptions = [];
+    }
   }
+}
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
   }
   getDepartments() {
     this.departmentService.getDepartments(this.page,this.size,this.keyword).subscribe((val) => {
-      this.departments = val||[];
+      this.departments = val.content||[];
     })
   }
   getEmployees() {

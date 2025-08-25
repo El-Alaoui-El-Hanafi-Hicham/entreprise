@@ -35,7 +35,7 @@ IsUploadModalopen:boolean=false
   isEdit:boolean=false;
   selectedDepartement!:Department
   isSetManager:boolean=false
-constructor(private departmentService:departmentService,private messageService:MessageService,){
+constructor(private departmentService:departmentService,private messageService:MessageService){
 
 }
 update(department: Department) {

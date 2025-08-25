@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectsRoutingModule } from './projects-routing.module';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { ProjectsComponent } from './projects.component';
@@ -22,11 +21,9 @@ import { AvatarModule } from 'primeng/avatar';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MenuModule } from 'primeng/menu';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ProjectsRoutingModule } from './projects-routing.module';
 @NgModule({
-  declarations: [
-    ProjectsComponent,
-    AddProjectComponent
-  ],
+  declarations: [ProjectsComponent, AddProjectComponent],
   imports: [
     CommonModule,
     ProjectsRoutingModule,
@@ -49,8 +46,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     CardModule,
     FormsModule,
     ReactiveFormsModule,
-    AutoCompleteModule
-
-  ]
+    AutoCompleteModule,
+    CalendarModule,
+  ],
 })
-export class ProjectsModule { }
+export class ProjectsModule {}

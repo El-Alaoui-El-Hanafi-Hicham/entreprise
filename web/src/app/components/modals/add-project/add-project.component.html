@@ -1,4 +1,4 @@
-<p-dialog [header]="isEdit?'Edit Project':'Add Project'" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (onHide)="onNoClick()">
+<p-dialog [header]="selectedProject?.id?'Edit Project':'Add Project'" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" (onHide)="onNoClick()">
   <form [formGroup]="projectForm" class="flex flex-column gap-3" >
     <div class="flex flex-column gap-2">
       <label for="firstName">Name</label>

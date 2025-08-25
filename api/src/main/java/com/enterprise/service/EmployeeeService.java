@@ -146,7 +146,7 @@ if(employee.get().getDepartment()!=null){
     public ResponseEntity<Page<Employee>> allEmployees(int pageNumber, int pageSize, String keyword) {
         Pageable firstPageWithTwoElements = PageRequest.of(pageSize==0? 0:pageNumber,pageSize==0? Integer.MAX_VALUE:pageSize);
 
-        Page<Employee> allEmployees=   employeeRepository.findByFirstNameContainsIgnoreCaseOrLastNameContainingIgnoreCaseOrDepartment_DepartmentNameContainingIgnoreCase(keyword,keyword,keyword,firstPageWithTwoElements);
+        Page<Employee> allEmployees=   employeeRepository.searchEmployee((keyword == null || keyword.isEmpty()) ? null : keyword,firstPageWithTwoElements);
 
 
 

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping(path = "/api/project")
@@ -42,7 +44,9 @@ public class ProjectController {
         List<Long> departmentIds = request != null ? request.getDepartmentIds() : null;
         List<Long> employeeIds = request != null ? request.getEmployeeIds() : null;
         List<String> statuses = request != null ? request.getStatuses() : null;
-        return projectService.getAllProjects(pageNumber, pageSize,keyword,departmentIds,employeeIds,statuses);
+        String startDate = request != null ? request.getStartDate() : null;
+        String endDate = request != null ? request.getEndDate() : null;
+        return projectService.getAllProjects(pageNumber, pageSize,keyword,departmentIds,employeeIds,statuses,startDate,endDate);
     }
 
     // Get project by ID

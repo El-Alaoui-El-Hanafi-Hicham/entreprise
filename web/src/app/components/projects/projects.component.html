@@ -11,45 +11,33 @@
         (click)="showDialog()"></p-button>
     </div>
   </p-toolbar>
-  <p-toolbar styleClass="mb-4 flex justify-content-between align-items-center gap-2">
-    <p-iconField>
-      <p-inputIcon class="pi pi-search" />
-      <input type="text" pInputText placeholder="Search" [(ngModel)]="keyword" (keyup)="getProjects()" />
-    </p-iconField>
-    <p-autoComplete 
-  [(ngModel)]="selectedDepartments" 
-  [suggestions]="departments"
-  (completeMethod)="filterDepartment($event)"
-  field="label"
-  [multiple]="true"
-  placeholder="Select Departments">
-</p-autoComplete>
-
-<p-autoComplete 
-  [(ngModel)]="selectedEmployees"
-  [suggestions]="employees"
-  (completeMethod)="filterEmployees($event)"
-  [field]="'label'"
-  [multiple]="true"
-  [minLength]="1"
-  placeholder="Select Employees"
-  (onSelect)="getProjects()"
-  (onUnselect)="getProjects()">
-</p-autoComplete>
-
+  <p-toolbar styleClass="mb-4 flex justify-content-between align-items-center gap-2 flex-nowrap">
+    <p-inputIcon icon="pi pi-search">
+  <input type="text" pInputText placeholder="Search..." [(ngModel)]="keyword" (keyup)="getProjects()"/>
+</p-inputIcon>
+    <p-autoComplete [(ngModel)]="selectedDepartments" [suggestions]="departments"
+      (completeMethod)="filterDepartment($event)" field="label" [multiple]="true" placeholder="Select Departments">
+    </p-autoComplete>
+    <p-autoComplete [(ngModel)]="selectedEmployees" [suggestions]="employees" (completeMethod)="filterEmployees($event)"
+      [field]="'label'" [multiple]="true" [minLength]="1" placeholder="Select Employees" (onSelect)="getProjects()"
+      (onUnselect)="getProjects()">
+    </p-autoComplete>
     <p-multiSelect [options]="status" [(ngModel)]="selectedStatus" (onChange)="getProjects()" optionLabel="label"
       display="chip" placeholder="Select Status"></p-multiSelect>
-       <p-button label="Refresh" [rounded]="true" [outlined]="true" (click)="refresh()" icon="pi pi-refresh" severity="secondary"
-          size="small" />
-        <p-button label="Reset" *ngIf="selectedDepartments.length||selectedEmployees.length||keyword.length||selectedStatus.length" [rounded]="true" [outlined]="true" (click)="reset()" icon="pi pi-times" severity="secondary"
-          size="small" />
+      <p-calendar [(ngModel)]="rangeDates" selectionMode="range" dateFormat="mm/dd/yy" placeholder="Select Date Range"
+      (onSelect)="getProjects()"></p-calendar>
+    <p-button label="Refresh" [rounded]="true" [outlined]="true" (click)="refresh()" icon="pi pi-refresh"
+      severity="secondary" size="small" />
+    <p-button label="Reset"
+      [disabled]="selectedDepartments.length||selectedEmployees.length||keyword.length||selectedStatus.length||rangeDates[0]"
+      [rounded]="true" [outlined]="true" (click)="reset()" icon="pi pi-times" severity="secondary" size="small" />
   </p-toolbar>
-  
+
   <p-card>
 
-    <p-table [value]="projects" [(selection)]="selectedProjects" (sortFunction)="customSort($event)" [customSort]="true" [scrollable]="true"
-      [paginator]="true" showGridlines [loading]="isLoading" [rows]="size" [rowsPerPageOptions]="[5,10,20]"  [sortOrder]="-1"  [pageLinks]="3" [first]="page*size"
-      responsiveLayout="scroll">
+    <p-table [value]="projects" [(selection)]="selectedProjects" (sortFunction)="customSort($event)" [customSort]="true"
+      [scrollable]="true" [paginator]="true" showGridlines [loading]="isLoading" [rows]="size"
+      [rowsPerPageOptions]="[5,10,20]" [sortOrder]="-1" [pageLinks]="3" [first]="page*size" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
@@ -82,7 +70,7 @@
           <th>
             <div class="flex items-center gap-2">
               Departments
-              <p-sortIcon field="departments"/>
+              <p-sortIcon field="departments" />
             </div>
           </th>
           <th>
@@ -186,8 +174,8 @@
         </tr>
       </ng-template>
     </p-table>
-    
+
   </p-card>
 
   <div>
-    <app-add-project [visible]="addProjectVisible" (closeModal)="onAddProjectClose($event)"></app-add-project>
+    <app-add-project [visible]="addProjectVisible" [selectedProject]="selectedProject" (closeModal)="onAddProjectClose($event)"></app-add-project>

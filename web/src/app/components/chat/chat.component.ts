@@ -41,7 +41,7 @@ export class ChatComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    //  console.log(this.count$)
+    // ¦ console.log(this.count$)
     this.employeeService.getEmployees(1, 0).subscribe((val) => {
       this.employees = val.content;
       this.getConversation();
