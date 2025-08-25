@@ -30,6 +30,9 @@ throw new Error('Method not implemented.');
   isLoading: boolean = false;
   ManagerOptions: any[] = [];
   employees: any[] = [];
+  page: number = 0;
+  size: number = 10;
+  keyword: string = "";
   departments: any[] = [];
   constructor(private fb: FormBuilder,private projectService:ProjectService,private messageService: MessageService,private employeeService:EmployeeService,private departmentService: departmentService) {
     // Initialize the form with default values if needed
@@ -55,12 +58,12 @@ throw new Error('Method not implemented.');
     throw new Error('Method not implemented.');
   }
   getDepartments() {
-    this.departmentService.getDepartments().subscribe((val) => {
+    this.departmentService.getDepartments(this.page,this.size,this.keyword).subscribe((val) => {
       this.departments = val||[];
     })
   }
   getEmployees() {
-    this.employeeService.getEmployees().subscribe((val) => {
+    this.employeeService.getEmployees().subscribe((val:any) => {
       this.employees = val.content.map((el:any)=>({...el,label:el?.firstName+" "+el?.lastName}))||[];
     })
   }

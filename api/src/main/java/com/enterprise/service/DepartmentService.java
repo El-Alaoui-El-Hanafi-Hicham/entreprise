@@ -14,6 +14,8 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -49,12 +51,39 @@ public class DepartmentService {
         this.jobRepository=jobRepository;
     }
 
-    @ResponseBody
-    public ResponseEntity<List<Department>> getDepartements() {
-        return new ResponseEntity<>(
-                this.departmentRepository.findAll(),
-                HttpStatus.OK);
+    public Page<Department> getDepartments(
+             int page,
+             int size,
+             String filter,
+             List<Long> employeeIds) {
+
+        Page<Department> departments;
+
+        PageRequest pageable = PageRequest.of(page, size);
+
+        if ((filter != null && !filter.isEmpty()) && (employeeIds != null && !employeeIds.isEmpty())) {
+            // ✅ Both filter and employeeIds provided
+            departments = departmentRepository.findByDepartmentNameContainingIgnoreCaseAndEmployees_IdIn(
+                    filter, employeeIds, pageable
+            );
+        } else if (filter != null && !filter.isEmpty()) {
+            // ✅ Only filter
+            departments = departmentRepository.findByDepartmentNameContainingIgnoreCase(
+                    filter, pageable
+            );
+        } else if (employeeIds != null && !employeeIds.isEmpty()) {
+            // ✅ Only employeeIds
+            departments = departmentRepository.findByEmployees_IdIn(
+                    employeeIds, pageable
+            );
+        } else {
+            // ✅ No filter at all
+            departments = departmentRepository.findAll(pageable);
+        }
+
+        return departments;
     }
+
     @Transactional
     public ResponseEntity<Object> AddDepartement(Department department) {
         Department s = this.departmentRepository.save(department);
@@ -62,7 +91,6 @@ public class DepartmentService {
         if (s.equals(department)) {
             response.put("message", "Department Added Succesfully");
             response.put("Status", true);
-            // Optionally send the department information to the WebSocket topic
             messagingTemplate.convertAndSend("/user", response);
             return new ResponseEntity<>(
                     response,
@@ -167,14 +195,14 @@ public class DepartmentService {
             } else {
                 if (department.get().getManager() != null && department.get().getManager().equals(employee.get())) {
                     response.put("Status", "false");
-                    response.put("message", employee.get().getFirstName() + " is already the manager " + department.get().getDepartment_name() + " departement .");
+                    response.put("message", employee.get().getFirstName() + " is already the manager " + department.get().getDepartmentName() + " departement .");
                     return ResponseEntity.ok(response);
                 } else {
 
                     department.get().setManager(employee.get());
                     this.departmentRepository.save(department.get());
                     response.put("Status", "true");
-                    response.put("message", employee.get().getFirstName() + " is the new manager for " + department.get().getDepartment_name() + " departement");
+                    response.put("message", employee.get().getFirstName() + " is the new manager for " + department.get().getDepartmentName() + " departement");
                     return ResponseEntity.ok().body(response);
                 }
 
@@ -194,13 +222,13 @@ public class DepartmentService {
 
             if (department.get().getManager() == null) {
                 response.put("Status", "false");
-                response.put("message", department.get().getDepartment_name() + " departement doesn't have a manager yet.");
+                response.put("message", department.get().getDepartmentName() + " departement doesn't have a manager yet.");
                 return ResponseEntity.ok(response);
             } else {
                 department.get().removeManager();
                 this.departmentRepository.save(department.get());
                 response.put("Status", "true");
-                response.put("message", department.get().getDepartment_name() + " departement's manager has been removed.");
+                response.put("message", department.get().getDepartmentName() + " departement's manager has been removed.");
                 return ResponseEntity.ok().body(response);
             }
 
@@ -218,7 +246,7 @@ public class DepartmentService {
             response.put("message", "Department not found");
             return ResponseEntity.badRequest().body(response);
         }
-        old_department.get().setDepartment_name(department.getDepartment_name());
+        old_department.get().setDepartmentName(department.getDepartmentName());
         this.departmentRepository.save(old_department.get());
         response.put("status", "true");
         response.put("message", "Department Updated Successfully");

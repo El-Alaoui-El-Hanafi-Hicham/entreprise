@@ -141,7 +141,7 @@ public class BatchImportService {
             
             switch (expectedType.toLowerCase()) {
                 case "departments":
-                    return firstLine.equals("department_name");
+                    return firstLine.equals("departmentName");
                 case "employees":
                     return firstLine.equals("firstName,lastName,email,job_title,phone_number,hire_date");
                 default:

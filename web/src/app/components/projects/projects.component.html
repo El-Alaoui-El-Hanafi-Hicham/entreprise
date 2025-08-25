@@ -1,107 +1,193 @@
-
 <div class="department-container">
-    <!-- Header Section -->
-    <p-toolbar styleClass="mb-4 flex justify-between">
-            <h2 class="text-xl font-bold text-primary m-0">
-                <i class="pi pi-building mr-2"></i>
-                Projects
-            </h2>
+  <!-- Header Section -->
+  <p-toolbar styleClass="mb-4 flex justify-between">
+    <h2 class="text-xl font-bold text-primary m-0">
+      <i class="pi pi-building mr-2"></i>
+      Projects
+    </h2>
 
-            <div class="flex gap-2">
-              <p-button label="Add" icon="pi pi-plus" pTooltip="Add project"  severity="primary" (click)="showDialog()"></p-button>
-            </div>
-          </p-toolbar>
-           <p-toolbar styleClass="mb-4 flex justify-content-start align-items-start gap-2">
+    <div class="flex gap-2">
+      <p-button label="Add" icon="pi pi-plus" pTooltip="Add project" severity="primary"
+        (click)="showDialog()"></p-button>
+    </div>
+  </p-toolbar>
+  <p-toolbar styleClass="mb-4 flex justify-content-between align-items-center gap-2">
     <p-iconField>
-    <p-inputIcon class="pi pi-search" />
-    <input type="text" pInputText placeholder="Search" />
-</p-iconField>
-<p-multiSelect [options]="departments" [(ngModel)]="selectedDepartments" optionLabel="name" display="chip" placeholder="Select Departments"></p-multiSelect>
-<p-multiSelect [options]="status" [(ngModel)]="selectedStatus" optionLabel="name" display="chip" placeholder="Select Status"></p-multiSelect>
-<p-toolbar
-  styleClass="bg-white flex justify-content-between w-full m-0 border-top-none border-left-none border-right-none border-noround">
+      <p-inputIcon class="pi pi-search" />
+      <input type="text" pInputText placeholder="Search" [(ngModel)]="keyword" (keyup)="getProjects()" />
+    </p-iconField>
+    <p-autoComplete 
+  [(ngModel)]="selectedDepartments" 
+  [suggestions]="departments"
+  (completeMethod)="filterDepartment($event)"
+  field="label"
+  [multiple]="true"
+  placeholder="Select Departments">
+</p-autoComplete>
 
-  <p-iconField>
-    <p-inputIcon class="pi pi-search" />
-    <input type="text" pInputText placeholder="Search" />
-  </p-iconField>
-  <div class="flex gap-2">
-    <p-button label="List" [rounded]="true" [text]="true" variety="text" icon="pi pi-bars" severity="secondary" size="small" />
-    <p-button label="Grid" [rounded]="true" [text]="true" variety="text" icon="pi pi-th-large" severity="secondary" size="small" />
-    <p-button label="Kanban" [rounded]="true" [text]="true" variety="text" icon="pi pi-clipboard" severity="secondary" size="small" />
-    <p-button label="Calendar" [rounded]="true" [text]="true" variety="text" icon="pi pi-calendar" severity="secondary" size="small" />
+<p-autoComplete 
+  [(ngModel)]="selectedEmployees"
+  [suggestions]="employees"
+  (completeMethod)="filterEmployees($event)"
+  [field]="'label'"
+  [multiple]="true"
+  [minLength]="1"
+  placeholder="Select Employees"
+  (onSelect)="getProjects()"
+  (onUnselect)="getProjects()">
+</p-autoComplete>
 
-  </div>
-  <div class="flex gap-2">
-    <p-button label="Filter" [rounded]="true" [outlined]="true"  icon="pi pi-filter" severity="secondary"
-      size="small" />
-    <p-button label="Sort" [rounded]="true" [outlined]="true"  icon="pi pi-sort-alt" severity="secondary" size="small" />
-    <p-button label="Refresh" [rounded]="true" [outlined]="true"  icon="pi pi-refresh" severity="secondary" size="small" />
-    <p-button label="Reset" [rounded]="true" [outlined]="true" icon="pi pi-times" severity="secondary" size="small" />
+    <p-multiSelect [options]="status" [(ngModel)]="selectedStatus" (onChange)="getProjects()" optionLabel="label"
+      display="chip" placeholder="Select Status"></p-multiSelect>
+       <p-button label="Refresh" [rounded]="true" [outlined]="true" (click)="refresh()" icon="pi pi-refresh" severity="secondary"
+          size="small" />
+        <p-button label="Reset" *ngIf="selectedDepartments.length||selectedEmployees.length||keyword.length||selectedStatus.length" [rounded]="true" [outlined]="true" (click)="reset()" icon="pi pi-times" severity="secondary"
+          size="small" />
+  </p-toolbar>
+  
+  <p-card>
 
-  </div>
-</p-toolbar>
-          </p-toolbar>
-          <div class="flex flex-wrap gap-3">
-<p-card header="Active">
-<!-- <span>Active</span> -->
-<span>15</span>
-</p-card>
-<p-card header="Completed">
-<!-- <span>Completed</span> -->
-<span>12</span>
-</p-card>
-<p-card header="Overdue">
-<!-- <span>Overdue</span> -->
-<span>12</span>
-</p-card>
-          </div>
-          <p-card>
+    <p-table [value]="projects" [(selection)]="selectedProjects" (sortFunction)="customSort($event)" [customSort]="true" [scrollable]="true"
+      [paginator]="true" showGridlines [loading]="isLoading" [rows]="size" [rowsPerPageOptions]="[5,10,20]"  [sortOrder]="-1"  [pageLinks]="3" [first]="page*size"
+      responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+          <th>
+            <div class="flex items-center gap-2">
 
-       <p-table [value]="projects" [(selection)]="selectedProjects" [paginator]="true" showGridlines [loading]="isLoading" [rows]="size" [rowsPerPageOptions]="[5,10,20]" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-      <tr>
-         <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Departments</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
+              Name
+              <p-sortIcon field="project_name" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Owner
+              <p-sortIcon field="owner" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Manager
+              <p-sortIcon field="manager" />
+            </div>
+          </th>
+          <!-- <th>Departments</th> -->
+          <th>
+            <div class="flex items-center gap-2">
+              Assignes
+              <p-sortIcon field="employees" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Departments
+              <p-sortIcon field="departments"/>
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Start Date
+              <p-sortIcon field="start_date" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              End Date
+              <p-sortIcon field="end_date" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Status
+              <p-sortIcon field="status" />
+            </div>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
 
-    <ng-template pTemplate="body" let-project>
-      <tr>
-       <td>
-                <p-tableCheckbox [value]="project" />
-            </td>
-        <td>{{ project.project_name }}</td>
-        <td>{{ project?.owner?.firstName }} {{project?.owner?.lastName}}</td>
-        <td>{{ project.start_date | date:'MM/dd/yyyy'}}</td>
-        <td>{{ project.end_date | date:'MM/dd/yyyy'}}</td>
-        <td>
-          <p-tag *ngFor="let department of project.departments">{{department.department_name}}</p-tag>
-        </td>
-        <td>
-          <span [ngClass]="{
+      <ng-template pTemplate="body" let-project>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="project" />
+          </td>
+          <td>{{ project.project_name }}</td>
+          <td>
+            <div class="flex align-items-center gap-2">
+              <p-avatar [label]="getInitials(project?.owner?.first_name, project?.owner?.last_name)" shape="circle"
+                [style]="{'background-color': getAvatarColor(project?.owner?.id), 'color': 'white'}">
+              </p-avatar>
+              <span>{{ project?.owner?.first_name }} {{project?.owner?.last_bane}}</span>
+            </div>
+          </td>
+          <td>
+            <div class="flex align-items-center gap-2">
+
+              <p-avatar [label]="getInitials(project?.manager?.first_name, project?.manager?.last_name)" shape="circle"
+                [style]="{'background-color': getAvatarColor(project?.manager?.id), 'color': 'white'}">
+              </p-avatar>
+              <span>{{ project?.manager?.first_name }} {{project?.manager?.last_name}}</span>
+            </div>
+          </td>
+          <td>
+            <span *ngIf="project.employees?.length === 0">No Assignes</span>
+            <span *ngIf="project.employees?.length > 0" class="cursor-pointer" (mouseenter)="emp.toggle($event)">
+              {{ project.employees.length }} Assignes
+            </span>
+
+            <p-overlayPanel #emp>
+              <div class="flex items-center flex-column">
+                <div *ngFor="let emp of project.employees" class="flex align-items-center gap-2 mb-2">
+                  <p-avatar [label]="getInitials(emp?.first_name, emp?.last_name)" shape="circle"
+                    [style]="{'background-color': getAvatarColor(emp.id), 'color': 'white'}">
+                  </p-avatar>
+                  <span>{{ emp?.first_name }} {{emp?.last_name}}</span>
+                </div>
+              </div>
+            </p-overlayPanel>
+          </td>
+          <td>
+            <span *ngIf="project.departments?.length === 0">No Departments</span>
+            <span *ngIf="project.departments?.length > 0" class="cursor-pointer" (mouseenter)="op.toggle($event)">
+              {{ project.departments.length }} Departments
+            </span>
+
+            <p-overlayPanel #op>
+              <div class="flex items-center flex-column">
+                <div *ngFor="let dept of project.departments" class="flex align-items-center gap-2 mb-2">
+                  <p-avatar [label]="getInitials(dept.departmentName)" shape="circle"
+                    [style]="{'background-color': getAvatarColor(dept.id), 'color': 'white'}">
+                  </p-avatar>
+                  <span>{{ dept.departmentName }}</span>
+                </div>
+              </div>
+            </p-overlayPanel>
+          </td>
+          <td>{{ project.start_date | date:'MM/dd/yyyy'}}</td>
+          <td>{{ project.end_date | date:'MM/dd/yyyy'}}</td>
+          <td>
+            <span [ngClass]="{
             'text-green-500': project.status === 'Completed',
             'text-blue-500': project.status === 'In Progress',
             'text-yellow-500': project.status === 'On Hold',
             'text-gray-500': project.status === 'Not Started'
           }">
-            <p-tag [value]="project?.status" [severity]="getSeverity(project.status)" />
-          </span>
-        </td>
-        <td>
-          <button pButton icon="pi pi-pencil" class="p-button-text p-button-rounded p-button-info"></button>
-          <button pButton icon="pi pi-trash" class="p-button-text p-button-rounded p-button-danger"></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-          </p-card>
+              <p-tag [value]="project?.status" [severity]="getSeverity(project.status)" />
+            </span>
+          </td>
+          <td>
+            <p-button icon="pi pi-ellipsis-v" [text]="true" [rounded]="true" severity="secondary"
+              (click)="menu.toggle($event)" #menuButton>
+            </p-button>
+            <p-menu #menu [model]="getMenuItems(project)" [popup]="true" appendTo="body"></p-menu>
 
-<div >
-<app-add-project [visible]="addProjectVisible"  (closeModal)="onAddProjectClose($event)"></app-add-project>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    
+  </p-card>
+
+  <div>
+    <app-add-project [visible]="addProjectVisible" (closeModal)="onAddProjectClose($event)"></app-add-project>

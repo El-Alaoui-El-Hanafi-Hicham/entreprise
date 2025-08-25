@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit, booleanAttribute } from '@angular/core';
 import { RegisterModule } from '../../modules/register/register.module';
 import { Observable, map } from 'rxjs';
@@ -32,12 +32,21 @@ this.jwtKey=localStorage.getItem('key');
 
      addDepartment(DepartmentName:String){
       let payload:object={
-        "department_name":DepartmentName,
+        "departmentName":DepartmentName,
       }
         return this.httpClient.post(this.baseUrl+"department", payload,{ headers: this.httpHeaders});
      }
-     getDepartments():Observable<any>{
-        return this.httpClient.get(this.baseUrl+"department", { headers: this.httpHeaders});
+     getDepartments(page:number,size:number,keyword:String,employee_ids:number[]=[]):Observable<any>{
+      let params = new HttpParams()
+            .set('pageNumber', String(page)) // Reassign the result
+            .set('pageSize', String(size));  // Reassign the result
+            if(keyword&&keyword.trim().length>0){
+              params=params.set('keyword',String(keyword))
+            }
+              if(employee_ids&&employee_ids.length>0){
+              params=params.set('employee_ids',employee_ids.join(','))
+            }
+        return this.httpClient.get(this.baseUrl+"department", { headers: this.httpHeaders,params});
      }
 
      addUserToDepartment(DepartmentId:number,userId:number){
@@ -47,7 +56,7 @@ this.jwtKey=localStorage.getItem('key');
     return this.httpClient.get(this.baseUrl+"department/employees/remove?id=" +userId+"&dep_id="+DepartmentId, { headers: this.httpHeaders});
  }
  editDepartment(id: number, value:Department ) {
-  const payload= {department_name:value['department_name']}
+  const payload= {departmentName:value['departmentName']}
   return this.httpClient.put(this.baseUrl+"department?dep_id=" +id,payload, { headers: this.httpHeaders});
 
 }
@@ -76,7 +85,7 @@ uploadFileToBE(file:File|null){
     }
     interface Department {
       id:number;
-      department_name: String;
+      departmentName: String;
       manager: Object|null
       employees: Array<EmployeeModule>
       // Add other properties if needed

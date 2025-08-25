@@ -21,8 +21,8 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
-    private String department_name;
+    @Column(name = "departmentName",unique = true)
+    private String departmentName;
 
     @OneToOne
     @JoinColumn(name = "manager_id")

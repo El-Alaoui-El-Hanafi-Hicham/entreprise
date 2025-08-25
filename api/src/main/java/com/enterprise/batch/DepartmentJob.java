@@ -65,7 +65,7 @@ public class DepartmentJob {
         DefaultLineMapper<Department> lineMapper = new DefaultLineMapper<>();
         lineMapper.setFieldSetMapper(new DepartmentFieldMapper());
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-        lineTokenizer.setNames(new String[]{"department_name"});
+        lineTokenizer.setNames(new String[]{"departmentName"});
         lineMapper.setLineTokenizer(lineTokenizer);
         flatFileItemReader.setLineMapper(lineMapper);
         return flatFileItemReader;
@@ -121,10 +121,10 @@ public class DepartmentJob {
     public ItemWriter<Department> writer() {
             return new JdbcBatchItemWriterBuilder<Department>()
                     .dataSource(dataSource)
-                    .sql("INSERT INTO department(department_name) VALUES (?)")
+                    .sql("INSERT INTO department(departmentName) VALUES (?)")
                     .itemPreparedStatementSetter((item, ps) -> {
-                        System.out.println("Writing department: " + item.getDepartment_name());
-                        ps.setString(1, item.getDepartment_name());
+                        System.out.println("Writing department: " + item.getDepartmentName());
+                        ps.setString(1, item.getDepartmentName());
                     })
                     .build();
         }

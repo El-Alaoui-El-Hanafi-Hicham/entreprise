@@ -6,12 +6,15 @@ import com.enterprise.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,10 +36,18 @@ public class DepartmentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Department>> getDepartments() {
+    public Page<Department> getDepartments(@RequestParam(name= "pageNumber", defaultValue = "0",required = false) int pageNumber,@RequestParam(name="pageSize",defaultValue = "10",required = false) int pageSize, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name="employee_ids",required = false) String emp_id) {
 
+        if(emp_id==null || emp_id.isEmpty()){
+            return this.departmentService.getDepartments(pageNumber, pageSize, keyword, null);
 
-        return this.departmentService.getDepartements();
+        }else{
+            List<Long> emps_ids = Arrays.stream(emp_id.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+            return this.departmentService.getDepartments(pageNumber, pageSize, keyword, emps_ids);
+
+        }
     }
     @PutMapping("")
     public ResponseEntity<Map<String, String>>  editDepartment(@RequestParam(name = "dep_id") Long id ,@RequestBody Department department) {

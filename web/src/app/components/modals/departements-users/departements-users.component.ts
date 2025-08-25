@@ -45,7 +45,7 @@ ngOnInit() {
   // Initialize the form with default values if needed
   this.newDep = this.fb.group({
     id: ['', [Validators.required, Validators.minLength(4)]],
-    department_name: ['', [Validators.required, Validators.minLength(4)]],
+    departmentName: ['', [Validators.required, Validators.minLength(4)]],
     manager: ['', [Validators.required]],
     employees: [ this.fb.array([]), [Validators.required]]
   });
@@ -55,7 +55,7 @@ ngOnChanges(changes: SimpleChanges) {
     this.getEmployees();
     this.newDep.patchValue({
       id: this.selectedDepartement.id,
-      department_name: this.selectedDepartement.department_name,
+      departmentName: this.selectedDepartement.departmentName,
       manager: this.selectedDepartement.manager,
       employees: this.selectedDepartement.employees
     });
@@ -177,7 +177,7 @@ removeManager() {
 
 interface Department {
   id:number;
-  department_name: string;
+  departmentName: string;
   manager: EmployeeModule|null
   employees: Array<EmployeeModule>
   // Add other properties if needed

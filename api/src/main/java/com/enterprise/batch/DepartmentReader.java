@@ -20,7 +20,7 @@
 //        FlatFileItemReader flatFileItemReader = new FlatFileItemReader<>();
 //        DefaultLineMapper lineMapper = new DefaultLineMapper();
 //        DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-//        lineTokenizer.setNames(new String[]{"Department_name"});
+//        lineTokenizer.setNames(new String[]{"departmentName"});
 //        lineMapper.setLineTokenizer(lineTokenizer);
 //        flatFileItemReader.setLinesToSkip(1);
 //        flatFileItemReader.setLineMapper(lineMapper);

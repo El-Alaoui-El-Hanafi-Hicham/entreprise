@@ -2,12 +2,17 @@ package com.enterprise.controller;
 
 import com.enterprise.dto.ProjectCreateDto;
 import com.enterprise.dto.ProjectDto;
+import com.enterprise.dto.ProjectSearchRequest;
 import com.enterprise.dto.ProjectUpdateDto;
+import com.enterprise.entity.Employee;
+import com.enterprise.entity.Project;
 import com.enterprise.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping(path = "/api/project")
 @RestController
@@ -27,11 +32,17 @@ public class ProjectController {
     }
 
     // Get all projects with pagination
-    @GetMapping("")
-    private ResponseEntity<Page<ProjectDto>> getAllProjects(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return projectService.getAllProjects(page, size);
+    @PostMapping("/search")
+    private Page<ProjectDto> getAllProjects(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestBody(required = false) ProjectSearchRequest request
+            ) {
+        String keyword = request != null ? request.getKeyword() : null;
+        List<Long> departmentIds = request != null ? request.getDepartmentIds() : null;
+        List<Long> employeeIds = request != null ? request.getEmployeeIds() : null;
+        List<String> statuses = request != null ? request.getStatuses() : null;
+        return projectService.getAllProjects(pageNumber, pageSize,keyword,departmentIds,employeeIds,statuses);
     }
 
     // Get project by ID
@@ -61,21 +72,10 @@ public class ProjectController {
             @RequestParam(name = "user_id") Long userId) {
         return projectService.changeManager(userId, id);
     }
-
-    // Legacy endpoints for backward compatibility
-    @GetMapping("/all")
-    @Deprecated
-    public ResponseEntity<Page<ProjectDto>> getProjectsLegacy(
-            @RequestParam(name = "pageNumber") int page,
-            @RequestParam(name = "pageSize") int size) {
-        return projectService.getAllProjects(page, size);
+    // Get project by ID
+    @GetMapping("/{id}/employees/{filter}")
+    public List<Employee> getEm(@PathVariable Long id, @PathVariable String filter) {
+        return projectService.getProjectEmployees(id,filter);
     }
 
-    @GetMapping("/manager")
-    @Deprecated
-    public ResponseEntity<String> changeManagerLegacy(
-            @RequestParam(name = "user_id") Long userId,
-            @RequestParam(name = "id") Long id) {
-        return projectService.changeManager(userId, id);
-    }
 }

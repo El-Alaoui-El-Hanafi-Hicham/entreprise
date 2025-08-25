@@ -21,10 +21,13 @@ this.httpHeaders= new HttpHeaders({
    me(){
     return this.http.get<any>(this.BASE_URL+"/me", { headers: this.httpHeaders });
     }
-  getEmployees(page:number=0,size:number=100){
+  getEmployees(page:number=0,size:number=100,keyword:String=""){
   let params = new HttpParams()
     .set('pageNumber', String(page)) // Reassign the result
     .set('pageSize', String(size));  // Reassign the result
+    if(keyword&&keyword.trim().length>0){
+        params=params.set('keyword',String(keyword))
+      }
   // Make the GET request with headers and params
   return this.http.get<any>(this.BASE_URL+"", { headers: this.httpHeaders, params });
   }

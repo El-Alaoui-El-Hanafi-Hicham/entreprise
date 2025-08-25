@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 export class ProjectService {
 
 
+
   jwtKey: String | null;
 
   private JwtKey: String | boolean = "";
@@ -46,7 +47,7 @@ export class ProjectService {
   }
 
 
-  getProjects(page: number, size: number): Observable<any> {
+  getProjects(page: number, size: number, keyword:String,department_ids:number[]=[],employee_ids:number[]=[],statuses:string[]=[]): Observable<any> {
       const httpUploadHeaders = new HttpHeaders({
     "Content-Type":"application/json",
     "Authorization":"Bearer "+this.jwtKey
@@ -54,6 +55,44 @@ export class ProjectService {
     let params = new HttpParams()
       .set('pageNumber', String(page)) // Reassign the result
       .set('pageSize', String(size));  // Reassign the result
+      let payload:{
+        keyword:string,
+        department_ids:number[],
+        employee_ids:number[],
+        statuses?:string[]
+      }
+      ={
+        keyword:"",
+        department_ids:[],
+        employee_ids:[],
+        statuses:[]
+      }
+      if(keyword&&keyword.trim().length>0){
+        payload.keyword=String(keyword)
+      }
+        if(employee_ids&&employee_ids.length>0){
+              payload.employee_ids=employee_ids
+            }
+              if(department_ids&&department_ids.length>0){
+              payload.department_ids=department_ids
+            }
+             if(statuses&&statuses.length>0){
+              payload.statuses=statuses
+            }
+    return this.httpClient.post(this.baseUrl+"/search" , payload,{ headers: httpUploadHeaders, params });
+  }
+ getProjectEmployees(id:number,filter:string): Observable<any> {
+      const httpUploadHeaders = new HttpHeaders({
+    "Content-Type":"application/json",
+    "Authorization":"Bearer "+this.jwtKey
+  });
+    let params = new HttpParams()
+      .set('id', String(id)) // Reassign the result
+      .set('filter', String(filter));  // Reassign the result
     return this.httpClient.get(this.baseUrl , { headers: httpUploadHeaders, params });
+  }
+
+  deleteProject(id: number): Observable<any> {
+    return this.httpClient.delete(this.baseUrl + `/${id}`, { headers: this.httpHeaders });
   }
 }

@@ -8,7 +8,7 @@ public class  DepartmentFieldMapper implements org.springframework.batch.item.fi
     @Override
     public Department mapFieldSet(FieldSet fieldSet) throws BindException {
         Department department= new Department();
-        department.setDepartment_name(fieldSet.readString("department_name"));
+        department.setDepartmentName(fieldSet.readString("departmentName"));
         return department;
     }
 }

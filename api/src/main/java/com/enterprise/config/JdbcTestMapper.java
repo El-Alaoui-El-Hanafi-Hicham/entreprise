@@ -9,7 +9,7 @@ public class JdbcTestMapper implements org.springframework.jdbc.core.RowMapper<c
     @Override
     public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
         Department department = new Department();
-        department.setDepartment_name(rs.getString("department_name"));
+        department.setDepartmentName(rs.getString("departmentName"));
         System.out.println(department);
         return department;
     }

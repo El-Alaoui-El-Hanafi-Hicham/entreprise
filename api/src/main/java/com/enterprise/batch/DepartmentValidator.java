@@ -15,9 +15,9 @@ public class DepartmentValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Department department = (Department) target;
-        ValidationUtils.rejectIfEmpty(errors,"department_name.empty","Department Name Can't be Empty");
+        ValidationUtils.rejectIfEmpty(errors,"departmentName.empty","Department Name Can't be Empty");
         // Additional custom validation rules
-        if (department.getDepartment_name().length() > 50) {
+        if (department.getDepartmentName().length() > 50) {
             errors.rejectValue("departmentName", "departmentName.tooLong", "Department name is too long");
         }
     }

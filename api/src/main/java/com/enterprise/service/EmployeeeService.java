@@ -126,7 +126,7 @@ if(employee.get().getDepartment()!=null){
         employeeRepository.save(employee.get());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body("Employee "+employee.get().getFirstName() +" " +employee.get().getLastName() +" is now in the "+departement.get().getDepartment_name() + " departement");
+                .body("Employee "+employee.get().getFirstName() +" " +employee.get().getLastName() +" is now in the "+departement.get().getDepartmentName() + " departement");
 
     }else{
         return ResponseEntity
@@ -143,12 +143,10 @@ if(employee.get().getDepartment()!=null){
     };
 
 
-    public ResponseEntity<Page<Employee>> allEmployees(int pageNumber, int pageSize) {
+    public ResponseEntity<Page<Employee>> allEmployees(int pageNumber, int pageSize, String keyword) {
         Pageable firstPageWithTwoElements = PageRequest.of(pageSize==0? 0:pageNumber,pageSize==0? Integer.MAX_VALUE:pageSize);
-        System.out.println("the page size is ====> "+firstPageWithTwoElements.getPageSize());
-        System.out.println("the page size is ====> "+firstPageWithTwoElements.getPageNumber());
 
-        Page<Employee> allEmployees=   employeeRepository.findAll(firstPageWithTwoElements);
+        Page<Employee> allEmployees=   employeeRepository.findByFirstNameContainsIgnoreCaseOrLastNameContainingIgnoreCaseOrDepartment_DepartmentNameContainingIgnoreCase(keyword,keyword,keyword,firstPageWithTwoElements);
 
 
 

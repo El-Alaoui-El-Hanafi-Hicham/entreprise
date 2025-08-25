@@ -54,7 +54,7 @@
         <ng-template pTemplate="body" let-department>
             <tr>
                 <td style="width: 4rem"><p-tableCheckbox [value]="department" /></td>
-                <td>{{ department.department_name }} </td>
+                <td>{{ department.departmentName }} </td>
                 <td>  <p *ngIf="department.manager; else noManager">
                     <p-tag [value]="department.manager.firstName + ' ' + department.manager.lastName" [rounded]="true"  severity="secondary"></p-tag>
                   </p>

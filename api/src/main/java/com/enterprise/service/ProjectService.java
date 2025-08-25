@@ -87,15 +87,47 @@ public class ProjectService {
     }
 
     // Get all projects with pagination
-    public ResponseEntity<Page<ProjectDto>> getAllProjects(int page, int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Project> projectsPage = projectRepository.findAll(pageable);
-            Page<ProjectDto> projectDtosPage = projectsPage.map(this::convertToDto);
-            return ResponseEntity.ok(projectDtosPage);
+    public Page<ProjectDto> getAllProjects(int page, int size, String filter, List<Long> department_ids, List<Long> employee_ids, List<String> statuses) {
+       try {
+           System.out.println(statuses.toString());
+           Page<Project> projects = projectRepository.searchProjects(
+                   (filter == null || filter.isEmpty()) ? null : filter,
+                   (department_ids == null || department_ids.isEmpty()) ? null : department_ids,
+                   (employee_ids   == null || employee_ids.isEmpty())   ? null : employee_ids,
+                   (statuses    == null || statuses.isEmpty())     ? null : statuses,
+                   PageRequest.of(page, size)
+           );
+
+           return projects.stream().map(this::convertToDto).collect(Collectors.collectingAndThen(Collectors.toList(), list -> new org.springframework.data.domain.PageImpl<>(list, PageRequest.of(page, size), projects.getTotalElements())));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+           throw new RuntimeException(e);
+       }
+            }
+
+    private ProjectDto convertToDto(Project project) {
+        return ProjectDto.builder()
+                .id(project.getId())
+                .projectName(project.getProject_name())
+                .description(project.getDescription())
+                .startDate(project.getStart_date())
+                .endDate(project.getEnd_date())
+                .status(project.getStatus())
+                .manager(convertToEmployeeBasicDto(project.getManager()))
+                .owner(convertToEmployeeBasicDto(project.getOwner()))
+                .employees(project.getEmployeesList().stream()
+                        .map(this::convertToEmployeeBasicDto)
+                        .collect(Collectors.toList()))
+                .departments(project.getDepartmentsList().stream()
+                        .map(this::convertToDepartmentBasicDto)
+                        .collect(Collectors.toList()))
+                .tasks(project.getTasksList().stream()
+                        .map(this::convertToTaskBasicDto)
+                        .collect(Collectors.toList()))
+                .employeeCount(project.getEmployeesList().size())
+                .departmentCount(project.getDepartmentsList().size())
+                .taskCount(project.getTasksList().size())
+                .build();
+
     }
 
     // Get project by ID
@@ -177,31 +209,22 @@ public class ProjectService {
        }
        }
     }
-    // Helper methods for entity to DTO conversion
-    private ProjectDto convertToDto(Project project) {
-        return ProjectDto.builder()
-                .id(project.getId())
-                .projectName(project.getProject_name())
-                .description(project.getDescription())
-                .startDate(project.getStart_date())
-                .endDate(project.getEnd_date())
-                .status(project.getStatus())
-                .manager(convertToEmployeeBasicDto(project.getManager()))
-                .owner(convertToEmployeeBasicDto(project.getOwner()))
-                .employees(project.getEmployeesList().stream()
-                        .map(this::convertToEmployeeBasicDto)
-                        .collect(Collectors.toList()))
-                .departments(project.getDepartmentsList().stream()
-                        .map(this::convertToDepartmentBasicDto)
-                        .collect(Collectors.toList()))
-                .tasks(project.getTasksList().stream()
-                        .map(this::convertToTaskBasicDto)
-                        .collect(Collectors.toList()))
-                .employeeCount(project.getEmployeesList().size())
-                .departmentCount(project.getDepartmentsList().size())
-                .taskCount(project.getTasksList().size())
-                .build();
+    public List<Employee> getProjectEmployees(Long projectId,String filter) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        List<Employee> employeeList= projectOpt.map(Project::getEmployeesList).orElse(Collections.emptyList());
+        employeeList.addAll(projectOpt.get().getDepartmentsList().stream().flatMap(department -> department.getEmployees().stream()).collect(Collectors.toList()));
+        employeeList.add(projectOpt.get().getManager());
+        employeeList.add(projectOpt.get().getOwner());
+        employeeList.stream().filter(Objects::isNull).filter(employee -> {
+            if(employee.getFirstName().startsWith(filter)||employee.getLastName().startsWith(filter)||employee.getEmail().startsWith(filter)||employee.getJobTitle().startsWith(filter)){
+                return true;
+            }
+                return false;
+
+        }).forEach(employee -> employeeList.remove(employee));
+        return employeeList;
     }
+
 
     private EmployeeBasicDto convertToEmployeeBasicDto(Employee employee) {
         if (employee == null) return null;
@@ -222,7 +245,7 @@ public class ProjectService {
         
         return DepartmentBasicDto.builder()
                 .id(department.getId())
-                .departmentName(department.getDepartment_name())
+                .departmentName(department.getDepartmentName())
                 .managerName(managerName)
                 .employeeCount(department.getEmployees().size())
                 .build();
@@ -240,4 +263,6 @@ public class ProjectService {
                 .priority(task.getPriority() != null ? task.getPriority().toString() : null)
                 .build();
     }
+
+
 }

@@ -17,7 +17,7 @@ public class DepartmentDto {
     @JsonProperty("id")
     private Long id;
     
-    @JsonProperty("department_name")
+    @JsonProperty("departmentName")
     private String departmentName;
     
     @JsonProperty("manager")

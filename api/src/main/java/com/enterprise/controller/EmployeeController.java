@@ -30,9 +30,8 @@ public class EmployeeController {
     this.jwtService= jwtService;
     }
     @GetMapping("")
-    public ResponseEntity<Page<Employee>> employees(@RequestParam(required=true) int pageNumber, @RequestParam(required=true) int pageSize){
-        System.out.println("Page Number: " + pageNumber + ", Page Size: " + pageSize);
-        return this.employeeeService.allEmployees(pageNumber, pageSize);
+    public ResponseEntity<Page<Employee>> employees(@RequestParam(required=true) int pageNumber, @RequestParam(required=true) int pageSize,@RequestParam(required=false) String keyword) {
+        return this.employeeeService.allEmployees(pageNumber, pageSize, keyword);
     }
    @PostMapping("/employee")
     public ResponseEntity<HashMap<String,String>> addEmployee(@RequestBody Employee employee) {

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DepartmentCreateDto {
     
-    @JsonProperty("department_name")
+    @JsonProperty("departmentName")
     private String departmentName;
     
     @JsonProperty("manager_id")

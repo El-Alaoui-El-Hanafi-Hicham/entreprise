@@ -13,6 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ ButtonModule,
     DropdownModule,
     TableModule,
     CalendarModule,
+    AutoCompleteModule,
 DialogModule
   ]
 })

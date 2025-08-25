@@ -29,6 +29,9 @@ IsUploadModalopen:boolean=false
   openDepartmentModal:boolean=false
   departments:any=[]
   isModalOpen:boolean=false;
+  page: number = 0;
+  keyword: string = "";
+  size: number = 10;
   isEdit:boolean=false;
   selectedDepartement!:Department
   isSetManager:boolean=false
@@ -156,8 +159,8 @@ openEditModal(selectedDepartement: Department) {
   }
 getDepartments(){
   this.departments=[];
-  this.departmentService.getDepartments().subscribe((val)=>{
-this.departments=val
+  this.departmentService.getDepartments(this.page,this.size,this.keyword).subscribe((val)=>{
+this.departments=val.content
   })
 }
 
@@ -167,7 +170,7 @@ this.departments=val
     this.openIsSetManagerModal(department)
 }
 getArrayLength(arr:Array<any>){
-  return String(arr.length).toString();
+  return String(arr?.length).toString()||"0";
 }
 openDepartmentDialog(){
   this.openDepartmentModal=true;
@@ -194,7 +197,7 @@ this.getDepartments();
 }
 interface Department {
   id:number;
-  department_name: string;
+  departmentName: string;
   manager: EmployeeModule|null
   employees: Array<EmployeeModule>
   // Add other properties if needed

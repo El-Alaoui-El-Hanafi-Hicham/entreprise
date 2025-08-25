@@ -32,7 +32,7 @@ Parameter: file (CSV file)
 
 ### Departments CSV Format
 ```csv
-department_name
+departmentName
 Human Resources
 Information Technology
 Finance
@@ -40,7 +40,7 @@ Marketing
 ```
 
 **Required Columns:**
-- `department_name`: Name of the department
+- `departmentName`: Name of the department
 
 ### Employees CSV Format
 ```csv
@@ -137,7 +137,7 @@ The system expects these database tables to exist:
 ```sql
 CREATE TABLE department (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    department_name VARCHAR(255) UNIQUE
+    departmentName VARCHAR(255) UNIQUE
 );
 ```
 

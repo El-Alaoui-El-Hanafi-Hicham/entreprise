@@ -18,6 +18,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
+import { AvatarModule } from 'primeng/avatar';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { MenuModule } from 'primeng/menu';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 @NgModule({
   declarations: [
     ProjectsComponent,
@@ -33,15 +37,19 @@ import { MessageModule } from 'primeng/message';
     IconFieldModule,
     InputIconModule,
     TableModule,
+    OverlayPanelModule,
     DialogModule,
     CalendarModule,
+    MenuModule,
     DropdownModule,
     InputTextModule,
+    AvatarModule,
     TagModule,
     MessageModule,
     CardModule,
-    FormsModule,             // 👈 Add this
-    ReactiveFormsModule      // 👈 Add this if using reactive forms
+    FormsModule,
+    ReactiveFormsModule,
+    AutoCompleteModule
 
   ]
 })

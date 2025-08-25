@@ -116,7 +116,7 @@ public  Step step2() throws Exception {
 //        DelimitedLineAggregator<Department> lineAggregator = new DelimitedLineAggregator<>();
 //        lineAggregator.setDelimiter(",");
 //        BeanWrapperFieldExtractor<Department> departmentBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-//        departmentBeanWrapperFieldExtractor.setNames(new String[]{"department_name"});
+//        departmentBeanWrapperFieldExtractor.setNames(new String[]{"departmentName"});
 //        lineAggregator.setFieldExtractor(departmentBeanWrapperFieldExtractor);
 //
 //        flatFileItemWriter.setLineAggregator(lineAggregator);
@@ -138,7 +138,7 @@ public  Step step2() throws Exception {
         DefaultLineMapper<Department> lineMapper = new DefaultLineMapper<>();
         lineMapper.setFieldSetMapper(new DepartmentFieldMapper());
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-        lineTokenizer.setNames(new String[]{"department_name"});
+        lineTokenizer.setNames(new String[]{"departmentName"});
         lineMapper.setLineTokenizer(lineTokenizer);
         flatFileItemReader.setLineMapper(lineMapper);
         return flatFileItemReader;
