@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectUpdateDto {
+public class ProjectCreateDto {
     
     @JsonProperty("project_name")
     private String projectName;
@@ -22,10 +23,10 @@ public class ProjectUpdateDto {
     private String description;
     
     @JsonProperty("start_date")
-    private Date startDate;
+    private LocalDate startDate;
     
     @JsonProperty("end_date")
-    private Date endDate;
+    private LocalDate endDate;
     
     @JsonProperty("status")
     private String status;
