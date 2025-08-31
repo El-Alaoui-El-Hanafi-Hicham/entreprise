@@ -23,6 +23,8 @@
     "@ngrx/store": "^18.1.1",
     "@ngrx/store-devtools": "^18.1.1",
     "@popperjs/core": "^2.11.8",
+    "@toast-ui/calendar": "^2.1.3",
+    "@toast-ui/date": "^0.0.3",
     "chart.js": "4.4.3",
     "clipboard": "2.0.11",
     "cors": "^2.8.5",
@@ -38,6 +40,7 @@
     "rxjs": "~7.8.1",
     "sockjs-client": "1.6.1",
     "stompjs": "2.3.3",
+    "ts-essentials": "^10.1.1",
     "tslib": "^2.6.3",
     "web-animations-js": "2.3.2",
     "zone.js": "~0.14.10"

@@ -14,28 +14,38 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { AvatarModule } from 'primeng/avatar';
+import { MenuModule } from 'primeng/menu';
+import { TagModule } from 'primeng/tag';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 
 @NgModule({
-  declarations: [
-    TasksComponent,
-    TaskModalComponent
-  ],
+  declarations: [TasksComponent, TaskModalComponent],
   imports: [
     CommonModule,
-  TasksRoutingModule,
-  ToolbarModule,
-  InputTextModule,
-  IconFieldModule,
-InputIconModule,
-ButtonModule,
-  ReactiveFormsModule,
+    TasksRoutingModule,
+    ToolbarModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    ButtonModule,
+    ReactiveFormsModule,
     FormsModule,
     DropdownModule,
     TableModule,
     CalendarModule,
     AutoCompleteModule,
-DialogModule
-  ]
+    MultiSelectModule,
+    DialogModule,
+    OverlayPanelModule,
+    AvatarModule,
+    MenuModule,
+    TagModule,
+    SelectButtonModule,
+    ButtonGroupModule,
+  ],
 })
-export class TasksModule { }
+export class TasksModule {}

@@ -7,7 +7,7 @@
     </div>
     <div class="flex flex-column gap-2">
       <label for="firstName">Description</label>
-      <input pInputText id="description" formControlName="task_name" class="w-full" />
+      <input pInputText id="description" formControlName="description" class="w-full" />
     </div>
     <div class="flex gap-2 w-full">
       <div class="flex flex-column gap-2 w-full">
@@ -24,38 +24,30 @@
     <div class="flex gap-2 w-full">
       <div class="flex flex-column gap-2 w-full">
         <label for="firstName">Project</label>
-        <!-- <p-dropdown [options]="projects" formControlName="project" styleClass="w-full" [checkmark]="true"
-          optionLabel="label" [showClear]="true" placeholder="Select a project" class="w-full md:w-56" /> -->
-          <p-autoComplete formControlName="project" [suggestions]="projects" (completeMethod)="findProject($event)" optionLabel="name" />
+          <p-autoComplete formControlName="project" [suggestions]="projects" (completeMethod)="findProject($event)" optionLabel="label" styleClass="w-full" />
 
       </div>
       <div class="flex flex-column gap-2 w-full">
         <label for="firstName">Manager</label>
-        <p-dropdown [options]="employees" [disabled]="!taskForm.get('project')?.value" formControlName="manager"
-          styleClass="w-full" [checkmark]="true" optionLabel="label" [showClear]="true" placeholder="Select a manager"
-          class="w-full md:w-56" />
+        <p-autoComplete [suggestions]="employees" [disabled]="!taskForm.get('project')?.value" (completeMethod)="findEmployee($event)" formControlName="manager" class="w-full" styleClass="w-full" optionLabel="label" display="chip" placeholder="Select Assignes"   />
       </div>
-    </div>
 
-    <div class="flex flex-column gap-2 w-full">
-      <label for="firstName">Departments</label>
-      <p-dropdown [options]="statusOptions" formControlName="Departments" styleClass="w-full" [checkmark]="true"
-        optionLabel="label" [showClear]="true" placeholder="Select Departments" class="w-full md:w-56" />
     </div>
     <div class="flex flex-column gap-2 w-full">
       <label for="firstName">Assignes</label>
-      <p-dropdown [options]="statusOptions" formControlName="employees" styleClass="w-full" [checkmark]="true"
-        optionLabel="label" [showClear]="true" placeholder="Select Assignes" class="w-full md:w-56" />
+       <p-autoComplete formControlName="employeesList" [suggestions]="employees"
+      [field]="'label'" [multiple]="true" [minLength]="1" (completeMethod)="findEmployee($event)" formControlName="employees"  placeholder="Select Employees" (onSelect)="getProjects()"
+      (onUnselect)="getProjects()">
+    </p-autoComplete>
     </div>
     <div class="flex gap-2 w-full">
       <div class="flex flex-column gap-2 w-full">
         <label for="start_date">Start Date</label>
-        <p-calendar id="start_date" formControlName="start_date" dateFormat="mm/dd/yy" [showIcon]="true"
-          styleClass="w-full"></p-calendar>
+        <p-calendar id="start_date" formControlName="start_date"  dateFormat="mm/dd/yy" [showIcon]="true" styleClass="w-full"></p-calendar>
       </div>
       <div class="flex flex-column gap-2 w-full">
         <label for="end_date">End Date</label>
-        <p-calendar id="end_date" formControlName="end_date" dateFormat="mm/dd/yy" [showIcon]="true"
+        <p-calendar id="end_date" formControlName="end_date"  dateFormat="mm/dd/yy" [showIcon]="true"
           styleClass="w-full"></p-calendar>
       </div>
     </div>
@@ -63,11 +55,11 @@
 
 
   </form>
-
+<!-- [disabled]="isLoading || !taskForm.valid" -->
   <ng-template pTemplate="footer">
     <div class="flex justify-content-end gap-2 w-full">
       <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="onNoClick()"></p-button>
-      <p-button label="Save" [disabled]="isLoading || !taskForm.valid" [loading]="isLoading" severity="primary"
+      <p-button label="Save"  [loading]="isLoading" severity="primary"
         (onClick)="addTask()"></p-button>
     </div>
   </ng-template>

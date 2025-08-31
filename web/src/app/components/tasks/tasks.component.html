@@ -4,7 +4,8 @@
     <i class="pi pi-building mr-2"></i>
     Tasks
   </h2>
-    <p-button label="Add Task" [rounded]="true" [outlined]="true"  icon="pi pi-plus" severity="secondary" size="small" (click)="openTaskModal(false)"/>
+  <p-button label="Add Task" [rounded]="true" [outlined]="true" icon="pi pi-plus" severity="secondary" size="small"
+    (click)="openTaskModal(false)" />
 </p-toolbar>
 <p-toolbar
   styleClass="bg-white flex justify-content-between w-full m-0 border-top-none border-left-none border-right-none border-noround">
@@ -14,70 +15,149 @@
     <input type="text" pInputText placeholder="Search" />
   </p-iconField>
   <div class="flex gap-2">
-    <p-button label="List" [rounded]="true" [text]="true" variety="text" icon="pi pi-bars" severity="secondary" size="small" />
-    <p-button label="Grid" [rounded]="true" [text]="true" variety="text" icon="pi pi-th-large" severity="secondary" size="small" />
-    <p-button label="Kanban" [rounded]="true" [text]="true" variety="text" icon="pi pi-clipboard" severity="secondary" size="small" />
-    <p-button label="Calendar" [rounded]="true" [text]="true" variety="text" icon="pi pi-calendar" severity="secondary" size="small" />
+    <p-button label="List" [rounded]="true" [text]="true" (onClick)="changeSelectedView('list')" variety="text"
+      icon="pi pi-bars" severity="secondary" size="small" />
+    <p-button label="Grid" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('grid')"
+      icon="pi pi-th-large" severity="secondary" size="small" />
+    <p-button label="Kanban" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('kanban')"
+      icon="pi pi-clipboard" severity="secondary" size="small" />
+    <p-button label="Calendar" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('calendar')"
+      icon="pi pi-calendar" severity="secondary" size="small" />
 
   </div>
   <div class="flex gap-2">
-    <p-button label="Filter" [rounded]="true" [outlined]="true"  icon="pi pi-filter" severity="secondary"
+    <p-button label="Filter" [rounded]="true" [outlined]="true" icon="pi pi-filter" severity="secondary" size="small" />
+    <p-button label="Sort" [rounded]="true" [outlined]="true" icon="pi pi-sort-alt" severity="secondary" size="small" />
+    <p-button label="Refresh" [rounded]="true" [outlined]="true" icon="pi pi-refresh" severity="secondary"
       size="small" />
-    <p-button label="Sort" [rounded]="true" [outlined]="true"  icon="pi pi-sort-alt" severity="secondary" size="small" />
-    <p-button label="Refresh" [rounded]="true" [outlined]="true"  icon="pi pi-refresh" severity="secondary" size="small" />
     <p-button label="Reset" [rounded]="true" [outlined]="true" icon="pi pi-times" severity="secondary" size="small" />
 
   </div>
 </p-toolbar>
 <div class="p-5">
-  <p-table [value]="tasks" (sortFunction)="customSort($event)"  [sortOrder]="-1" [tableStyle]="{ 'min-width': '60rem' }">
+  <p-table [value]="tasks" (sortFunction)="customSort($event)" *ngIf="selectedView=='list'" [sortOrder]="-1"
+    [tableStyle]="{ 'min-width': '60rem' }">¦
     <ng-template pTemplate="header">
-        <tr>
-            <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
-            <th pSortableColumn="code" style="width:20%">
-                <div class="flex items-center gap-2">
-                    Code
-                    <p-sortIcon field="code" />
-                </div>
-            </th>
-            <th pSortableColumn="name" style="width:20%">
-                <div class="flex items-center gap-2">
-                    Name
-                    <p-sortIcon field="name" />
-                </div>
-            </th>
-            <th pSortableColumn="price" style="width:20%">
-                <div class="flex items-center gap-2">
-                    Price
-                    <p-sortIcon field="price" />
-                </div>
-            </th>
-            <th pSortableColumn="category" style="width:20%">
-                <div class="flex items-center gap-2">
-                    Category
-                    <p-sortIcon field="category" />
-                </div>
-            </th>
-            <th pSortableColumn="quantity" style="width:20%">
-                <div class="flex items-center gap-2">
-                    Quantity
-                    <p-sortIcon field="quantity" />
-                </div>
-            </th>
-        </tr>
+      <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th pSortableColumn="name" style="width:20%">
+          <div class="flex items-center gap-2">
+            Name
+            <p-sortIcon field="name" />
+          </div>
+        </th>
+        <th>
+          <div class="flex items-center gap-2">
+            Created By
+            <p-sortIcon field="manager" />
+          </div>
+        </th>
+        <th>
+          <div class="flex items-center gap-2">
+            Manager
+            <p-sortIcon field="manager" />
+          </div>
+        </th>
+        <th pSortableColumn="price" style="width:20%">
+          <div class="flex items-center gap-2">
+            Description
+            <p-sortIcon field="price" />
+          </div>
+        </th>
+
+        <th pSortableColumn="category" style="width:20%">
+          <div class="flex items-center gap-2">
+            Start Date
+            <p-sortIcon field="category" />
+          </div>
+        </th>
+        <th pSortableColumn="category" style="width:20%">
+          <div class="flex items-center gap-2">
+            End Date
+            <p-sortIcon field="category" />
+          </div>
+        </th>
+        <th pSortableColumn="quantity" style="width:20%">
+          <div class="flex items-center gap-2">
+            Status
+            <p-sortIcon field="quantity" />
+          </div>
+        </th>
+        <th pSortableColumn="quantity" style="width:20%">
+          <div class="flex items-center gap-2">
+            Action
+            <p-sortIcon field="quantity" />
+          </div>
+        </th>
+      </tr>
     </ng-template>
     <ng-template pTemplate="body" let-task>
-        <tr>
-          <td>
-                <p-tableCheckbox [value]="task" />
-            </td>
-            <td>{{ task.id }}</td>
-            <td>{{ task.name }}</td>
-            <td>{{ task.description }}</td>
-            <td>{{ task.status }}</td>
-            <!-- <td>{{ tasks.quantity }}</td> -->
-        </tr>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="task" />
+        </td>
+        <td>{{ task.task_name }}</td>
+        <td>
+          <div *ngIf="task.manager; else noCreator" class="flex align-items-center gap-2">
+
+            <p-avatar [label]="getInitials(task.createdBy.firstName + ' ' + task.createdBy.lastName)" shape="circle"
+              [style]="{'background-color': getAvatarColor(task.createdBy.id), 'color': 'white'}">
+            </p-avatar>
+            <span>{{ (task.createdBy.firstName + ' ' + task.createdBy.lastName) }}</span>
+          </div>
+          <ng-template #noCreator>
+            <span>Unknown</span>
+          </ng-template>
+        </td>
+        <td>
+          <div *ngIf="task.manager; else noManager" class="flex align-items-center gap-2">
+
+            <p-avatar [label]="getInitials(task.manager.firstName + ' ' + task.manager.lastName)" shape="circle"
+              [style]="{'background-color': getAvatarColor(task.manager.id), 'color': 'white'}">
+            </p-avatar>
+            <span>{{ (task.manager.firstName + ' ' + task.manager.lastName) }}</span>
+          </div>
+          <ng-template #noManager>
+            <span>Unassigned</span>
+
+          </ng-template>
+        </td>
+        <td>{{ task.description }}</td>
+        <td>{{ (task.start_date | date:'MM/dd/yyyy') ??'Missing'}}</td>
+        <td>{{ (task.end_date | date:'MM/dd/yyyy')??"Missing" }}</td>
+        <td>
+          <span [ngClass]="{
+            'text-green-500': task.status === 'Completed',
+            'text-blue-500': task.status === 'In Progress',
+            'text-yellow-500': task.status === 'On Hold',
+            'text-gray-500': task.status === 'Not Started'
+          }">
+            <p-tag [value]="task?.status" [severity]="getSeverity(task.status)" />
+          </span>
+        </td>
+        <td>
+          <p-button icon="pi pi-ellipsis-v" [text]="true" [rounded]="true" severity="secondary"
+            (click)="menu.toggle($event)" #menuButton>
+          </p-button>
+          <p-menu #menu [model]="getMenuItems(task)" [popup]="true" appendTo="body"></p-menu>
+
+        </td>
+      </tr>
     </ng-template>
-</p-table>
+  </p-table>
+  <ng-container *ngIf="selectedView === 'calendar'">
+    <div class="flex justify-content-between mb-3">
+      <p-selectButton [options]="PeriodOptions" [(ngModel)]="selectedCalendarView" size="small" optionLabel="name"
+        optionValue="value" (click)="changeCalendarView()"/>
+      <div class="flex gap-1">
+        <p-button label="Prev" icon="pi pi-bars" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="prevPeriod()" size="small" />
+        <p-button label="Today" icon="pi pi-trash" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="goToday()" size="small" />
+        <p-button label="Next" icon="pi pi-building" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="nextPeriod()" size="small" />
+      </div>
+
+    </div>
+    <div #calendar style="height: 800px;"></div>
+  </ng-container>
 </div>
-<app-task-modal [visible]="isModalOpen" [taskData]="selectedTask" [isEdit]="isEdit" (closeModal)="selectedTask = null"></app-task-modal>
+<app-task-modal [visible]="isModalOpen" [taskData]="selectedTask" [isEdit]="isEdit"
+  (closeModal)="closeTaskDialog ($event)"></app-task-modal>
