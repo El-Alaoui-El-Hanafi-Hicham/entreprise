@@ -1,20 +1,18 @@
 package com.enterprise.entity;
 
 public enum Priority {
-    ZERO(0),
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5);
+    Low("LOW"),
+    Medium("MEDIUM"),
+    High("HIGH"),
+    Critical("CRITICAL");
 
-    private final int value;
+    private final String value;
 
-    Priority(int value) {
+    Priority(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 }

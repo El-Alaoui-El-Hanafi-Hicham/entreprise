@@ -3,16 +3,18 @@ package com.enterprise.service;
 import com.enterprise.config.AppConfig;
 import com.enterprise.config.JwtService;
 import com.enterprise.dao.EmployeeRepository;
-import com.enterprise.dto.AuthenticationResponseDto;
-import com.enterprise.dto.LoginUserDto;
-import com.enterprise.dto.RegisterUserDto;
-import com.enterprise.dto.ResetPasswordMessageDto;
+import com.enterprise.dto.authDTO.AuthenticationResponseDto;
+import com.enterprise.dto.authDTO.LoginUserDto;
+import com.enterprise.dto.authDTO.RegisterUserDto;
+import com.enterprise.dto.authDTO.ResetPasswordMessageDto;
 import com.enterprise.entity.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,17 @@ public class AuthenticationService {
         String jwtToken= jwtService.generateToken(user);
         return AuthenticationResponseDto.builder().JwtKey(jwtToken).build();
     }
+
+    protected Employee getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                return employeeRepository.findByEmail(userDetails.getUsername()).orElse(null);
+            }}
+        return null;
+        }
 
     public AuthenticationResponseDto login(LoginUserDto loginUserDto) {
         var  user = employeeRepository.findByEmail(loginUserDto.getEmail());

@@ -1,5 +1,8 @@
-package com.enterprise.dto;
+package com.enterprise.dto.employeeDTO;
 
+import com.enterprise.dto.DepartmentDTO.DepartmentBasicDto;
+import com.enterprise.dto.TaskDTO.TaskBasicDto;
+import com.enterprise.dto.projectDTO.ProjectBasicDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

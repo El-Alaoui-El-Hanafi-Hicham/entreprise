@@ -1,4 +1,4 @@
-package com.enterprise.dto;
+package com.enterprise.dto.authDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

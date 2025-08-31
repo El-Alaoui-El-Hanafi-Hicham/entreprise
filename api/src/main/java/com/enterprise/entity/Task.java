@@ -3,10 +3,13 @@ package com.enterprise.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 @Table
 @Entity
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class Task {
     @Id
@@ -25,11 +29,11 @@ public class Task {
     @Column
     private String description;
     @Column
-    private Date start_date;
+    private LocalDate start_date;
     @Column
-    private Date end_date;
+    private LocalDate end_date;
     @Column
-    private Boolean status;
+    private String status;
     @Column
     private Priority priority;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -41,9 +45,9 @@ public class Task {
     @JsonIgnore
     private List<Employee> employeeList = new ArrayList<>();
     @Column
-    private Timestamp created_at ;
+    private LocalDateTime created_at ;
     @Column
-    private Timestamp updated_at;
+    private LocalDateTime updated_at;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<SubTask> subTaskList = new ArrayList<>();
@@ -58,12 +62,13 @@ public class Task {
     @JoinColumn(name = "creator_id")
     private Employee createdBy;
 
-    public Task(String task_name, String description, Date start_date, Date end_date) {
+    public Task(String task_name, String description, LocalDate start_date, LocalDate end_date,String status,Priority priority) {
         this.task_name = task_name;
         this.description = description;
         this.start_date = start_date;
         this.end_date = end_date;
-        this.status = false;
+        this.status = status;
+        this.priority = priority;
     }
     public boolean addEmployee(Employee employee){
         if(this.employeeList == null){

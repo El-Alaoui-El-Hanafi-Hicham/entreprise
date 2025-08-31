@@ -3,7 +3,7 @@ package com.enterprise.service;
 import com.enterprise.dao.ChatRoomRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.dao.MessageRepository;
-import com.enterprise.dto.EmployeeDto;
+import com.enterprise.dto.employeeDTO.EmployeeDto;
 import com.enterprise.dto.MessageDto;
 import com.enterprise.entity.ChatRoom;
 import com.enterprise.entity.Employee;

@@ -1,19 +1,16 @@
 package com.enterprise.controller;
 
-import com.enterprise.dto.ProjectCreateDto;
-import com.enterprise.dto.ProjectDto;
-import com.enterprise.dto.ProjectSearchRequest;
-import com.enterprise.dto.ProjectUpdateDto;
+import com.enterprise.dto.projectDTO.ProjectCreateDto;
+import com.enterprise.dto.projectDTO.ProjectDto;
+import com.enterprise.dto.projectDTO.ProjectSearchRequest;
+import com.enterprise.dto.projectDTO.ProjectUpdateDto;
 import com.enterprise.entity.Employee;
-import com.enterprise.entity.Project;
 import com.enterprise.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @RequestMapping(path = "/api/project")

@@ -1,13 +1,14 @@
 package com.enterprise.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.engine.spi.Managed;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +27,11 @@ public class Project {
     @Column
     private String description;
     @Column
-    private Date start_date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate start_date;
     @Column
-    private Date end_date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate end_date;
 
     @ManyToMany(mappedBy = "projectsList")
     @JsonIgnore
@@ -53,14 +56,14 @@ public class Project {
     private List<Task> tasksList = new ArrayList<>();
 
 
-    public Project(String project_name, String description, Date start_date, Date end_date) {
+    public Project(String project_name, String description, LocalDate start_date, LocalDate end_date) {
         this.project_name = project_name;
         this.description = description;
         this.start_date = start_date;
         this.end_date = end_date;
     }
 
-    public Project(String project_name, String description, Date start_date, Date end_date,Employee Manager,Employee Owner,String status) {
+    public Project(String project_name, String description, LocalDate start_date, LocalDate end_date,Employee Manager,Employee Owner,String status) {
         this.project_name = project_name;
         this.description = description;
         this.start_date = start_date;

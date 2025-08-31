@@ -1,9 +1,7 @@
-package com.enterprise.dto;
+package com.enterprise.dto.projectDTO;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Data

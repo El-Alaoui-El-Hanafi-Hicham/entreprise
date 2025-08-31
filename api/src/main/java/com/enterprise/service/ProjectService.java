@@ -4,14 +4,24 @@ import com.enterprise.dao.DepartmentRepository;
 import com.enterprise.dao.EmployeeRepository;
 import com.enterprise.dao.ProjectRepository;
 import com.enterprise.dao.TaskRepository;
-import com.enterprise.dto.*;
+import com.enterprise.dto.DepartmentDTO.DepartmentBasicDto;
+import com.enterprise.dto.TaskDTO.TaskBasicDto;
+import com.enterprise.dto.employeeDTO.EmployeeBasicDto;
+import com.enterprise.dto.projectDTO.ProjectCreateDto;
+import com.enterprise.dto.projectDTO.ProjectDto;
+import com.enterprise.dto.projectDTO.ProjectUpdateDto;
 import com.enterprise.entity.Department;
 import com.enterprise.entity.Employee;
 import com.enterprise.entity.Project;
 import com.enterprise.entity.Task;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,7 +44,7 @@ public class ProjectService {
         this.projectRepository=projectRepository;
     }
     // Create a new project using ProjectCreateDto
-    public ResponseEntity<ProjectDto> createProject(ProjectCreateDto    createDto) {
+    public ResponseEntity<ProjectDto> createProject(ProjectCreateDto createDto) {
         try {
             // Validate manager
             Optional<Employee> manager = employeeRepository.findById(createDto.getManagerId());
@@ -89,18 +99,45 @@ public class ProjectService {
     public Page<ProjectDto> getAllProjects(int page, int size, String filter, List<Long> department_ids, List<Long> employee_ids, List<String> statuses, String startDate, String endDate) {
        try {
 
+           Specification<Project> spec = (root, query, cb) -> {
+               query.distinct(true);
+               List<Predicate> preds = new ArrayList<>();
 
-           Page<Project> projects = projectRepository.searchProjects(
-                   (filter == null || filter.isEmpty()) ? null : filter,
-                   (department_ids == null || department_ids.isEmpty()) ? null : department_ids,
-                   (employee_ids   == null || employee_ids.isEmpty())   ? null : employee_ids,
-                   statuses.isEmpty() ? null : statuses,
-                   startDate,
-                   endDate,
-                   PageRequest.of(page, size)
-           );
+               if (filter != null && !filter.isBlank()) {
+                   String like = "%" + filter.toLowerCase() + "%";
+                   Predicate p1 = cb.like(cb.lower(root.get("project_name")), like);
+                   Predicate p2 = cb.like(cb.lower(root.get("description")), like);
+                   preds.add(cb.or(p1, p2));
+               }
 
-           return projects.stream().map(this::convertToDto).collect(Collectors.collectingAndThen(Collectors.toList(), list -> new org.springframework.data.domain.PageImpl<>(list, PageRequest.of(page, size), projects.getTotalElements())));
+               if (statuses != null && !statuses.isEmpty()) {
+                   preds.add(root.get("status").in(statuses));
+               }
+
+               if (department_ids != null && !department_ids.isEmpty()) {
+                   Join<Project, Department> djoin = root.join("departmentsList", JoinType.LEFT);
+                   preds.add(djoin.get("id").in(department_ids));
+               }
+
+               if (employee_ids != null && !employee_ids.isEmpty()) {
+                   Join<Project, Employee> ejoin = root.join("employeesList", JoinType.LEFT);
+                   preds.add(ejoin.get("id").in(employee_ids));
+               }
+
+               if (startDate != null) {
+                   preds.add(cb.greaterThanOrEqualTo(root.get("start_date"), startDate));
+               }
+
+               if (endDate != null) {
+                   preds.add(cb.lessThanOrEqualTo(root.get("end_date"), endDate));
+               }
+
+               return cb.and(preds.toArray(new Predicate[0]));
+           };
+           System.out.println(spec.toString());
+          List<Project> projects= projectRepository.findAll(spec);
+
+           return projects.stream().map(this::convertToDto).collect(Collectors.collectingAndThen(Collectors.toList(), list -> new PageImpl<>(list, PageRequest.of(page, size), projects.size())));
         } catch (Exception e) {
            throw new RuntimeException(e);
        }

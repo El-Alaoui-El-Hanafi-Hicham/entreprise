@@ -1,10 +1,10 @@
 package com.enterprise.controller;
 
 import com.enterprise.config.JwtService;
-import com.enterprise.dto.AuthenticationResponseDto;
-import com.enterprise.dto.LoginUserDto;
-import com.enterprise.dto.RegisterUserDto;
-import com.enterprise.dto.ResetPasswordMessageDto;
+import com.enterprise.dto.authDTO.AuthenticationResponseDto;
+import com.enterprise.dto.authDTO.LoginUserDto;
+import com.enterprise.dto.authDTO.RegisterUserDto;
+import com.enterprise.dto.authDTO.ResetPasswordMessageDto;
 import com.enterprise.service.AuthenticationService;
 import com.enterprise.service.EmailService;
 import lombok.RequiredArgsConstructor;

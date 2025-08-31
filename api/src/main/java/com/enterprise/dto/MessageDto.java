@@ -1,6 +1,6 @@
 package com.enterprise.dto;
 
-import com.enterprise.entity.Employee;
+import com.enterprise.dto.employeeDTO.EmployeeDto;
 import lombok.*;
 
 import java.util.Date;
