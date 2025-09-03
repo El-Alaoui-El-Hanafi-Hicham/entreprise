@@ -149,29 +149,19 @@ public class TaskService {
             return cb.and(preds.toArray(new Predicate[0]));
         };
         System.out.println(spec.toString());
-        Page<Task> task1= taskRepository.findAll(spec, PageRequest.of(pageNumber, pageSize));
-        Page<TaskBasicDto> taskBasicDtos = task1.map(el->{
-            TaskBasicDto taskBasicDto= TaskBasicDto.builder().id(el.getId())
+        Page<Task> task1 = taskRepository.findAll(spec, PageRequest.of(pageNumber, pageSize));
+        Page<TaskBasicDto> taskBasicDtos = task1.map(el -> {
+            TaskBasicDto taskBasicDto = TaskBasicDto.builder().id(el.getId())
                     .taskName(el.getTask_name())
                     .description(el.getDescription())
                     .startDate(el.getStart_date())
                     .endDate(el.getEnd_date())
                     .status(el.getStatus())
                     .priority(el.getPriority().name())
-                    .employeesIds(new ArrayList<>())
-                    .subTaskIds(new ArrayList<>())
                     .build();
-            if(!el.getEmployeeList().isEmpty()){
-                for(Employee employee:el.getEmployeeList()){
-                    taskBasicDto.getEmployeesIds().add(employee.getId());
-                }
-            }
-            if(!el.getSubTaskList().isEmpty()){
-                for(SubTask subTask:el.getSubTaskList()){
-                    taskBasicDto.getSubTaskIds().add(subTask.getId());
-                }
-            }
+
             return taskBasicDto;
         });
+        return task1;
     }
 }

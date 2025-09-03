@@ -58,11 +58,10 @@ export class TasksComponent implements OnInit, AfterViewChecked {
   calendarInitialized = false;
   isEdit: boolean = false;
   PeriodOptions: any[] = [
-        { name: 'Day', value: 'day' },
-        { name: 'Week', value: 'week' },
-        { name: 'Month', value: 'month' },
-    ];
-
+    { name: 'Day', value: 'day' },
+    { name: 'Week', value: 'week' },
+    { name: 'Month', value: 'month' },
+  ];
 
   constructor(private taskService: TaskService) {}
 
@@ -79,30 +78,29 @@ export class TasksComponent implements OnInit, AfterViewChecked {
       this.initCalendar();
       this.calendarInitialized = true; // <-- prevent re-running
     }
-     if (this.selectedView !== 'calendar' && this.calendarInitialized) {
-    this.destroyCalendar();
+    if (this.selectedView !== 'calendar' && this.calendarInitialized) {
+      this.destroyCalendar();
+    }
   }
-  }
-
 
   initCalendar() {
-  this.calendar = new Calendar(this.calendarRef.nativeElement, {
-    defaultView: this.selectedCalendarView,
-    useDetailPopup: true,
-    calendars: [
-      {
-        id: '1',
-        name: 'Tasks',
-        color: '#ffffff',
-        borderColor: '#00a9ff',
-      },
-    ],
-  });
+    this.calendar = new Calendar(this.calendarRef.nativeElement, {
+      defaultView: this.selectedCalendarView,
+      useDetailPopup: true,
+      calendars: [
+        {
+          id: '1',
+          name: 'Tasks',
+          color: '#ffffff',
+          borderColor: '#00a9ff',
+        },
+      ],
+    });
 
-  const events = this.mapTasksToEvents(this.tasks)
+    const events = this.mapTasksToEvents(this.tasks);
 
-  this.calendar.createEvents(events as any); // cast to any if TS complains
-}
+    this.calendar.createEvents(events as any); // cast to any if TS complains
+  }
   mapTasksToEvents(tasks: any) {
     return tasks.map((task: any) => ({
       id: task.id.toString(),
@@ -193,11 +191,11 @@ export class TasksComponent implements OnInit, AfterViewChecked {
     this.selectedView = view;
   }
   destroyCalendar() {
-  if (this.calendar) {
-    this.calendar.destroy();
-    this.calendarInitialized = false;
+    if (this.calendar) {
+      this.calendar.destroy();
+      this.calendarInitialized = false;
+    }
   }
-}
   getSeverity(status: string) {
     switch (status) {
       case 'On Hold':
@@ -218,10 +216,40 @@ export class TasksComponent implements OnInit, AfterViewChecked {
         return undefined;
     }
   }
-   changeCalendarView() {
+  changeCalendarView() {
     this.calendar.changeView(this.selectedCalendarView);
   }
+  getPrioritySeverity(priority: string) {
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return 'danger';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
+      default:
+        return 'info';
+    }
+  }
 
+  getStatusSeverity(status: string) {
+    switch (status.toLowerCase()) {
+      case 'in progress':
+        return 'info';
+      case 'pending':
+        return 'warning';
+      case 'completed':
+        return 'success';
+      case 'overdue':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
+  }
+
+  isOverdue(dueDate: Date): boolean {
+    return new Date(dueDate) < new Date();
+  }
   // --- Date Navigation ---
   prevPeriod() {
     this.calendar.prev();

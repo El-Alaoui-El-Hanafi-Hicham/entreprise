@@ -1,0 +1,52 @@
+<div>
+  <div class="flex justify-content-between align-items-center p-3">
+    <h2 class="m-0">Kanban View {{tasks.length}}</h2>
+    <p-button label="Add Task" icon="pi pi-plus" (onClick)="openNewTaskModal()" severity="primary"></p-button>
+  </div>
+  <div class="p-3 flex gap-3 overflow-x-auto kanban-board">
+<p-panel header="To Do">
+   <div class="kanban-column">
+          <div *ngFor="let task of tasks | filterByStatus:'To Do'" class="kanban-card">
+            <h3>{{ task.task_name }}</h3>
+            <p>{{ task.description }}</p>
+            <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)"></p-tag>
+          </div>
+        </div>
+</p-panel>
+<p-panel header="In Progress">
+   <div class="kanban-column">
+          <div *ngFor="let task of tasks | filterByStatus:'In Progress'" class="kanban-card">
+            <h3>{{ task.task_name }}</h3>
+            <p>{{ task.description }}</p>
+            <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)"></p-tag>
+          </div>
+        </div>
+</p-panel>
+<p-panel header="Done">
+   <div class="kanban-column">
+          <div *ngFor="let task of tasks | filterByStatus:'Completed'" class="kanban-card">
+            <h3>{{ task.task_name }}</h3>
+            <p>{{ task.description }}</p>
+            <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)"></p-tag>
+          </div>
+        </div>
+</p-panel>
+<p-panel header="Pending">
+   <div class="kanban-column">
+          <div *ngFor="let task of tasks | filterByStatus:'pending'" class="kanban-card">
+            <h3>{{ task.task_name }}</h3>
+            <p>{{ task.description }}</p>
+            <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)"></p-tag>
+          </div>
+        </div>
+</p-panel>
+<p-panel header="Header">
+   <div class="kanban-column">
+          <div *ngFor="let task of tasks | filterByStatus:'To Do'" class="kanban-card">
+            <h3>{{ task.task_name }}</h3>
+            <p>{{ task.description }}</p>
+            <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)"></p-tag>
+          </div>
+        </div>
+</p-panel>
+</div>

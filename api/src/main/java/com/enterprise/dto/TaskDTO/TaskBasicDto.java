@@ -43,6 +43,6 @@ public class TaskBasicDto {
     @JsonProperty("employees")
     private List<Employee> employees;
 
-    public Collection<Long> getEmployeesIds() {
-    }
+//    public Collection<Long> getEmployeesIds() {
+//    }
 }

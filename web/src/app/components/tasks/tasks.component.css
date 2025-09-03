@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  padding: 1rem;
+  background-color: #f9f9f9;
+}
+.overdue {
+  color: red;
+  font-weight: bold;
+}
+.completed {
+  color: green;
+  font-weight: bold;
+}
+.in-progress {
+  color: orange;
+  font-weight: bold;
+}
+
+.task-card {
+  flex: 1 1 calc(33.333% - 1rem);
+  min-width: 280px;
+  max-width: 400px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.task-title{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.task-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.task-card p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.task-card .p-card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}

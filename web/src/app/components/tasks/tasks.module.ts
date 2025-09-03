@@ -21,9 +21,14 @@ import { MenuModule } from 'primeng/menu';
 import { TagModule } from 'primeng/tag';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ButtonGroupModule } from 'primeng/buttongroup';
+import { CardModule } from 'primeng/card';
+import { KanbanViewComponent } from './kanban-view/kanban-view.component';
+import { TabViewModule } from 'primeng/tabview';
+import { FilterByStatusPipe } from "./filterByStatus.pipe";
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
-  declarations: [TasksComponent, TaskModalComponent],
+  declarations: [TasksComponent, TaskModalComponent,KanbanViewComponent],
   imports: [
     CommonModule,
     TasksRoutingModule,
@@ -45,7 +50,10 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
     MenuModule,
     TagModule,
     SelectButtonModule,
+    PanelModule,
     ButtonGroupModule,
-  ],
+    CardModule,
+    FilterByStatusPipe
+],
 })
 export class TasksModule {}

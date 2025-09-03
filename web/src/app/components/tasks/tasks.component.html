@@ -15,14 +15,18 @@
     <input type="text" pInputText placeholder="Search" />
   </p-iconField>
   <div class="flex gap-2">
-    <p-button label="List" [rounded]="true" [text]="true" (onClick)="changeSelectedView('list')" variety="text"
+    <p-button label="List" [rounded]="true" [text]="selectedView!='list'" (onClick)="changeSelectedView('list')"
       icon="pi pi-bars" severity="secondary" size="small" />
-    <p-button label="Grid" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('grid')"
+
+    <p-button label="Grid" [rounded]="true" [text]="selectedView!='grid'" (onClick)="changeSelectedView('grid')"
       icon="pi pi-th-large" severity="secondary" size="small" />
-    <p-button label="Kanban" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('kanban')"
+
+    <p-button label="Kanban" [rounded]="true" [text]="selectedView!='kanban'" (onClick)="changeSelectedView('kanban')"
       icon="pi pi-clipboard" severity="secondary" size="small" />
-    <p-button label="Calendar" [rounded]="true" [text]="true" variety="text" (onClick)="changeSelectedView('calendar')"
-      icon="pi pi-calendar" severity="secondary" size="small" />
+
+    <p-button label="Calendar" [rounded]="true" [text]="selectedView!='calendar'"
+      (onClick)="changeSelectedView('calendar')" icon="pi pi-calendar" severity="secondary" size="small" />
+
 
   </div>
   <div class="flex gap-2">
@@ -79,6 +83,12 @@
         </th>
         <th pSortableColumn="quantity" style="width:20%">
           <div class="flex items-center gap-2">
+            Priority
+            <p-sortIcon field="quantity" />
+          </div>
+        </th>
+        <th pSortableColumn="quantity" style="width:20%">
+          <div class="flex items-center gap-2">
             Status
             <p-sortIcon field="quantity" />
           </div>
@@ -127,6 +137,16 @@
         <td>{{ (task.end_date | date:'MM/dd/yyyy')??"Missing" }}</td>
         <td>
           <span [ngClass]="{
+            'text-green-500': task.priority === 'Completed',
+            'text-blue-500': task.priority === 'In Progress',
+            'text-yellow-500': task.priority === 'On Hold',
+            'text-gray-500': task.priority === 'Not Started'
+          }">
+            <p-tag [value]="task?.priority" [severity]="getSeverity(task.priority)" />
+          </span>
+        </td>
+        <td>
+          <span [ngClass]="{
             'text-green-500': task.status === 'Completed',
             'text-blue-500': task.status === 'In Progress',
             'text-yellow-500': task.status === 'On Hold',
@@ -148,16 +168,59 @@
   <ng-container *ngIf="selectedView === 'calendar'">
     <div class="flex justify-content-between mb-3">
       <p-selectButton [options]="PeriodOptions" [(ngModel)]="selectedCalendarView" size="small" optionLabel="name"
-        optionValue="value" (click)="changeCalendarView()"/>
+        optionValue="value" (click)="changeCalendarView()" />
       <div class="flex gap-1">
-        <p-button label="Prev" icon="pi pi-bars" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="prevPeriod()" size="small" />
-        <p-button label="Today" icon="pi pi-trash" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="goToday()" size="small" />
-        <p-button label="Next" icon="pi pi-building" [rounded]="true" [text]="true" variety="text" severity="secondary" (click)="nextPeriod()" size="small" />
+        <p-button label="Prev" icon="pi pi-bars" [rounded]="true" [text]="true" variety="text" severity="secondary"
+          (click)="prevPeriod()" size="small" />
+        <p-button label="Today" icon="pi pi-trash" [rounded]="true" [text]="true" variety="text" severity="secondary"
+          (click)="goToday()" size="small" />
+        <p-button label="Next" icon="pi pi-building" [rounded]="true" [text]="true" variety="text" severity="secondary"
+          (click)="nextPeriod()" size="small" />
       </div>
 
     </div>
     <div #calendar style="height: 800px;"></div>
   </ng-container>
+  <div class="flex gap-3 flex-wrap" *ngIf="selectedView === 'grid'">
+    <div *ngFor="let task of tasks" style="flex: 1 1 calc(33.333% - 1rem);" class=" p-md-6 p-lg-4">
+      <p-card [header]="" class="task-card">
+        <div class="task-details">
+          <p>🗓 Start: {{ (task.start_date | date:'MMM dd, yyyy') || 'No Start Date' }}</p>
+          <p>⏰ Due: <span [ngClass]="{ 'overdue': isOverdue(task.end_date) }">
+              {{ (task.end_date | date:'MMM dd, yyyy') || 'No Due Date' }}
+            </span></p>
+          <p>📌 Status: <p-tag [value]="task.status" [severity]="getStatusSeverity(task.status)"></p-tag></p>
+          <p>👤 Created By: {{ (task.createdBy.firstName + ' ' + task.createdBy.lastName) || "Unknown"}}</p>
+        </div>
+
+        <ng-template pTemplate="header">
+          <div class="flex px-3 justify-content-between align-items-center">
+            <div class="flex justify-content-start align-items-center gap-3">
+              <div class="flex align
+-items-center gap-2">
+                <p-avatar [label]="getInitials(task.createdBy.firstName + ' ' + task.createdBy.lastName)" shape="circle"
+                  [style]="{'background-color': getAvatarColor(task.createdBy.id), 'color': 'white'}">
+                </p-avatar>
+                <span class="task-title">{{ task.task_name }}</span>
+              </div>
+              <p-tag [value]="task.priority" [severity]="getPrioritySeverity(task.priority)
+"></p-tag>
+            </div>
+            <div>
+              <p-button icon="pi pi-ellipsis-v" [text]="true" [rounded]="true" severity="secondary"
+                (click)="menu2.toggle($event)" #menuButton>
+              </p-button>
+              <p-menu #menu2 [model]="getMenuItems(task)" [popup]="true" appendTo="body"></p-menu>
+
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+
 </div>
 <app-task-modal [visible]="isModalOpen" [taskData]="selectedTask" [isEdit]="isEdit"
   (closeModal)="closeTaskDialog ($event)"></app-task-modal>
+<app-kanban-view [hidden]="selectedView != 'kanban'" (editTaskEvent)="openTaskModal(true, $event)"
+  [tasks]="tasks"></app-kanban-view>
